@@ -1,5 +1,7 @@
 #include <stdlib.h>
 
+#include "FlumenCore/Delegate/Delegate.hpp"
+
 #include "Element.hpp"
 #include "Sprite.hpp"
 #include "FlumenEngine/Core/Transform.hpp"
@@ -8,11 +10,11 @@
 #include "FlumenEngine/Animation/AnimationEvent.hpp"
 #include "FlumenEngine/Animation/AnimationProperty.hpp"
 #include "FlumenEngine/Core/InputHandler.hpp"
-#include "FlumenCore/Delegate/Delegate.hpp"
+#include "FlumenEngine/Interface/Interface.hpp"
 
-#define DEFAULT_CHILDREN_COUNT 8
+#define DEFAULT_CHILDREN_COUNT 32
 
-Element::Element()
+/*Element::Element()
 {
 	isActive_ = false;
 
@@ -24,24 +26,34 @@ Element::Element()
 
 	animator_ = nullptr;
 
-	clickEvents_ = nullptr;
+	leftClickEvents_ = nullptr;
 
-	HandleConfigure();
-}
+	rightClickEvents_ = nullptr;
 
-Element::Element(Size size, Transform* transform, Sprite* sprite)
-{
-	Configure(size, transform, sprite);
-}
+	hoverEvents_ = nullptr;
 
-/*Element::Element(Size size, DrawOrder drawOrder, Transform* transform, Sprite* sprite)
-{
-	Initialize(size, drawOrder, transform, sprite);
+	//HandleConfigure();
 }*/
 
-Element::Element(Size size, DrawOrder drawOrder, Transform* transform, Sprite* sprite, Opacity opacity)
+Element::Element() //: Element()
 {
-	Configure(size, drawOrder, transform, sprite, opacity);
+	isActive_ = false;
+
+	isInteractive_ = false;
+
+	parent_ = nullptr;
+
+	transform_ = nullptr;
+
+	animator_ = nullptr;
+
+	leftClickEvents_ = nullptr;
+
+	rightClickEvents_ = nullptr;
+
+	hoverEvents_ = nullptr;
+
+	Interface::AddElement("DefaultName", this);
 }
 
 void Element::Configure(Size size, Transform* transform, Sprite* sprite)
@@ -65,20 +77,24 @@ void Element::Configure(Size size, Transform* transform, Sprite* sprite)
 
 	opacity_ = 1.0f;
 
-	clickEvents_ = new Delegate();
+	leftClickEvents_ = new Delegate();
+
+	rightClickEvents_ = new Delegate();
+
+	hoverEvents_ = new Delegate();
 
 	children_.Initialize(DEFAULT_CHILDREN_COUNT);
 
 	HandleConfigure();
 }
 
-void Element::Configure(Size size, DrawOrder drawOrder, Transform* transform, Sprite* sprite, Opacity opacity)
+void Element::Configure(Size size, DrawOrder drawOrder, Position2 position, Sprite* sprite, Opacity opacity)
 {
 	isActive_ = false;
 
 	isInteractive_ = false;
 
-	transform_ = transform;
+	transform_ = new Transform(position);
 
 	parent_ = nullptr;
 
@@ -96,7 +112,11 @@ void Element::Configure(Size size, DrawOrder drawOrder, Transform* transform, Sp
 
 	opacity_ = opacity;
 
-	clickEvents_ = new Delegate();
+	leftClickEvents_ = new Delegate();
+
+	rightClickEvents_ = new Delegate();
+
+	hoverEvents_ = new Delegate();
 
 	children_.Initialize(DEFAULT_CHILDREN_COUNT);
 
@@ -218,9 +238,14 @@ Opacity Element::GetOpacity()
 	return opacity_;
 }
 
-Delegate & Element::GetClickEvents()
+Delegate & Element::GetLeftClickEvents()
 {
-	return *clickEvents_;
+	return *leftClickEvents_;
+}
+
+Delegate & Element::GetRightClickEvents()
+{
+	return *rightClickEvents_;
 }
 
 Delegate & Element::GetHoverEvents()
@@ -238,12 +263,28 @@ void Element::SetInteractivity(bool isInteractive)
 	isInteractive_ = isInteractive;
 }
 
-void Element::HandleClick()
+void Element::TriggerLeftClickEvents()
 {
-	if(!clickEvents_)
+	if(!leftClickEvents_)
 		return;
 
-	clickEvents_->Invoke();
+	leftClickEvents_->Invoke();
+}
+
+void Element::TriggerRightClickEvents()
+{
+	if(!rightClickEvents_)
+		return;
+
+	rightClickEvents_->Invoke();
+}
+
+void Element::TriggerHoverEvents()
+{
+	if(!hoverEvents_)
+		return;
+
+	hoverEvents_->Invoke();
 }
 
 void Element::Open()

@@ -4,7 +4,7 @@
 #include "FlumenEngine/Core/File.hpp"
 #include "Mesh.hpp"
 
-Map <Mesh, Word> MeshManager::meshes_ = Map <Mesh, Word>();
+Map <Mesh*, Word> MeshManager::meshes_ = Map <Mesh*, Word>();
 
 #define MAXIMUM_MESH_COUNT 256
 
@@ -33,16 +33,16 @@ void MeshManager::LoadMeshes()
 		if(mesh == nullptr)
 			continue;
 
-		mesh->Initialize(file);
+		(*mesh)->Initialize(file);
 	}
 }
 
-Map <Mesh, Word> & MeshManager::GetMeshes()
+Map <Mesh*, Word> & MeshManager::GetMeshes()
 {
 	return meshes_;
 }
 
 Mesh* MeshManager::GetMesh(const char* identifier)
 {
-	return meshes_.Get(identifier);
+	return *meshes_.Get(identifier);
 }

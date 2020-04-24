@@ -36,6 +36,20 @@ class Camera
 
 	Screen* screen_;
 
+	float zoomFactor_;
+
+	bool isAnimated;
+
+	Float animationTime;
+
+	Float animationDuration;
+
+	Position3 startPosition;
+
+	Position3 endPosition;
+
+	void ComputeMatrix();
+
 public:
 	Camera();
 
@@ -47,9 +61,9 @@ public:
 
 	Matrix & GetMatrix();
 
-	void ComputeMatrix();
-
 	void SetTarget(glm::vec3);
+
+	void SetTarget(Position3, Float);
 
 	void Drag(glm::vec3);
 
@@ -70,4 +84,8 @@ public:
 	float GetViewDistance() const {return viewDistance_;}
 
 	void Update();
+
+	void Translate(Direction3);
+
+	Position2 GetScreenPosition(Position3);
 };

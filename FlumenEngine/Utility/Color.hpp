@@ -23,9 +23,9 @@ public:
 
 	Color(float, float, float, float);
 
-	Color operator + (Color&);
+	Color operator + (const Color&);
 
-	Color operator * (float) const;
+	Color operator * (float);
 
 	Color operator - (Color&);
 
@@ -37,5 +37,13 @@ public:
 
 	static Color RED;
 
-	static Color DARK_RED;
+	static Color BLUE;
+
+	static Color GREEN;
+
+	static Color YELLOW;
+
+	static Color CYAN;
+
+	static Color MAGENTA;
 };

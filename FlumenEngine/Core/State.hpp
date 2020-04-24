@@ -6,18 +6,13 @@ class State
 {
 	friend class StateManager;
 
-private:
-	void Enter();
-
-	void Exit();
-
 protected:
-	virtual void HandleEnter();
+	virtual void HandleEnter() = 0;
 
-	virtual void HandleExit();
+	virtual void HandleExit() = 0;
 
-public:
 	State();
 
-	State(States);
+public:
+	void Enter();
 };

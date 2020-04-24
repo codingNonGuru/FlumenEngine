@@ -16,6 +16,22 @@ class Delegate;
 
 class Element : public Object
 {
+	friend class Interface;
+
+	void TriggerRightClickEvents();
+	
+	void TriggerLeftClickEvents();
+
+	void TriggerHoverEvents();
+
+	bool CheckHover();
+
+	Delegate * leftClickEvents_;
+
+	Delegate * rightClickEvents_;
+
+	Delegate * hoverEvents_;
+
 protected:
 	Word identifier_;
 
@@ -37,10 +53,6 @@ protected:
 
 	bool isHovered_;
 
-	Delegate * clickEvents_;
-
-	Delegate * hoverEvents_;
-
 	virtual void HandleOpen();
 
 	virtual void HandleClose();
@@ -58,15 +70,15 @@ protected:
 	virtual void HandleSetParent(Object*) override;
 
 public:
+	//Element();
+
 	Element();
-
-	Element(Size, Transform*, Sprite*);
-
-	Element(Size, DrawOrder, Transform*, Sprite*, Opacity = 1.0f);
 
 	void Configure(Size, Transform*, Sprite*);
 
-	void Configure(Size, DrawOrder, Transform*, Sprite*, Opacity = 1.0f);
+	void Configure(Size, DrawOrder, Position2, Sprite* = nullptr, Opacity = 1.0f);
+
+	void SetOpacity(Opacity opacity) {opacity_ = opacity;}
 
 	Word GetIdentifier();
 
@@ -75,8 +87,6 @@ public:
 	Sprite* GetSprite();
 
 	void Initialize();
-
-	bool CheckHover();
 
 	void Update();
 
@@ -90,7 +100,9 @@ public:
 
 	Opacity GetOpacity();
 
-	Delegate & GetClickEvents();
+	Delegate & GetLeftClickEvents();
+
+	Delegate & GetRightClickEvents();
 
 	Delegate & GetHoverEvents();
 
@@ -101,10 +113,6 @@ public:
 	void AddChild(Element*);
 
 	Element* GetChild(Word);
-
-	void HandleClick();
-
-	void HandleHover();
 
 	void Open();
 

@@ -8,13 +8,13 @@ enum class Scenes;
 
 class SceneManager
 {
-	static Map <Scene*, Scenes> scenes_;
+	friend class Scene;
+
+	static Array <Scene*> scenes;
+
+	static Scene * AddScene(Scene*);
 
 public:
-	static Scene * Get(Scenes);
-
-	static Scene * AddScene(Scene*, Scenes);
-
 	static void Update();
 
 	static void Render();

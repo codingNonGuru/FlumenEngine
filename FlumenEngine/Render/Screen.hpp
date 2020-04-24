@@ -32,17 +32,17 @@ public:
 
 	Screen() {}
 
-	Screen(int width, int height)
+	Screen(Size size)
 	{
-		Initialize(width, height);
+		Initialize(size);
 	}
 
-	void Initialize(int width, int height)
+	void Initialize(Size size)
 	{
-		widthInteger_ = width;
-		heightInteger_ = height;
-		widthFloating_ = (float)width;
-		heightFloating_ = (float)height;
+		widthInteger_ = size.x;
+		heightInteger_ = size.y;
+		widthFloating_ = (float)size.x;
+		heightFloating_ = (float)size.y;
 	}
 
 	Size GetSize()

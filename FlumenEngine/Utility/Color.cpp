@@ -8,7 +8,15 @@ Color Color::WHITE = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
 Color Color::RED = Color(1.0f, 0.0f, 0.0f, 1.0f);
 
-Color Color::DARK_RED = Color(0.5f, 0.0f, 0.0f, 1.0f);
+Color Color::BLUE = Color(0.0f, 0.0f, 1.0f, 1.0f);
+
+Color Color::GREEN = Color(0.0f, 1.0f, 0.0f, 1.0f);
+
+Color Color::YELLOW = Color(1.0f, 1.0f, 0.0f, 1.0f);
+
+Color Color::CYAN = Color(0.0f, 1.0f, 1.0f, 1.0f);
+
+Color Color::MAGENTA = Color(1.0f, 0.0f, 1.0f, 1.0f);
 
 float Color::GetSaturation(Color color)
 {
@@ -161,7 +169,7 @@ Color::Color(float r, float g, float b, float a) : r_(r), g_(g), b_(b), a_(a)
 {
 }
 
-Color Color::operator + (Color& other)
+Color Color::operator + (const Color& other)
 {
 	Color result;
 
@@ -173,7 +181,7 @@ Color Color::operator + (Color& other)
 	return result;
 }
 
-Color Color::operator * (float factor) const
+Color Color::operator * (float factor)
 {
 	Color result;
 

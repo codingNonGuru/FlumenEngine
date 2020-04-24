@@ -1,20 +1,14 @@
 #include "State.hpp"
 #include "StateManager.hpp"
 
-State::State() {}
-
-State::State(States stateType) {}
+State::State() 
+{
+	StateManager::Register(this);
+}
 
 void State::Enter()
 {
-	HandleEnter();
+	StateManager::Enter(this);
 }
 
-void State::Exit()
-{
-	HandleExit();
-}
 
-void State::HandleEnter() {}
-
-void State::HandleExit() {}

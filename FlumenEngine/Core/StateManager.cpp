@@ -3,57 +3,51 @@
 
 #define MAXIMUM_STATE_COUNT 16
 
-States StateManager::currentState_ = States();
+StateManager StateManager::instance = StateManager();
 
-States StateManager::nextState_ = States();
-
-States StateManager::previousState_ = States();
-
-Map <State*, States> StateManager::states_ = Map <State*, States> (MAXIMUM_STATE_COUNT);
-
-void StateManager::Enter(States state)
+StateManager::StateManager()
 {
-	if(currentState_ == state)
+	currentState = nullptr;
+
+	nextState = nullptr;
+
+	previousState = nullptr;
+
+	states = Array <State *> (MAXIMUM_STATE_COUNT);
+}
+
+void StateManager::Enter(State * state)
+{
+	if(instance.currentState == state)
 		return;
 
-	previousState_ = currentState_;
-
-	currentState_ = state;
-
-	nextState_ = state;
-
-	auto previousState = states_.Get(previousState_);
-	if(previousState != nullptr && *previousState != nullptr)
+	if(instance.currentState != nullptr)
 	{
-		(*previousState)->Exit();
+		instance.currentState->HandleExit();
 	}
 
-	auto nextState = states_.Get(nextState_);
-	if(nextState != nullptr && *nextState != nullptr)
-	{
-		(*nextState)->Enter();
-	}
+	//instance.previousState = instance.currentState;
+
+	instance.currentState = state;
+
+	instance.currentState->HandleEnter();
+
+	//instance.nextState = state;
+
+	//instance.nextState->HandleEnter();
 }
 
-void StateManager::Register(State* state, States stateType)
+void StateManager::Register(State* state)
 {
-	auto statePointer = states_.Get(stateType);
-	if(statePointer != nullptr)
-		return;
-
-	statePointer = states_.Add(stateType);
-	if(statePointer == nullptr)
-		return;
-
-	*statePointer = state;
+	*instance.states.Allocate() = state;
 }
 
-States StateManager::GetNextState()
+State* StateManager::GetNextState()
 {
-	return nextState_;
+	return instance.nextState;
 }
 
-States StateManager::GetPreviousState()
+State* StateManager::GetPreviousState()
 {
-	return previousState_;
+	return instance.previousState;
 }

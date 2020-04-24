@@ -4,9 +4,15 @@
 #include "FlumenEngine/Interface/Font.hpp"
 #include "FlumenEngine/Core/File.hpp"
 
-#define MAXIMUM_FONT_COUNT 16
+#define MAXIMUM_FONT_COUNT 32
 
 Map <Font*, Word> FontManager::fonts_ = Map <Font*, Word> (MAXIMUM_FONT_COUNT);
+
+struct 
+{
+	Length Size;
+	Word Name;
+} sizeDatas[] = {{15, "Tiny"}, {20, "VerySmall"}, {25, "Small"}, {30, "Medium"}, {40, "Large"}, {50, "VeryLarge"}, {60, "Huge"}};
 
 void FontManager::LoadFonts()
 {
@@ -20,14 +26,18 @@ void FontManager::LoadFonts()
 		if(extensionPosition == nullptr)
 			continue;
 
-		Word fontName;
-		fontName.Add(file->GetName(), extensionPosition - file->GetName());
+		for(auto sizeData : sizeDatas)
+		{
+			Word fontName;
+			fontName.Add(file->GetName(), extensionPosition - file->GetName());
+			fontName.Add(sizeData.Name);
 
-		auto font = fonts_.Add(fontName);
-		if(font == nullptr)
-			continue;
+			auto font = fonts_.Add(fontName);
+			if(font == nullptr)
+				continue;
 
-		*font = new Font(file);
+			*font = new Font(file, sizeData.Size);
+		}
 	}
 }
 

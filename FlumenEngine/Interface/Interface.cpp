@@ -13,9 +13,12 @@ bool Interface::isSorted_ = false;
 
 Array <Element*> sortedElements = Array <Element*> (MAXIMUM_ELEMENT_COUNT);
 
-void Interface::Initialize() {}
+void Interface::Initialize() 
+{
+	InputHandler::OnInputUpdate.Add(&Interface::ProcessInput);
+}
 
-void Interface::Update()
+void Interface::ProcessInput()
 {
 	Element* firstElement = nullptr;
 	for(auto elementIterator = elements_.GetStart(); elementIterator != elements_.GetEnd(); ++elementIterator)
@@ -42,9 +45,22 @@ void Interface::Update()
 
 	if(firstElement && InputHandler::GetMouse().CurrentLeft_)
 	{
-		firstElement->HandleClick();
+		firstElement->TriggerLeftClickEvents();
 	}
 
+	if(firstElement && InputHandler::GetMouse().CurrentRight_)
+	{
+		firstElement->TriggerRightClickEvents();
+	}
+
+	if(firstElement)
+	{
+		firstElement->TriggerHoverEvents();
+	}
+}
+
+void Interface::Update()
+{
 	for(auto elementIterator = elements_.GetStart(); elementIterator != elements_.GetEnd(); ++elementIterator)
 	{
 		auto element = *elementIterator;

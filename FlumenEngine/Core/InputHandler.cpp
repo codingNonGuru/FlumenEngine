@@ -9,11 +9,21 @@ container::Array<int> InputHandler::currentKeys_ = container::Array<int>();
 
 container::Array<int> InputHandler::formerKeys_ = container::Array<int>();
 
+Map <Delegate, SDL_Scancode> InputHandler::onKeyPressedEvents = Map <Delegate, SDL_Scancode> ();
+
+Delegate InputHandler::OnInputUpdate = Delegate();
+
+Delegate InputHandler::OnRightMouseClick = Delegate();
+
+Delegate InputHandler::OnLeftMouseClick = Delegate();
+
 void InputHandler::Initialize()
 {
 	currentKeys_.Initialize(64);
 
 	formerKeys_.Initialize(64);
+
+	onKeyPressedEvents.Initialize(64);
 }
 
 void InputHandler::Update()
@@ -57,6 +67,42 @@ void InputHandler::Update()
 	}
 
 	SDL_PumpEvents();
+
+	OnInputUpdate.Invoke();
+
+	if(mouse_.CurrentRight_)
+	{
+		OnRightMouseClick.Invoke();
+	}
+
+	if(mouse_.CurrentLeft_)
+	{
+		OnLeftMouseClick.Invoke();
+	}
+
+	for(auto currKey = currentKeys_.GetStart(); currKey != currentKeys_.GetEnd(); ++currKey)
+	{
+		bool wasPressed = false;
+		for(auto formerKey = formerKeys_.GetStart(); formerKey != formerKeys_.GetEnd(); ++formerKey)
+		{
+			if(*formerKey == *currKey)
+			{
+				wasPressed = true;
+				break;
+			}
+		}
+
+		if(wasPressed)
+		{
+			break;
+		}
+
+		auto event = onKeyPressedEvents.Get((SDL_Scancode)*currKey);
+		if(event == nullptr)
+			continue;
+
+		event->Invoke();
+	}
 }
 
 void InputHandler::UpdateMouse()

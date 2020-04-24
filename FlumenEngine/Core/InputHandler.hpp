@@ -5,6 +5,7 @@
 #include "FlumenCore/Conventions.hpp"
 
 class Engine;
+class Delegate;
 
 struct Mouse
 {
@@ -29,9 +30,17 @@ class InputHandler
 
 	static container::Array<int> formerKeys_;
 
+	static Map <Delegate, SDL_Scancode> onKeyPressedEvents;
+
 	static void UpdateMouse();
 
 public:
+	static Delegate OnInputUpdate;
+
+	static Delegate OnRightMouseClick;
+
+	static Delegate OnLeftMouseClick;
+
 	static void Update();
 
 	static bool IsPressed(int32_t);
@@ -39,6 +48,34 @@ public:
 	static bool WasPressed(int32_t);
 
 	static void Initialize();
+
+	template <class ClassType, class ObjectType>
+	static void RegisterEvent(SDL_Scancode key, ObjectType* object, void(ClassType::*function)())
+	{
+		auto event = onKeyPressedEvents.Get(key);
+		if(event != nullptr)
+		{
+			event->Add(object, function);
+			return;
+		}
+
+		event = onKeyPressedEvents.Add(key);
+		event->Add(object, function);
+	}
+
+	template <class ClassType, class ObjectType>
+	static void UnregisterEvent(SDL_Scancode key, ObjectType* object, void(ClassType::*function)())
+	{
+		auto event = onKeyPressedEvents.Get(key);
+		if(event != nullptr)
+		{
+			event->Remove(object, function);
+			return;
+		}
+
+		//event = onKeyPressedEvents.Add(key);
+		//event->Add(object, function);
+	}
 
 	static Position2 GetMousePosition(bool = true);
 

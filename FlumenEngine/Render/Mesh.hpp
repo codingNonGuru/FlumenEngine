@@ -29,6 +29,8 @@ public:
 	void SetSize(Length size) {size_ = size;}
 };
 
+class Camera;
+
 class Mesh
 {
 private:
@@ -40,6 +42,8 @@ private:
 
 public:
 	static Mesh* GenerateQuad();
+
+	static Mesh* GenerateHex();
 
 	Mesh();
 

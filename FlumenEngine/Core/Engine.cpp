@@ -18,17 +18,21 @@ bool Engine::isRunning_ = false;
 
 Screen* Engine::screen_ = nullptr;
 
-Delegate Engine::OnInitialize_ = Delegate();
+Delegate Engine::OnInitializeStarted = Delegate();
 
-Delegate Engine::OnGameLoopStart_ = Delegate();
+Delegate Engine::OnInitializeEnded = Delegate();
 
-Delegate Engine::OnShutDown_ = Delegate();
+Delegate Engine::OnGameLoopStarted = Delegate();
 
-void Engine::Initialize()
+Delegate Engine::OnShutDown = Delegate();
+
+void Engine::Initialize(Size size)
 {
+	OnInitializeStarted.Invoke();
+
 	AssetManager::Initialize();
 
-	screen_ = new Screen(2560, 1440);
+	screen_ = new Screen(size);
 
 	RenderManager::Initialize();
 
@@ -36,7 +40,11 @@ void Engine::Initialize()
 
 	InputHandler::Initialize();
 
-	OnInitialize_.Invoke();
+	Interface::Initialize();
+
+	OnInitializeEnded.Invoke();
+
+	StartGameLoop();
 }
 
 void Engine::StartGameLoop()
@@ -45,7 +53,7 @@ void Engine::StartGameLoop()
 
 	Time::Update();
 
-	OnGameLoopStart_.Invoke();
+	OnGameLoopStarted.Invoke();
 
 	while(isRunning_)
 	{
@@ -72,7 +80,7 @@ void Engine::ShutDown()
 {
 	isRunning_ = false;
 
-	OnShutDown_.Invoke();
+	OnShutDown.Invoke();
 
 	SDL_Quit();
 }

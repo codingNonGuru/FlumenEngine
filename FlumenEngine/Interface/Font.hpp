@@ -21,7 +21,7 @@ class Font
 public:
 	Font();
 
-	Font(File*);
+	Font(File*, Length);
 
 	Texture* GetTexture();
 

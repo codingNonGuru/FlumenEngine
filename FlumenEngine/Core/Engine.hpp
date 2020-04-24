@@ -4,8 +4,6 @@
 #include "FlumenCore/Delegate/Delegate.hpp"
 
 class Screen;
-class RenderManager;
-class Window;
 
 class Engine
 {
@@ -14,16 +12,18 @@ private:
 
 	static Screen* screen_;
 
-public:
-	static Delegate OnInitialize_;
-
-	static Delegate OnGameLoopStart_;
-
-	static Delegate OnShutDown_;
-
-	static void Initialize();
-
 	static void StartGameLoop();
+
+public:
+	static Delegate OnInitializeStarted;
+
+	static Delegate OnInitializeEnded;
+
+	static Delegate OnGameLoopStarted;
+
+	static Delegate OnShutDown;
+
+	static void Initialize(Size);
 
 	static void ShutDown();
 

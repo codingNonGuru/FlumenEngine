@@ -34,7 +34,7 @@ void Perlin::Initialize()
 	Size capacity(4096, 4096);
 	Length pixelCount = capacity.x * capacity.y;
 
-	container::Array<float, int> stream(pow(2, 24));
+	container::Array <float> stream(pow(2, 24));
 
 	for(int index = 0; index < stream.GetCapacity(); ++index)
 	{

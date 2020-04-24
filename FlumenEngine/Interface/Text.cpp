@@ -2,7 +2,9 @@
 
 #include "FlumenEngine/Interface/TextManager.hpp"
 #include "FlumenEngine/Interface/Glyph.hpp"
+#include "FlumenEngine/Interface/FontManager.hpp"
 #include "FlumenEngine/Interface/Font.hpp"
+#include "FlumenEngine/Interface/Interface.hpp"
 #include "FlumenEngine/Render/DataBuffer.hpp"
 #include "FlumenEngine/Render/Shader.hpp"
 #include "FlumenEngine/Render/Camera.hpp"
@@ -10,11 +12,15 @@
 
 Text::Text() {}
 
-Text::Text(Font* font, Color color = Color::BLACK)
+Text::Text(FontDescriptor fontName, Color color = Color::BLACK) 
 {
-	font_ = font;
+	font_ = FontManager::GetFont(fontName);
 
 	color_ = color;
+
+	alignment = Alignments::CENTER;
+
+	//Interface::AddElement(elementName, this);
 }
 
 void Text::Setup(const char* string, Float scale)
@@ -22,6 +28,16 @@ void Text::Setup(const char* string, Float scale)
 	string_ = string;
 
 	scale_ = scale;
+}
+
+void Text::SetColor(Color color)
+{
+	color_ = color;
+}
+
+void Text::AdjustSize()
+{
+	size_.x = GetTextWidth();
 }
 
 void Text::Assemble()
@@ -61,9 +77,24 @@ void Text::Assemble()
 		textWidth += glyph->GetAdvance();
 	}
 
+	auto widthOffset = textWidth * 0.5f;
+	auto alignmentOffset = 0.0f;
+	switch(alignment)
+	{
+		case Alignments::LEFT:
+			alignmentOffset = size_.x * 0.5f - widthOffset;
+			break;
+		case Alignments::RIGHT:
+			alignmentOffset = widthOffset - size_.x * 0.5f;
+			break;
+		default:
+			break;
+	}
+
 	for(auto glyphData = dataQueue.GetStart(); glyphData != dataQueue.GetEnd(); ++glyphData)
 	{
-		glyphData->Position_.x -= textWidth * 0.5f;
+		glyphData->Position_.x -= widthOffset;
+		glyphData->Position_.x -= alignmentOffset;
 
 		glyphData->Position_.x *= scale_;
 
@@ -71,6 +102,21 @@ void Text::Assemble()
 		glyphData->Position_.y += textPosition.y;
 
 		glyphData->Scale_ *= scale_;
+	}
+}
+
+Float Text::GetTextWidth()
+{
+	float textWidth = 0.0f;
+
+	for(auto sign = string_.Get(); sign != string_.GetEnd(); ++sign)
+	{
+		auto glyph = font_->GetGlyph(*sign);
+
+		if(!glyph)
+			continue;
+
+		textWidth += glyph->GetAdvance();
 	}
 }
 
@@ -97,7 +143,7 @@ void Text::Render(Camera* camera)
 
 	shader->SetConstant(camera->GetMatrix(), "viewMatrix");
 
-	Opacity opacity = 1.0f;
+	Opacity opacity = opacity_;
 	shader->SetConstant(opacity, "opacity");
 
 	auto drawOrder = (float)drawOrder_ * 0.1f;

@@ -7,13 +7,16 @@ class Light;
 
 class Scene : public Object
 {
+	friend class SceneManager;
+	
 protected:
 	Camera* camera_;
 
 	Light* light_;
 
-public:
-	virtual void Initialize();
+	Scene();
 
-	virtual void Render();
+	virtual void Initialize() = 0;
+
+	virtual void Render() = 0;
 };

@@ -4,8 +4,7 @@
 
 #include <GL/glew.h>
 
-#include "Mesh.hpp"
-
+#include "FlumenEngine/Render/Mesh.hpp"
 #include "FlumenEngine/Core/AssetManager.hpp"
 #include "FlumenEngine/Core/File.hpp"
 
@@ -14,6 +13,37 @@ Mesh::Mesh() {}
 Mesh* Mesh::GenerateQuad()
 {
 	auto mesh = new Mesh();
+
+	return mesh;
+}
+
+Mesh* Mesh::GenerateHex()
+{
+	auto mesh = new Mesh();
+	mesh->Initialize(2);
+
+	auto positionAttribute = mesh->attributes_.Add("position");
+	positionAttribute->SetSize(7);
+	auto positionData = new Array <Float3> (7);
+
+	*positionData->Allocate() = Float3(0.0f, 0.0f, 0.0f);
+	*positionData->Allocate() = Float3(0.866f, 0.5f, 0.0f);
+	*positionData->Allocate() = Float3(0.0f, 1.0f, 0.0f);
+	*positionData->Allocate() = Float3(-0.866f, 0.5f, 0.0f);
+	*positionData->Allocate() = Float3(-0.866f, -0.5f, 0.0f);
+	*positionData->Allocate() = Float3(0.0f, -1.0f, 0.0f);
+	*positionData->Allocate() = Float3(0.866f, -0.5f, 0.0f);
+
+	positionAttribute->GetData() = positionData;
+
+	auto indexAttribute = mesh->attributes_.Add("index");
+	indexAttribute->SetSize(18);
+	auto indexData = new Array <Index> {0, 1, 2, 0, 2, 3, 0, 3, 4, 0, 4, 5, 0, 5, 6, 0, 6, 1};
+
+	indexAttribute->GetData() = indexData;
+
+	mesh->vertexCount_ = 7;
+	mesh->indexCount_ = 18;
 
 	return mesh;
 }

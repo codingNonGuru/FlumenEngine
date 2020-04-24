@@ -5,21 +5,23 @@
 
 class Task
 {
+	friend class TaskManager;
+
 	bool isValid_;
 
 	Delegate event_;
 
 	float timer_;
 
+	bool Update();
+
+	void Run();
+
 public:
 	Task();
 
 	template <class ClassType, class ObjectType>
 	void Initialize(ObjectType*, void (ClassType::*)(), float);
-
-	void Update();
-
-	void Run();
 };
 
 template <class ClassType, class ObjectType>

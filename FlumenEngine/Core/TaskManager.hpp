@@ -4,10 +4,12 @@
 
 class TaskManager
 {
+	friend class Engine;
+	
 	static Pool <Task> tasks_;
 
-public:
 	static void Update();
 
+public:
 	static Task* Add();
 };

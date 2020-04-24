@@ -7,20 +7,26 @@ class State;
 
 class StateManager
 {
-	static States currentState_;
+	friend class State;
 
-	static States nextState_;
+	State * currentState;
 
-	static States previousState_;
+	State * nextState;
 
-	static Map <State*, States> states_;
+	State * previousState;
+
+	Array <State *> states;
+
+	StateManager();
+
+	static StateManager instance;
+
+	static void Enter(State *);
+
+	static void Register(State *);
 
 public:
-	static void Enter(States);
+	static State* GetNextState();
 
-	static void Register(State*, States);
-
-	static States GetNextState();
-
-	static States GetPreviousState();
+	static State* GetPreviousState();
 };

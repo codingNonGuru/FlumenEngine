@@ -1,7 +1,7 @@
 #include "Scene.hpp"
+#include "FlumenEngine/Core/SceneManager.hpp"
 
-void Scene::Initialize() {}
-
-void Scene::Render()
+Scene::Scene()
 {
+    SceneManager::AddScene(this);
 }

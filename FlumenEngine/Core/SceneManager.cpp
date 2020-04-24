@@ -4,20 +4,11 @@
 
 #define MAXIMUM_SCENE_COUNT 32
 
-Map <Scene*, Scenes> SceneManager::scenes_ = Map <Scene*, Scenes> (MAXIMUM_SCENE_COUNT);
+Array <Scene*> SceneManager::scenes = Array <Scene*> (MAXIMUM_SCENE_COUNT);
 
-Scene * SceneManager::Get(Scenes sceneName)
+Scene * SceneManager::AddScene(Scene* scene)
 {
-	auto scenePointer = scenes_.Get(sceneName);
-	if(!scenePointer)
-		return nullptr;
-
-	return *scenePointer;
-}
-
-Scene * SceneManager::AddScene(Scene* scene, Scenes sceneName)
-{
-	auto scenePointer = scenes_.Add(sceneName);
+	auto scenePointer = scenes.Allocate();
 	if(!scenePointer)
 		return nullptr;
 
@@ -28,7 +19,7 @@ Scene * SceneManager::AddScene(Scene* scene, Scenes sceneName)
 
 void SceneManager::Update()
 {
-	for(auto sceneIterator = scenes_.GetStart(); sceneIterator != scenes_.GetEnd(); ++sceneIterator)
+	for(auto sceneIterator = scenes.GetStart(); sceneIterator != scenes.GetEnd(); ++sceneIterator)
 	{
 		auto scene = *sceneIterator;
 		if(!scene)
@@ -43,7 +34,7 @@ void SceneManager::Update()
 
 void SceneManager::Render()
 {
-	for(auto sceneIterator = scenes_.GetStart(); sceneIterator != scenes_.GetEnd(); ++sceneIterator)
+	for(auto sceneIterator = scenes.GetStart(); sceneIterator != scenes.GetEnd(); ++sceneIterator)
 	{
 		auto scene = *sceneIterator;
 		if(scene == nullptr)

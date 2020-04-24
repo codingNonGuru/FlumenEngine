@@ -11,17 +11,15 @@ Font::Font()
 	texture_ = nullptr;
 }
 
-Font::Font(File* file)
+Font::Font(File* file, Length size)
 {
 	TTF_Init();
 
 	SDL_Color color;
 	color.a = 255;
-	const char* signs = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .:,;_";
+	const char* signs = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .:,;_!?-/+=()";
 
-	size_ = 70;
-
-	TTF_Font* font = TTF_OpenFont(file->GetPath(), size_);
+	TTF_Font* font = TTF_OpenFont(file->GetPath(), size);
 
 	ascent_ = (float)TTF_FontAscent(font);
 	descent_ = (float)TTF_FontDescent(font);

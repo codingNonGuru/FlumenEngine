@@ -19,14 +19,14 @@ struct MeshAttributeType : public AttributeType
 class MeshManager
 {
 private:
-	static Map <Mesh, Word> meshes_;
+	static Map <Mesh*, Word> meshes_;
 
 public:
 	static void Initialize();
 
 	static void LoadMeshes();
 
-	static Map <Mesh, Word> & GetMeshes();
+	static Map <Mesh*, Word> & GetMeshes();
 
 	static Mesh* GetMesh(const char*);
 };
