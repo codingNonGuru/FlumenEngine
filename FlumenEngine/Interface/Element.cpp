@@ -11,31 +11,13 @@
 #include "FlumenEngine/Animation/AnimationProperty.hpp"
 #include "FlumenEngine/Core/InputHandler.hpp"
 #include "FlumenEngine/Interface/Interface.hpp"
+#include "FlumenEngine/Render/Shader.hpp"
+#include "FlumenEngine/Render/ShaderManager.hpp"
+#include "FlumenEngine/Render/TextureManager.hpp"
 
 #define DEFAULT_CHILDREN_COUNT 32
 
-/*Element::Element()
-{
-	isActive_ = false;
-
-	isInteractive_ = false;
-
-	parent_ = nullptr;
-
-	transform_ = nullptr;
-
-	animator_ = nullptr;
-
-	leftClickEvents_ = nullptr;
-
-	rightClickEvents_ = nullptr;
-
-	hoverEvents_ = nullptr;
-
-	//HandleConfigure();
-}*/
-
-Element::Element() //: Element()
+Element::Element() 
 {
 	isActive_ = false;
 
@@ -56,40 +38,17 @@ Element::Element() //: Element()
 	Interface::AddElement("DefaultName", this);
 }
 
-void Element::Configure(Size size, Transform* transform, Sprite* sprite)
+void Element::Configure(Size size, DrawOrder drawOrder, Position2 position, SpriteDescriptor spriteDescriptor, Opacity opacity)
 {
-	isActive_ = false;
+	Sprite* sprite = nullptr;
+	if(spriteDescriptor)
+	{
+		auto shader = ShaderManager::GetShaderMap().Get(spriteDescriptor.ShaderName);
+		auto texture = TextureManager::GetTexture(spriteDescriptor.TextureName);
 
-	isInteractive_ = false;
+    	sprite = new Sprite(texture, shader);
+	}
 
-	transform_ = transform;
-
-	parent_ = nullptr;
-
-	animator_ = new Animator();
-
-	sprite_ = sprite;
-	sprite_->SetParent(this);
-
-	size_ = size;
-
-	drawOrder_ = 0;
-
-	opacity_ = 1.0f;
-
-	leftClickEvents_ = new Delegate();
-
-	rightClickEvents_ = new Delegate();
-
-	hoverEvents_ = new Delegate();
-
-	children_.Initialize(DEFAULT_CHILDREN_COUNT);
-
-	HandleConfigure();
-}
-
-void Element::Configure(Size size, DrawOrder drawOrder, Position2 position, Sprite* sprite, Opacity opacity)
-{
 	isActive_ = false;
 
 	isInteractive_ = false;
@@ -121,6 +80,8 @@ void Element::Configure(Size size, DrawOrder drawOrder, Position2 position, Spri
 	children_.Initialize(DEFAULT_CHILDREN_COUNT);
 
 	HandleConfigure();
+
+	//Configure(size, drawOrder, position, sprite, opacity);
 }
 
 Word Element::GetIdentifier()

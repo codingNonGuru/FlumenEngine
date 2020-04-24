@@ -14,6 +14,25 @@ class AnimationEvent;
 class AnimationProperty;
 class Delegate;
 
+struct SpriteDescriptor
+{
+private:
+	bool isInitialized;
+
+public:
+	Word TextureName;
+
+	Word ShaderName;
+
+	SpriteDescriptor() : isInitialized(false) {}
+
+	SpriteDescriptor(Word shaderName) : TextureName(), ShaderName(shaderName), isInitialized(true) {}
+
+	SpriteDescriptor(Word textureName, Word shaderName) : TextureName(textureName), ShaderName(shaderName), isInitialized(true) {}
+
+	operator bool() {return isInitialized;}
+};
+
 class Element : public Object
 {
 	friend class Interface;
@@ -70,13 +89,9 @@ protected:
 	virtual void HandleSetParent(Object*) override;
 
 public:
-	//Element();
-
 	Element();
 
-	void Configure(Size, Transform*, Sprite*);
-
-	void Configure(Size, DrawOrder, Position2, Sprite* = nullptr, Opacity = 1.0f);
+	void Configure(Size, DrawOrder, Position2, SpriteDescriptor = SpriteDescriptor(), Opacity = 1.0f);
 
 	void SetOpacity(Opacity opacity) {opacity_ = opacity;}
 
