@@ -3,7 +3,7 @@
 #include "FlumenEngine/Core/InputHandler.hpp"
 #include "FlumenEngine/Render/RenderManager.hpp"
 
-#define MAXIMUM_ELEMENT_COUNT 256
+#define MAXIMUM_ELEMENT_COUNT 1024
 
 Map <Element*, Word> Interface::elements_ = Map <Element*, Word> (MAXIMUM_ELEMENT_COUNT);
 

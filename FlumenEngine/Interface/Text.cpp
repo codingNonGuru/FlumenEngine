@@ -9,6 +9,7 @@
 #include "FlumenEngine/Render/Shader.hpp"
 #include "FlumenEngine/Render/Camera.hpp"
 #include "FlumenEngine/Render/Texture.hpp"
+#include "FlumenEngine/Interface/TextData.h"
 
 Text::Text() {}
 

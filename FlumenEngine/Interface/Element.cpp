@@ -38,7 +38,7 @@ Element::Element()
 	Interface::AddElement("DefaultName", this);
 }
 
-void Element::Configure(Size size, DrawOrder drawOrder, Position2 position, SpriteDescriptor spriteDescriptor, Opacity opacity)
+/*void Element::Configure(Size size, DrawOrder drawOrder, Position2 position, SpriteDescriptor spriteDescriptor, Opacity opacity)
 {
 	Sprite* sprite = nullptr;
 	if(spriteDescriptor)
@@ -80,8 +80,57 @@ void Element::Configure(Size size, DrawOrder drawOrder, Position2 position, Spri
 	children_.Initialize(DEFAULT_CHILDREN_COUNT);
 
 	HandleConfigure();
+}*/
 
-	//Configure(size, drawOrder, position, sprite, opacity);
+void Element::Configure(Size size, DrawOrder drawOrder, PositionData positionData, SpriteDescriptor spriteDescriptor, Opacity opacity)
+{
+	Sprite* sprite = nullptr;
+	if(spriteDescriptor)
+	{
+		auto shader = ShaderManager::GetShaderMap().Get(spriteDescriptor.ShaderName);
+		auto texture = TextureManager::GetTexture(spriteDescriptor.TextureName);
+
+    	sprite = new Sprite(texture, shader);
+	}
+
+	isActive_ = false;
+
+	isInteractive_ = false;
+
+	size_ = size;
+
+	parent_ = positionData.Parent;
+
+	Position2 offset = -GetPivotOffset(positionData.Pivot);
+	
+	if(positionData.Parent != nullptr)
+	{
+		offset += positionData.Parent->GetAnchorOffset(positionData.Anchor);
+	}
+
+	transform_ = new Transform(positionData.Position + offset);
+
+	animator_ = new Animator();
+
+	sprite_ = sprite;
+	if(sprite_)
+	{
+		sprite_->SetParent(this);
+	}
+
+	drawOrder_ = drawOrder;
+
+	opacity_ = opacity;
+
+	leftClickEvents_ = new Delegate();
+
+	rightClickEvents_ = new Delegate();
+
+	hoverEvents_ = new Delegate();
+
+	children_.Initialize(DEFAULT_CHILDREN_COUNT);
+
+	HandleConfigure();
 }
 
 Word Element::GetIdentifier()
@@ -322,3 +371,57 @@ void Element::HandleConfigure() {}
 void Element::HandleInitialize() {}
 
 void Element::HandleUpdate() {}
+
+Position2 Element::GetAnchorOffset(ElementAnchors anchor)
+{
+	Position2 position = Position2(0.0f, 0.0f);//transform_->GetPosition();
+	Direction2 sizeOffset = Float2(size_) * 0.5f;
+	switch(anchor)
+	{
+		case ElementAnchors::UPPER_LEFT:
+			return {position.x - sizeOffset.x, position.y - sizeOffset.y};
+		case ElementAnchors::UPPER_CENTER:
+			return {position.x, position.y - sizeOffset.y};
+		case ElementAnchors::UPPER_RIGHT:
+			return {position.x + sizeOffset.x, position.y - sizeOffset.y};
+		case ElementAnchors::MIDDLE_LEFT:
+			return {position.x - sizeOffset.x, position.y};
+		case ElementAnchors::MIDDLE_CENTER:
+			return {position.x, position.y};
+		case ElementAnchors::MIDDLE_RIGHT:
+			return {position.x + sizeOffset.x, position.y};
+		case ElementAnchors::LOWER_LEFT:
+			return {position.x - sizeOffset.x, position.y + sizeOffset.y};
+		case ElementAnchors::LOWER_CENTER:
+			return {position.x, position.y + sizeOffset.y};
+		case ElementAnchors::LOWER_RIGHT:
+			return {position.x + sizeOffset.x, position.y + sizeOffset.y};
+	}
+}
+
+Position2 Element::GetPivotOffset(ElementPivots pivot)
+{
+	Position2 position = Position2(0.0f, 0.0f);//transform_->GetPosition();
+	Direction2 sizeOffset = Float2(size_) * 0.5f;
+	switch(pivot)
+	{
+		case ElementPivots::UPPER_LEFT:
+			return {position.x - sizeOffset.x, position.y - sizeOffset.y};
+		case ElementPivots::UPPER_CENTER:
+			return {position.x, position.y - sizeOffset.y};
+		case ElementPivots::UPPER_RIGHT:
+			return {position.x + sizeOffset.x, position.y - sizeOffset.y};
+		case ElementPivots::MIDDLE_LEFT:
+			return {position.x - sizeOffset.x, position.y};
+		case ElementPivots::MIDDLE_CENTER:
+			return {position.x, position.y};
+		case ElementPivots::MIDDLE_RIGHT:
+			return {position.x + sizeOffset.x, position.y};
+		case ElementPivots::LOWER_LEFT:
+			return {position.x - sizeOffset.x, position.y + sizeOffset.y};
+		case ElementPivots::LOWER_CENTER:
+			return {position.x, position.y + sizeOffset.y};
+		case ElementPivots::LOWER_RIGHT:
+			return {position.x + sizeOffset.x, position.y + sizeOffset.y};
+	}
+}

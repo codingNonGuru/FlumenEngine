@@ -2,9 +2,11 @@
 
 #include <glm/glm.hpp>
 
-#include "FlumenEngine/Core/Object.hpp"
 #include "FlumenCore/Conventions.hpp"
+
+#include "FlumenEngine/Core/Object.hpp"
 #include "FlumenEngine/Core/Types.hpp"
+#include "FlumenEngine/Interface/ElementData.h"
 
 class Sprite;
 class Camera;
@@ -14,28 +16,11 @@ class AnimationEvent;
 class AnimationProperty;
 class Delegate;
 
-struct SpriteDescriptor
-{
-private:
-	bool isInitialized;
-
-public:
-	Word TextureName;
-
-	Word ShaderName;
-
-	SpriteDescriptor() : isInitialized(false) {}
-
-	SpriteDescriptor(Word shaderName) : TextureName(), ShaderName(shaderName), isInitialized(true) {}
-
-	SpriteDescriptor(Word textureName, Word shaderName) : TextureName(textureName), ShaderName(shaderName), isInitialized(true) {}
-
-	operator bool() {return isInitialized;}
-};
-
 class Element : public Object
 {
 	friend class Interface;
+
+	friend class ElementFactory;
 
 	void TriggerRightClickEvents();
 	
@@ -88,11 +73,15 @@ protected:
 
 	virtual void HandleSetParent(Object*) override;
 
-public:
+	Position2 GetAnchorOffset(ElementAnchors);
+
+	Position2 GetPivotOffset(ElementPivots);
+
+	void Configure(Size, DrawOrder, PositionData, SpriteDescriptor = SpriteDescriptor(), Opacity = 1.0f);
+
 	Element();
-
-	void Configure(Size, DrawOrder, Position2, SpriteDescriptor = SpriteDescriptor(), Opacity = 1.0f);
-
+	
+public:
 	void SetOpacity(Opacity opacity) {opacity_ = opacity;}
 
 	Word GetIdentifier();
