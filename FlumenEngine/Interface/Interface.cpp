@@ -15,7 +15,7 @@ Array <Element*> sortedElements = Array <Element*> (MAXIMUM_ELEMENT_COUNT);
 
 void Interface::Initialize() 
 {
-	InputHandler::OnInputUpdate.Add(&Interface::ProcessInput);
+	InputHandler::OnInputUpdate += &Interface::ProcessInput;
 }
 
 void Interface::ProcessInput()

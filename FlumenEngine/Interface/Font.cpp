@@ -17,7 +17,7 @@ Font::Font(File* file, Length size)
 
 	SDL_Color color;
 	color.a = 255;
-	const char* signs = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .:,;_!?-/+=()";
+	const char* signs = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .:,;_!?-/+=()[]<>";
 
 	TTF_Font* font = TTF_OpenFont(file->GetPath(), size);
 

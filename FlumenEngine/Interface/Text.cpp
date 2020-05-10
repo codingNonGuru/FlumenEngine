@@ -20,8 +20,6 @@ Text::Text(FontDescriptor fontName, Color color = Color::BLACK)
 	color_ = color;
 
 	alignment = Alignments::CENTER;
-
-	//Interface::AddElement(elementName, this);
 }
 
 void Text::Setup(const char* string, Float scale)

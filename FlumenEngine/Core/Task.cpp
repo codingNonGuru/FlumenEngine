@@ -3,16 +3,25 @@
 
 Task::Task()
 {
-	isValid_ = false;
-
 	timer_ = 0.0f;
+}
+
+Task::Task(float timer, void (*function)())
+{
+	event = Event(function);
+
+	timer_ = timer;
+}
+
+Task::Task(float timer, Event _event)
+{
+	event = _event;
+	
+	timer_ = timer;
 }
 
 bool Task::Update()
 {
-	if(isValid_ == false)
-		return false;
-
 	timer_ -= Time::GetDelta();
 
 	if(timer_ < 0.0f)
@@ -26,12 +35,5 @@ bool Task::Update()
 
 void Task::Run()
 {
-	//std::cout<<"RUUUUN\n";
-	isValid_ = false;
-
-	timer_ = 0.0f;
-
-	event_.Invoke();
-
-	event_.Clear();
+	event.Invoke();
 }

@@ -11,5 +11,5 @@ class TaskManager
 	static void Update();
 
 public:
-	static Task* Add();
+	static void Add(Task);
 };

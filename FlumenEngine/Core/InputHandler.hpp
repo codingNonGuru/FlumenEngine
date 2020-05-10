@@ -3,6 +3,8 @@
 #include "SDL2/SDL.h"
 
 #include "FlumenCore/Conventions.hpp"
+#include "FlumenCore/Delegate/Delegate.hpp"
+#include "FlumenCore/Delegate/Event.hpp"
 
 class Engine;
 class Delegate;
@@ -49,18 +51,56 @@ public:
 
 	static void Initialize();
 
-	template <class ClassType, class ObjectType>
+	static void RegisterEvent(SDL_Scancode key, Event action)
+	{
+		auto event = onKeyPressedEvents.Get(key);
+		if(event != nullptr)
+		{
+			*event += action;
+			//event->Add(object, function);
+			return;
+		}
+
+		event = onKeyPressedEvents.Add(key);
+		//event->Add(object, function);
+		*event += action;
+	}
+
+	static void UnregisterEvent(SDL_Scancode key, Event action)
+	{
+		auto event = onKeyPressedEvents.Get(key);
+		if(event != nullptr)
+		{
+			*event -= action;
+		}
+	}
+
+	/*template <class ClassType, class ObjectType>
 	static void RegisterEvent(SDL_Scancode key, ObjectType* object, void(ClassType::*function)())
 	{
 		auto event = onKeyPressedEvents.Get(key);
 		if(event != nullptr)
 		{
-			event->Add(object, function);
+			*event += {object, function};
+			//event->Add(object, function);
 			return;
 		}
 
 		event = onKeyPressedEvents.Add(key);
 		event->Add(object, function);
+	}
+
+	static void RegisterEvent(SDL_Scancode key, void(*function)())
+	{
+		auto event = onKeyPressedEvents.Get(key);
+		if(event != nullptr)
+		{
+			event->Add(function);
+			return;
+		}
+
+		event = onKeyPressedEvents.Add(key);
+		event->Add(function);
 	}
 
 	template <class ClassType, class ObjectType>
@@ -72,10 +112,17 @@ public:
 			event->Remove(object, function);
 			return;
 		}
-
-		//event = onKeyPressedEvents.Add(key);
-		//event->Add(object, function);
 	}
+
+	static void UnregisterEvent(SDL_Scancode key, void(*function)())
+	{
+		auto event = onKeyPressedEvents.Get(key);
+		if(event != nullptr)
+		{
+			event->Remove(function);
+			return;
+		}
+	}*/
 
 	static Position2 GetMousePosition(bool = true);
 

@@ -9,16 +9,15 @@ Array <Task *> recycleBin = Array <Task *> (TASK_POOL_SIZE);
 void TaskManager::Update()
 {
 	recycleBin.Reset();
-	//std::cout<<"task count: "<<tasks_.GetSize()<<"\n";
 
-	for(auto task = tasks_.GetStart(); task != tasks_.GetEnd(); ++task)
+	tasks_.Do([](auto &task) -> bool 
 	{
-		bool hasExecuted = task->Update();
+		bool hasExecuted = task.Update();
 		if(hasExecuted)
 		{
-			*recycleBin.Allocate() = task;
+			*recycleBin.Allocate() = &task;
 		}
-	}
+	});
 
 	for(auto task = recycleBin.GetStart(); task != recycleBin.GetEnd(); ++task)
 	{
@@ -26,7 +25,7 @@ void TaskManager::Update()
 	}
 }
 
-Task* TaskManager::Add()
+void TaskManager::Add(Task task)
 {
-	return tasks_.Add();
+	*tasks_.Add() = task;
 }

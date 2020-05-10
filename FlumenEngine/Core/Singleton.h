@@ -11,6 +11,8 @@ protected:
         instance = this;
     }
 
+    Singleton(Singleton &) = delete;
+
 public:
     static ObjectType * Get()
     {

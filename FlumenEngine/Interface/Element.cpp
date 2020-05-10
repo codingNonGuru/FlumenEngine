@@ -1,6 +1,7 @@
 #include <stdlib.h>
 
 #include "FlumenCore/Delegate/Delegate.hpp"
+#include "FlumenCore/Delegate/Event.hpp"
 
 #include "Element.hpp"
 #include "Sprite.hpp"
@@ -37,50 +38,6 @@ Element::Element()
 
 	Interface::AddElement("DefaultName", this);
 }
-
-/*void Element::Configure(Size size, DrawOrder drawOrder, Position2 position, SpriteDescriptor spriteDescriptor, Opacity opacity)
-{
-	Sprite* sprite = nullptr;
-	if(spriteDescriptor)
-	{
-		auto shader = ShaderManager::GetShaderMap().Get(spriteDescriptor.ShaderName);
-		auto texture = TextureManager::GetTexture(spriteDescriptor.TextureName);
-
-    	sprite = new Sprite(texture, shader);
-	}
-
-	isActive_ = false;
-
-	isInteractive_ = false;
-
-	transform_ = new Transform(position);
-
-	parent_ = nullptr;
-
-	animator_ = new Animator();
-
-	sprite_ = sprite;
-	if(sprite_)
-	{
-		sprite_->SetParent(this);
-	}
-
-	size_ = size;
-
-	drawOrder_ = drawOrder;
-
-	opacity_ = opacity;
-
-	leftClickEvents_ = new Delegate();
-
-	rightClickEvents_ = new Delegate();
-
-	hoverEvents_ = new Delegate();
-
-	children_.Initialize(DEFAULT_CHILDREN_COUNT);
-
-	HandleConfigure();
-}*/
 
 void Element::Configure(Size size, DrawOrder drawOrder, PositionData positionData, SpriteDescriptor spriteDescriptor, Opacity opacity)
 {
@@ -154,7 +111,7 @@ void Element::Initialize()
 	if(animation != nullptr)
 	{
 		closeEvent_ = animation->GetFinishEvent();
-		closeEvent_->GetActions().Add(this, &Element::Disable);
+		closeEvent_->GetActions() += {this, &Element::Disable};
 	}
 
 	HandleInitialize();
