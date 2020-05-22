@@ -21,4 +21,4 @@ project (Engine)
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 #add_executable(Engine ${SOURCE_FILES})
 
-target_link_libraries(Engine GL GLEW pthread SDL2 SDL2_ttf SDL2_image)
+target_link_libraries(Engine GL GLEW pthread SDL2 SDL2_ttf SDL2_image SDL2_mixer)

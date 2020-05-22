@@ -9,6 +9,7 @@
 #include "FlumenEngine/Render/MeshManager.hpp"
 #include "FlumenEngine/Render/TextureManager.hpp"
 #include "FlumenEngine/Interface/FontManager.hpp"
+#include "FlumenEngine/Sound/SoundManager.h"
 
 Array <File>* AssetManager::files_ = nullptr;
 
@@ -54,6 +55,8 @@ void AssetManager::LoadAssets()
 	TextureManager::LoadTextures();
 
 	FontManager::LoadFonts();
+
+	engine::SoundManager::Get()->LoadSounds();
 
 	//CountScripts();
 
