@@ -11,6 +11,8 @@ container::Array<int> InputHandler::formerKeys_ = container::Array<int>();
 
 Map <Delegate, SDL_Scancode> InputHandler::onKeyPressedEvents = Map <Delegate, SDL_Scancode> ();
 
+Map <Delegate, SDL_Scancode> InputHandler::onKeyHeldEvents = Map <Delegate, SDL_Scancode> ();
+
 Delegate InputHandler::OnInputUpdate = Delegate();
 
 Delegate InputHandler::OnRightMouseClick = Delegate();
@@ -24,6 +26,8 @@ void InputHandler::Initialize()
 	formerKeys_.Initialize(64);
 
 	onKeyPressedEvents.Initialize(64);
+
+	onKeyHeldEvents.Initialize(64);
 }
 
 void InputHandler::Update()
@@ -94,7 +98,11 @@ void InputHandler::Update()
 
 		if(wasPressed)
 		{
-			break;
+			auto event = onKeyHeldEvents.Get((SDL_Scancode)*currKey);
+			if(event != nullptr)
+				event->Invoke();
+
+			continue;
 		}
 
 		auto event = onKeyPressedEvents.Get((SDL_Scancode)*currKey);

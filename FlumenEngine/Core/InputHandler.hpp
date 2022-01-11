@@ -34,6 +34,8 @@ class InputHandler
 
 	static Map <Delegate, SDL_Scancode> onKeyPressedEvents;
 
+	static Map <Delegate, SDL_Scancode> onKeyHeldEvents;
+
 	static void UpdateMouse();
 
 public:
@@ -69,6 +71,30 @@ public:
 	static void UnregisterEvent(SDL_Scancode key, Event action)
 	{
 		auto event = onKeyPressedEvents.Get(key);
+		if(event != nullptr)
+		{
+			*event -= action;
+		}
+	}
+
+	static void RegisterContinualEvent(SDL_Scancode key, Event action)
+	{
+		auto event = onKeyHeldEvents.Get(key);
+		if(event != nullptr)
+		{
+			*event += action;
+			//event->Add(object, function);
+			return;
+		}
+
+		event = onKeyHeldEvents.Add(key);
+		//event->Add(object, function);
+		*event += action;
+	}
+
+	static void UnregisterContinualEvent(SDL_Scancode key, Event action)
+	{
+		auto event = onKeyHeldEvents.Get(key);
 		if(event != nullptr)
 		{
 			*event -= action;
