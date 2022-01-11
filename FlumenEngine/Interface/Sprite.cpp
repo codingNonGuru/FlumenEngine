@@ -34,11 +34,11 @@ void Sprite::Initialize(Texture* texture, Shader* shader)
 	opacity_ = 1.0f;
 }
 
-void Sprite::Draw(Camera* camera)
+void Sprite::Draw(Camera* camera, const SpriteDrawData data = SpriteDrawData())
 {
 	shader_->Bind();
 
-	SetDefaultConstants(camera);
+	SetDefaultConstants(camera, parent_ ? nullptr : &data);
 
 	SetExtraConstants();
 
@@ -61,30 +61,33 @@ float & Sprite::GetOpacity()
 	return opacity_;
 }
 
-void Sprite::SetDefaultConstants(Camera* camera)
+void Sprite::SetDefaultConstants(Camera* camera, const SpriteDrawData *data)
 {
 	shader_->SetConstant(camera->GetMatrix(), "viewMatrix");
 
-	shader_->SetConstant(parent_->GetGlobalPosition(), "spritePosition");
+	shader_->SetConstant(parent_ ? parent_->GetGlobalPosition() : data->Position, "spritePosition");
 
-	Scale2 scale;
-	if(texture_)
-	{
-		auto textureSize = texture_->GetSize();
-		scale = Scale2(textureSize.x, textureSize.y);
-	}
-	else
-	{
-		auto parentSize = parent_->GetSize();
-		scale = Scale2(parentSize.x, parentSize.y);
-	}
-	scale *= parent_->GetTransform()->GetScale();
+	auto scale = parent_ ? [this, data] {
+		Scale2 scale;
+		if(texture_)
+		{
+			auto textureSize = texture_->GetSize();
+			scale = Scale2(textureSize.x, textureSize.y);
+		}
+		else
+		{
+			auto parentSize = parent_->GetSize();
+			scale = Scale2(parentSize.x, parentSize.y);
+		}
+		scale *= parent_->GetTransform()->GetScale();
+		return scale;
+	} () : data->Size;
 	shader_->SetConstant(scale, "spriteSize");
 
-	Opacity opacity = opacity_ * parent_->GetOpacity();
+	Opacity opacity = parent_ ? opacity_ * parent_->GetOpacity() : data->Opacity;
 	shader_->SetConstant(opacity, "opacity");
 
-	auto drawOrder = (float)parent_->GetDrawOrder() * 0.1f;
+	auto drawOrder = parent_ ? (float)parent_->GetDrawOrder() * 0.1f : data->Depth;
 	shader_->SetConstant(drawOrder, "depth");
 }
 

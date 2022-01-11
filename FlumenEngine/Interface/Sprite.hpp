@@ -14,6 +14,17 @@ class Camera;
 class Model;
 class Color;
 
+struct SpriteDrawData
+{
+	Position2 Position;
+
+	Scale2 Size;
+
+	Opacity Opacity;
+
+	DrawOrder Depth;
+};
+
 class Sprite
 {
 private:
@@ -31,7 +42,7 @@ private:
 
 	Color* color_;
 
-	void SetDefaultConstants(Camera*);
+	void SetDefaultConstants(Camera *, const SpriteDrawData *);
 
 	void BindDefaultTextures();
 
@@ -47,7 +58,7 @@ public:
 
 	void Initialize(Texture*, Shader*);
 
-	void Draw(Camera*);
+	void Draw(Camera*, const SpriteDrawData = SpriteDrawData());
 
 	void SetTexture(Texture* texture) {texture_ = texture;}
 

@@ -13,7 +13,7 @@
 
 Text::Text() {}
 
-Text::Text(FontDescriptor fontName, Color color = Color::BLACK) 
+Text::Text(FontDescriptor fontName, Color color) 
 {
 	font_ = FontManager::GetFont(fontName);
 

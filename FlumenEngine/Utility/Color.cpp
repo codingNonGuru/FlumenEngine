@@ -87,6 +87,8 @@ Color Color::SetSaturation(Color color, float rate)
 	if(result.b_ > 1.0f)
 		result.b_ = 1.0f;
 
+	result.a_ = color.a_;
+
 	return result;
 }
 
@@ -134,6 +136,8 @@ Color Color::AddSaturation(Color color, float amount)
 	if(result.b_ > 1.0f)
 		result.b_ = 1.0f;
 
+	result.a_ = color.a_;
+
 	return result;
 }
 
@@ -151,6 +155,8 @@ Color Color::Lighten(Color color, float rate)
 
 		//(Color(1.0f) - color) * rate + color;
 	}
+
+	result.a_ = color.a_;
 
 	return result;
 }
