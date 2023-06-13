@@ -83,6 +83,8 @@ public:
 
 	float GetViewDistance() const {return viewDistance_;}
 
+	float GetZoomFactor() const {return zoomFactor_;}
+
 	void Update();
 
 	void Translate(Direction3);

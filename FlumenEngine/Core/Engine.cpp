@@ -24,6 +24,8 @@ Delegate Engine::OnInitializeEnded = Delegate();
 
 Delegate Engine::OnGameLoopStarted = Delegate();
 
+Delegate Engine::OnInterfaceUpdateStarted = Delegate();
+
 Delegate Engine::OnShutDown = Delegate();
 
 void Engine::Initialize(Size size)
@@ -69,6 +71,8 @@ void Engine::StartGameLoop()
 		SceneManager::Update();
 
 		TaskManager::Update();
+
+		OnInterfaceUpdateStarted.Invoke();
 
 		Interface::Update();
 

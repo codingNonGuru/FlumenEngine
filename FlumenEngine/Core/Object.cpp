@@ -3,6 +3,8 @@
 
 Object::Object()
 {
+	isActive_ = false;
+	
 	parent_ = nullptr;
 
 	transform_ = nullptr;

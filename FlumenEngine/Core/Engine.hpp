@@ -21,6 +21,8 @@ public:
 
 	static Delegate OnGameLoopStarted;
 
+	static Delegate OnInterfaceUpdateStarted;
+
 	static Delegate OnShutDown;
 
 	static void Initialize(Size);

@@ -23,6 +23,8 @@ public:
 
 	Color(float, float, float, float);
 
+	Color(Float4);
+
 	Color operator + (const Color&);
 
 	Color operator * (float);

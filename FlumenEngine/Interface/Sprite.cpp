@@ -67,28 +67,33 @@ void Sprite::SetDefaultConstants(Camera* camera, const SpriteDrawData *data)
 
 	shader_->SetConstant(parent_ ? parent_->GetGlobalPosition() : data->Position, "spritePosition");
 
-	auto scale = parent_ ? [this, data] {
-		Scale2 scale;
-		if(texture_)
+	auto size = [this, data]
+	{
+		if(parent_)
 		{
-			auto textureSize = texture_->GetSize();
-			scale = Scale2(textureSize.x, textureSize.y);
+			auto scale = parent_->GetTransform()->GetScale();
+			if(texture_)
+				return scale * (Scale2)texture_->GetSize();
+			else
+				return scale * (Scale2)parent_->GetSize();
 		}
 		else
 		{
-			auto parentSize = parent_->GetSize();
-			scale = Scale2(parentSize.x, parentSize.y);
+			if(texture_)
+				return (Scale2)texture_->GetSize() * data->Size;
+			else
+				return data->Size;
 		}
-		scale *= parent_->GetTransform()->GetScale();
-		return scale;
-	} () : data->Size;
-	shader_->SetConstant(scale, "spriteSize");
+	} ();
+	shader_->SetConstant(size, "spriteSize");
 
 	Opacity opacity = parent_ ? opacity_ * parent_->GetOpacity() : data->Opacity;
 	shader_->SetConstant(opacity, "opacity");
 
 	auto drawOrder = parent_ ? (float)parent_->GetDrawOrder() * 0.1f : data->Depth;
 	shader_->SetConstant(drawOrder, "depth");
+
+	shader_->SetConstant(texture_ ? 1 : 0, "hasTexture");
 }
 
 void Sprite::BindDefaultTextures()

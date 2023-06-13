@@ -92,35 +92,38 @@ Color Color::SetSaturation(Color color, float rate)
 	return result;
 }
 
-Color Color::AddSaturation(Color color, float amount)
+Color Color::AddSaturation(Color color, float amount) 
 {
 	Color result;
 
-	float average = (color.r_ + color.g_ + color.b_) / 3.0f;
+	if(color.r_ == color.g_ && color.g_ == color.b_)
+		return color;
+
+	float average = (color.r_ + color.g_ + color.b_) / 3.0f; 
 	float maxRate;
 	if(color.r_ > average)
-		result.r_ = abs(average - color.r_) / (1.0f - average);
+		result.r_ = abs(average - color.r_) / (1.0f - average); 
 	else
 		result.r_ = abs(average - color.r_) / average;
 
 	if(color.g_ > average)
-		result.g_ = abs(average - color.g_) / (1.0f - average);
+		result.g_ = abs(average - color.g_) / (1.0f - average); 
 	else
 		result.g_ = abs(average - color.g_) / average;
 
 	if(color.b_ > average)
-		result.b_ = abs(average - color.b_) / (1.0f - average);
+		result.b_ = abs(average - color.b_) / (1.0f - average); 
 	else
 		result.b_ = abs(average - color.b_) / average;
 
 	if(result.r_ > result.g_)
-		maxRate = result.r_;
+		maxRate = result.r_; 
 	else
 		maxRate = result.g_;
 	if(result.b_ > maxRate)
 		maxRate = result.b_;
 
-	float rate = amount + maxRate;
+	float rate = amount + maxRate; 
 	if(rate > 1.0f)
 		rate = 0.9999f;
 	if(rate < 0.0f)
@@ -173,6 +176,10 @@ Color::Color(float r, float g, float b) : r_(r), g_(g), b_(b), a_(1.0f)
 
 Color::Color(float r, float g, float b, float a) : r_(r), g_(g), b_(b), a_(a)
 {
+}
+
+Color::Color(Float4 data) : r_(data.r), g_(data.g), b_(data.b), a_(data.a)
+{	
 }
 
 Color Color::operator + (const Color& other)
