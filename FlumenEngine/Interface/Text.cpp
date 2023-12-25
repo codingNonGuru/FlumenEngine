@@ -37,6 +37,10 @@ void Text::SetColor(Color color)
 void Text::AdjustSize()
 {
 	size_.x = GetTextWidth();
+
+	size_.y = font_->GetHeight();
+
+	UpdatePosition();
 }
 
 void Text::Assemble()
@@ -117,6 +121,8 @@ Float Text::GetTextWidth()
 
 		textWidth += glyph->GetAdvance();
 	}
+
+	return textWidth;
 }
 
 void Text::Render(Camera* camera)

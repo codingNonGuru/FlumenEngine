@@ -43,6 +43,8 @@ public:
 
 	static Color GREEN;
 
+	static Color DARK_GREEN;
+
 	static Color YELLOW;
 
 	static Color CYAN;

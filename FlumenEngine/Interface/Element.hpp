@@ -53,6 +53,12 @@ protected:
 
 	Opacity opacity_;
 
+	Position2 basePosition_;
+
+	ElementPivots pivot_;
+
+	ElementAnchors anchor_;
+
 	bool isInteractive_;
 
 	bool isHovered_;
@@ -78,6 +84,8 @@ protected:
 	Position2 GetPivotOffset(ElementPivots);
 
 	void Configure(Size, DrawOrder, PositionData, SpriteDescriptor = SpriteDescriptor(), Opacity = 1.0f);
+
+	void UpdatePosition();
 
 	Element();
 	

@@ -35,6 +35,8 @@ Font::Font(File* file, Length size)
 		SDL_FreeSurface(letters);
 	}
 
+	height_ = height;
+
 	Grid <Byte> text(width + 4 - width % 4, height);
 	for(auto t = text.GetStart(); t != text.GetEnd(); ++t)
 		*t = 0;

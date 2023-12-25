@@ -14,6 +14,8 @@ class Font
 
 	float descent_;
 
+	int height_;
+
 	Texture* texture_;
 
 	Array <Glyph> glyphs_;
@@ -26,4 +28,6 @@ public:
 	Texture* GetTexture();
 
 	Glyph* GetGlyph(char);
+
+	int GetHeight() const {return height_;}
 };

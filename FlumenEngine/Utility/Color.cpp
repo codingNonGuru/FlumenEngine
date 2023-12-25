@@ -12,6 +12,8 @@ Color Color::BLUE = Color(0.0f, 0.0f, 1.0f, 1.0f);
 
 Color Color::GREEN = Color(0.0f, 1.0f, 0.0f, 1.0f);
 
+Color Color::DARK_GREEN = Color(0.0f, 0.5f, 0.0f, 1.0f);
+
 Color Color::YELLOW = Color(1.0f, 1.0f, 0.0f, 1.0f);
 
 Color Color::CYAN = Color(0.0f, 1.0f, 1.0f, 1.0f);

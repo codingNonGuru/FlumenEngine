@@ -58,14 +58,15 @@ void Element::Configure(Size size, DrawOrder drawOrder, PositionData positionDat
 
 	parent_ = positionData.Parent;
 
-	Position2 offset = -GetPivotOffset(positionData.Pivot);
-	
-	if(positionData.Parent != nullptr)
-	{
-		offset += positionData.Parent->GetAnchorOffset(positionData.Anchor);
-	}
+	basePosition_ = positionData.Position;
 
-	transform_ = new Transform(positionData.Position + offset);
+	pivot_ = positionData.Pivot;
+
+	anchor_ = positionData.Anchor;
+
+	transform_ = new Transform(basePosition_);
+
+	UpdatePosition();
 
 	animator_ = new Animator();
 
@@ -88,6 +89,19 @@ void Element::Configure(Size size, DrawOrder drawOrder, PositionData positionDat
 	children_.Initialize(DEFAULT_CHILDREN_COUNT);
 
 	HandleConfigure();
+}
+
+void Element::UpdatePosition()
+{
+	Position2 offset = -GetPivotOffset(pivot_);
+	
+	if(parent_ != nullptr)
+	{
+		auto castParent = (Element*)(parent_);
+		offset += castParent->GetAnchorOffset(anchor_);
+	}
+
+	*transform_ = Transform(basePosition_ + offset);
 }
 
 Word Element::GetIdentifier()
