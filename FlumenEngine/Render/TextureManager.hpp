@@ -2,19 +2,22 @@
 
 #include "FlumenCore/Conventions.hpp"
 
-class Texture;
-
-class TextureManager
+namespace render
 {
-private:
-	static Map <Texture*> textures_;
+	class Texture;
 
-public:
-	static void LoadTextures();
+	class TextureManager
+	{
+	private:
+		static Map <Texture*> textures_;
 
-	static Map <Texture*> & GetTextures();
+	public:
+		static void LoadTextures();
 
-	static Texture* GetTexture(const char*);
+		static Map <Texture*> & GetTextures();
 
-	static void AddTexture(Texture*, const char*);
-};
+		static Texture* GetTexture(const char*);
+
+		static void AddTexture(Texture*, const char*);
+	};
+}

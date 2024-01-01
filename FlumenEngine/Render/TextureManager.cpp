@@ -8,6 +8,8 @@
 
 #define TEXTURE_EXTENSION_COUNT 2
 
+using namespace render;
+
 Map <Texture*> TextureManager::textures_ = Map <Texture*> (MAXIMUM_TEXTURE_COUNT);
 
 void TextureManager::LoadTextures()

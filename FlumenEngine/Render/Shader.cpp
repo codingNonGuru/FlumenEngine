@@ -47,7 +47,7 @@ void Shader::Unbind()
 	DEBUG_OPENGL
 }
 
-bool Shader::BindTexture(Texture* texture, const char* identifier)
+bool Shader::BindTexture(render::Texture* texture, const char* identifier)
 {
 	auto binding = textureBindings_.Get(identifier);
 	if(!binding)

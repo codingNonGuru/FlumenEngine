@@ -5,7 +5,10 @@
 typedef unsigned int GLuint;
 typedef unsigned int GLenum;
 
-class Texture;
+namespace render
+{
+	class Texture;
+}
 class TextureBinding;
 class ConstantBinding;
 class ShaderFile;
@@ -42,7 +45,7 @@ public:
 
 	void Unbind();
 
-	bool BindTexture(Texture*, const char*);
+	bool BindTexture(render::Texture*, const char*);
 
 	ConstantBinding* GetConstant(const char*);
 

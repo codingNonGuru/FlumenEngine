@@ -1,7 +1,10 @@
 #pragma once
 
 class Shader;
-class Texture;
+namespace render
+{
+	class Texture;
+}
 class Camera;
 
 class Filter
@@ -16,7 +19,7 @@ protected:
 
 	Shader* shader_;
 
-	Texture* screenTexture_;
+	render::Texture* screenTexture_;
 
 	virtual void HandleInitialize() {}
 
@@ -27,9 +30,9 @@ protected:
 public:
 	Filter();
 
-	Filter(Shader*, Texture*);
+	Filter(Shader*, render::Texture*);
 
-	void Initialize(Shader*, Texture*);
+	void Initialize(Shader*, render::Texture*);
 
 	void Update(Camera*);
 

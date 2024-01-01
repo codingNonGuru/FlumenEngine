@@ -3,7 +3,7 @@
 #include "FlumenEngine/Core/InputHandler.hpp"
 #include "FlumenEngine/Render/RenderManager.hpp"
 
-#define MAXIMUM_ELEMENT_COUNT 1024
+#define MAXIMUM_ELEMENT_COUNT 4096
 
 Map <Element*, Word> Interface::elements_ = Map <Element*, Word> (MAXIMUM_ELEMENT_COUNT);
 
@@ -88,11 +88,6 @@ void Interface::Render()
 
 void Interface::Sort()
 {
-	for(auto elementIterator = elements_.GetStart(); elementIterator != elements_.GetEnd(); ++elementIterator)
-	{
-		*sortedElements.Allocate() = *elementIterator;
-	}
-
 	for(int i = 0; i < sortedElements.GetSize(); ++i)
 	{
 		for(auto elementIterator = sortedElements.GetStart(); elementIterator != sortedElements.GetEnd(); ++elementIterator)
@@ -140,6 +135,8 @@ Element* Interface::AddElement(Word name, Element* element)
 	element->SetIdentifier(name);
 
 	isSorted_ = false;
+
+	*sortedElements.Add() = element;
 
 	return element;
 }

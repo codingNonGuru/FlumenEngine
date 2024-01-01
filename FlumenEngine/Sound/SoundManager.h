@@ -2,13 +2,13 @@
 
 #include "FlumenCore/Conventions.hpp"
 
-#include "FlumenEngine/Core/Singleton.h"
+#include "FlumenCore/Singleton.h"
 
 namespace engine
 {
     class Sound;
 
-    class SoundManager : public Singleton<SoundManager>
+    class SoundManager : public core::Singleton <SoundManager>
     {
     private:
         Map <Sound> sounds;

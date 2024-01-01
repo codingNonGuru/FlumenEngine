@@ -11,6 +11,8 @@
 
 void * reusableData = new Byte[4096 * 4096 * 16];
 
+using namespace render;
+
 Texture::Texture()
 {
 	key_ = 0;

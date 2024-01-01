@@ -6,11 +6,11 @@
 #include <future>
 #include <chrono>
 
-#include "FlumenEngine/Core/Singleton.h"
+#include "FlumenCore/Singleton.h"
 
 namespace engine
 {
-    class ThreadManager : public Singleton <ThreadManager>
+    class ThreadManager : public core::Singleton <ThreadManager>
     {
         std::thread activeThread;
 

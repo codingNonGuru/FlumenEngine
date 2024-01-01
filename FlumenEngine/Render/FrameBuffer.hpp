@@ -5,7 +5,10 @@
 #include "FlumenEngine/Utility/Color.hpp"
 
 class Shader;
-class Texture;
+namespace render
+{
+    class Texture;
+}
 
 class FrameBuffer
 {
@@ -16,9 +19,9 @@ protected:
 
 	Index bufferKey_, depthBufferKey_;
 
-	Texture* colorTexture_;
+	render::Texture* colorTexture_;
 
-	Texture* depthTexture_;
+	render::Texture* depthTexture_;
 
 	GLenum textureType_;
 
@@ -43,9 +46,9 @@ public:
 
     void UnbindTexture();
 
-    Texture* GetColorTexture();
+    render::Texture* GetColorTexture();
 
-    Texture* GetDepthTexture();
+    render::Texture* GetDepthTexture();
 
     void Clear(Color);
 };

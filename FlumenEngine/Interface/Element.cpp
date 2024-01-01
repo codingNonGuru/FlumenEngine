@@ -16,7 +16,7 @@
 #include "FlumenEngine/Render/ShaderManager.hpp"
 #include "FlumenEngine/Render/TextureManager.hpp"
 
-#define DEFAULT_CHILDREN_COUNT 32
+#define DEFAULT_CHILDREN_COUNT 512
 
 Element::Element() 
 {
@@ -45,9 +45,9 @@ void Element::Configure(Size size, DrawOrder drawOrder, PositionData positionDat
 	if(spriteDescriptor)
 	{
 		auto shader = ShaderManager::GetShaderMap().Get(spriteDescriptor.ShaderName);
-		auto texture = TextureManager::GetTexture(spriteDescriptor.TextureName);
+		auto texture = render::TextureManager::GetTexture(spriteDescriptor.TextureName);
 
-    	sprite = new Sprite(texture, shader);
+    	sprite = new Sprite(shader, texture);
 	}
 
 	isActive_ = false;

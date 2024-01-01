@@ -17,6 +17,8 @@ void TaskManager::Update()
 		{
 			*recycleBin.Allocate() = &task;
 		}
+
+		return true;
 	});
 
 	for(auto task = recycleBin.GetStart(); task != recycleBin.GetEnd(); ++task)

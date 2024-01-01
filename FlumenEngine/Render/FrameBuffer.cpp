@@ -45,14 +45,14 @@ void FrameBuffer::HandleInitialize(FrameBufferAttachments attachment)
 
 	if(attachment == FrameBufferAttachments::COLOR || attachment == FrameBufferAttachments::COLOR_AND_DEPTH)
 	{
-		colorTexture_ = new Texture(size_, TextureFormats::FOUR_FLOAT);
+		colorTexture_ = new render::Texture(size_, TextureFormats::FOUR_FLOAT);
 		colorTexture_->Bind();
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, textureType_, colorTexture_->GetKey(), 0);
 	}
 
 	if(attachment == FrameBufferAttachments::DEPTH || attachment == FrameBufferAttachments::COLOR_AND_DEPTH)
 	{
-		depthTexture_ = new Texture(size_, TextureFormats::ONE_FLOAT);
+		depthTexture_ = new render::Texture(size_, TextureFormats::ONE_FLOAT);
 		depthTexture_ ->Bind();
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, textureType_, depthTexture_ ->GetKey(), 0);
 	}
@@ -101,12 +101,12 @@ void FrameBuffer::UnbindTexture()
     DEBUG_OPENGL
 }
 
-Texture* FrameBuffer::GetColorTexture()
+render::Texture* FrameBuffer::GetColorTexture()
 {
 	return colorTexture_;
 }
 
-Texture* FrameBuffer::GetDepthTexture()
+render::Texture* FrameBuffer::GetDepthTexture()
 {
 	return depthTexture_;
 }

@@ -11,6 +11,46 @@ Font::Font()
 	texture_ = nullptr;
 }
 
+Uint32 GetPixel(SDL_Surface *surface, int x, int y)
+{
+    int bpp = surface->format->BytesPerPixel;
+    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+
+	switch (bpp)
+	{
+    case 1:
+        return *p;
+        break;
+
+    case 2:
+        return *(Uint16 *)p;
+        break;
+
+    case 3:
+        if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+			return p[0] << 24 | p[1] << 16 | p[2] << 8 | p[3];
+        else
+            return p[0] | p[1] << 8 | p[2] << 16 | p[3] << 24;
+            break;
+
+        case 4:
+            return *(Uint32 *)p;
+            break;
+
+        default:
+            return 0;       
+    }
+}
+
+Uint8 GetAlpha(Uint32 pixel, SDL_PixelFormat *format)
+{
+	static Uint8 r, g, b, a;
+
+	SDL_GetRGBA(pixel, format, &r, &g, &b, &a);
+
+	return a;
+}
+
 Font::Font(File* file, Length size)
 {
 	TTF_Init();
@@ -29,9 +69,10 @@ Font::Font(File* file, Length size)
 	for(char* sign = signs; *sign != 0; ++sign, ++signCount)
 	{
 		char symbol[] = {*sign, 0};
-		SDL_Surface* letters = TTF_RenderUTF8_Blended_Wrapped(font, symbol, color, 800);
+		SDL_Surface* letters = TTF_RenderUTF8_Blended(font, symbol, color);
 		width += letters->w;
 		height = letters->h;
+
 		SDL_FreeSurface(letters);
 	}
 
@@ -50,7 +91,7 @@ Font::Font(File* file, Length size)
 	for(char* sign = signs; *sign != 0; ++sign)
 	{
 		char symbol[] = {*sign, 0};
-		SDL_Surface* letters = TTF_RenderUTF8_Blended_Wrapped(font, symbol, color, 800);
+		SDL_Surface* letters = TTF_RenderUTF8_Blended(font, symbol, color);
 		int minx, maxx, miny, maxy, advance;
 		TTF_GlyphMetrics(font, *sign, &minx, &maxx, &miny, &maxy, &advance);
 
@@ -63,26 +104,25 @@ Font::Font(File* file, Length size)
 		*glyph = Glyph(scale, letters->w, position, textureOffset, textureScale);
 		glyph->MinimumX_ = minx;
 
-		//std::cout<<*sign<<" "<<advance<<" "<<letters->w<<" "<<minx<<"\n";
-
 		for(int x = 0; x < letters->w; ++x)
 		{
 			for(int y = 0; y < letters->h; ++y)
 			{
 				int index = x + y * letters->w;
-				*text(horizontalAdvance + x, y) = ((SDL_Color*)letters->pixels + index)->a;
+				*text(horizontalAdvance + x, y) = GetAlpha(GetPixel(letters, x, y), letters->format); //((SDL_Color*)letters->pixels + index)->a;
 			}
 		}
+		
 		horizontalAdvance += letters->w;
 		SDL_FreeSurface(letters);
 	}
 
-	texture_ = new Texture(Size(text.GetWidth(), text.GetHeight()), TextureFormats::ONE_BYTE, &text);
+	texture_ = new render::Texture(Size(text.GetWidth(), text.GetHeight()), TextureFormats::ONE_BYTE, &text);
 
 	TTF_CloseFont(font);
 }
 
-Texture* Font::GetTexture()
+render::Texture* Font::GetTexture()
 {
 	return texture_;
 }

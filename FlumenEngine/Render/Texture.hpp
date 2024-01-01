@@ -10,48 +10,49 @@ class Shader;
 class File;
 class DataBuffer;
 
-class Texture
+namespace render
 {
-	Index key_;
+	class Texture
+	{
+		Index key_;
 
-	Size size_;
+		Size size_;
 
-	TextureFormats format_;
+		TextureFormats format_;
 
-	File* file_;
+		File* file_;
 
-	void ProcessInternalFormat();
+		void ProcessInternalFormat();
 
-	void ProcessPngFormat();
+		void ProcessPngFormat();
 
-public:
-	Texture();
+	public:
+		Texture();
 
-	Texture(Size, TextureFormats, container::Matrix* = nullptr);
+		Texture(Size, TextureFormats, container::Matrix* = nullptr);
 
-	Texture(Size, TextureFormats, DataBuffer &);
+		Texture(Size, TextureFormats, DataBuffer &);
 
-	Texture(File*);
+		Texture(File*);
 
-	void Initialize(File*);
+		void Initialize(File*);
 
-	void Upload(void*);
+		void Upload(void*);
 
-	void Bind();
+		void Bind();
 
-	void Bind(GLuint, Shader*, const char*);
+		void Bind(GLuint, Shader*, const char*);
 
-	void Unbind();
+		void Unbind();
 
-	void DownloadBackBuffer();
+		void DownloadBackBuffer();
 
-	void Delete();
+		void Delete();
 
-	Index GetKey() const {return key_;}
+		Index GetKey() const {return key_;}
 
-	Size GetSize() const {return size_;}
+		Size GetSize() const {return size_;}
 
-	~Texture();
-};
-
-
+		~Texture();
+	};
+}

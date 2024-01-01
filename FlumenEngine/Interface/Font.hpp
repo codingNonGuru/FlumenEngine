@@ -3,7 +3,10 @@
 #include "FlumenCore/Conventions.hpp"
 
 class File;
-class Texture;
+namespace render
+{
+	class Texture;
+}
 class Glyph;
 
 class Font
@@ -16,7 +19,7 @@ class Font
 
 	int height_;
 
-	Texture* texture_;
+	render::Texture* texture_;
 
 	Array <Glyph> glyphs_;
 
@@ -25,7 +28,7 @@ public:
 
 	Font(File*, Length);
 
-	Texture* GetTexture();
+	render::Texture* GetTexture();
 
 	Glyph* GetGlyph(char);
 

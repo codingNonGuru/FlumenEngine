@@ -26,13 +26,18 @@ void FontManager::LoadFonts()
 		if(extensionPosition == nullptr)
 			continue;
 
+		Word fontName; 
+		fontName.Add(file->GetName(), extensionPosition - file->GetName());
+
+		std::cout<<"Generating font "<<fontName<<"\n";
+
 		for(auto sizeData : sizeDatas)
 		{
-			Word fontName;
-			fontName.Add(file->GetName(), extensionPosition - file->GetName());
-			fontName.Add(sizeData.Name);
+			Word sizeSpecificName;
+			sizeSpecificName.Add(fontName);
+			sizeSpecificName.Add(sizeData.Name);
 
-			auto font = fonts_.Add(fontName);
+			auto font = fonts_.Add(sizeSpecificName);
 			if(font == nullptr)
 				continue;
 

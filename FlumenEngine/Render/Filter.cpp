@@ -8,12 +8,12 @@
 
 Filter::Filter() {}
 
-Filter::Filter(Shader* shader, Texture* screenTexture)
+Filter::Filter(Shader* shader, render::Texture* screenTexture)
 {
 	Initialize(shader, screenTexture);
 }
 
-void Filter::Initialize(Shader* shader, Texture* screenTexture)
+void Filter::Initialize(Shader* shader, render::Texture* screenTexture)
 {
 	isActive_ = false;
 

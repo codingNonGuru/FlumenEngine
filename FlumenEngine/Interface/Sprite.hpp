@@ -7,7 +7,10 @@
 typedef unsigned int GLuint;
 typedef unsigned int GLenum;
 
-class Texture;
+namespace render
+{
+	class Texture;
+}
 class Element;
 class Shader;
 class Camera;
@@ -25,6 +28,21 @@ struct SpriteDrawData
 	DrawOrder Depth;
 };
 
+struct TextureData
+{
+	render::Texture *Texture;
+
+	Position2 Offset = {0.0f, 0.0f};
+
+	Scale2 Scale = {1.0f, 1.0f};
+
+	TextureData() : Texture(nullptr) {}
+
+	TextureData(render::Texture *texture) : Texture(texture) {}
+
+	TextureData(render::Texture *texture, Position2 offset, Scale2 scale) : Texture(texture), Offset(offset), Scale(scale) {}
+};
+
 class Sprite
 {
 private:
@@ -34,7 +52,7 @@ private:
 
 	float depth_;
 
-	Texture* texture_;
+	TextureData textureData_;
 
 	Shader* shader_;
 
@@ -54,13 +72,13 @@ protected:
 public:
 	Sprite();
 
-	Sprite(Texture*, Shader*);
+	Sprite(Shader *, TextureData = TextureData());
 
-	void Initialize(Texture*, Shader*);
+	void Initialize(Shader *, TextureData = TextureData());
 
 	void Draw(Camera*, const SpriteDrawData = SpriteDrawData());
 
-	void SetTexture(Texture* texture) {texture_ = texture;}
+	void SetTexture(render::Texture* texture) {textureData_.Texture = texture;}
 
 	void SetParent(Element* parent) {parent_ = parent;}
 

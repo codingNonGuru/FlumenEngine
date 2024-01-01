@@ -52,7 +52,7 @@ void AssetManager::LoadAssets()
 
 	MeshManager::LoadMeshes();
 
-	TextureManager::LoadTextures();
+	render::TextureManager::LoadTextures();
 
 	FontManager::LoadFonts();
 
