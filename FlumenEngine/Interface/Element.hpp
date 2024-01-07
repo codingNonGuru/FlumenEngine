@@ -16,11 +16,28 @@ class AnimationEvent;
 class AnimationProperty;
 class Delegate;
 
+class Element;
+
+class MouseFollower
+{
+	friend class Element;
+
+	Element *parent;
+
+	bool isActive {true};
+
+	MouseFollower(Element *newParent) : parent(newParent) {}
+
+	void Update();
+};
+
 class Element : public Object
 {
 	friend class Interface;
 
 	friend class ElementFactory;
+
+	friend class MouseFollower;
 
 	void TriggerRightClickEvents();
 	
@@ -63,6 +80,8 @@ protected:
 
 	bool isHovered_;
 
+	MouseFollower *mouseFollower_ {nullptr};
+
 	virtual void HandleOpen();
 
 	virtual void HandleClose();
@@ -78,6 +97,12 @@ protected:
 	virtual void HandleDisable() override;
 
 	virtual void HandleSetParent(Object*) override;
+
+	virtual void HandleLeftClick();
+
+	virtual void HandleRightClick();
+
+	virtual void HandleHover();
 
 	Position2 GetAnchorOffset(ElementAnchors);
 
@@ -129,4 +154,6 @@ public:
 	void Open();
 
 	void Close();
+
+	void FollowMouse() {mouseFollower_ = new MouseFollower(this);}
 };

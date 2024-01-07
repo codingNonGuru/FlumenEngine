@@ -18,6 +18,19 @@
 
 #define DEFAULT_CHILDREN_COUNT 32
 
+
+void MouseFollower::Update()
+{
+	if(isActive == false)
+		return;
+
+	auto mousePosition = InputHandler::GetMousePosition();
+
+	parent->basePosition_ = mousePosition;
+
+	parent->UpdatePosition();
+}
+
 Element::Element() 
 {
 	isActive_ = false;
@@ -178,6 +191,11 @@ void Element::Update()
 		animator_->Update();
 	}
 
+	if(mouseFollower_)
+	{
+		mouseFollower_->Update();
+	}
+
 	HandleUpdate();
 }
 
@@ -264,6 +282,8 @@ void Element::TriggerLeftClickEvents()
 		return;
 
 	leftClickEvents_->Invoke();
+
+	HandleLeftClick();
 }
 
 void Element::TriggerRightClickEvents()
@@ -272,6 +292,8 @@ void Element::TriggerRightClickEvents()
 		return;
 
 	rightClickEvents_->Invoke();
+
+	HandleRightClick();
 }
 
 void Element::TriggerHoverEvents()
@@ -280,6 +302,8 @@ void Element::TriggerHoverEvents()
 		return;
 
 	hoverEvents_->Invoke();
+
+	HandleHover();
 }
 
 void Element::Open()
@@ -352,6 +376,12 @@ void Element::HandleSetParent(Object* parent)
 	auto parentAsElement = (Element*)parent;
 	parentAsElement->AddChild(this);
 }
+
+void Element::HandleLeftClick() {std::cout<<"alohaaaa\n";}
+
+void Element::HandleRightClick() {}
+
+void Element::HandleHover() {}
 
 void Element::HandleConfigure() {}
 
