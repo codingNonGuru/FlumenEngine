@@ -49,5 +49,7 @@ public:
 
 	static Color CYAN;
 
+	static Color ORANGE;
+
 	static Color MAGENTA;
 };

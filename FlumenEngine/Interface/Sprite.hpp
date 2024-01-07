@@ -19,18 +19,18 @@ class Color;
 
 struct SpriteDrawData
 {
-	Position2 Position;
+	Position2 Position {0.0f, 0.0f};
 
-	Scale2 Size;
+	Scale2 Size {1.0f, 1.0f};
 
-	Opacity Opacity;
+	Opacity Opacity {1.0f};
 
-	DrawOrder Depth;
+	DrawOrder Depth {0};
 };
 
 struct TextureData
 {
-	render::Texture *Texture;
+	render::Texture *Texture {nullptr};
 
 	Position2 Offset = {0.0f, 0.0f};
 
@@ -58,7 +58,9 @@ private:
 
 	Element* parent_;
 
-	Color* color_;
+	Color* color_ {nullptr};
+
+	SpriteDrawData *drawData_ {nullptr};
 
 	void SetDefaultConstants(Camera *, const SpriteDrawData *);
 
@@ -78,11 +80,15 @@ public:
 
 	void Draw(Camera*, const SpriteDrawData = SpriteDrawData());
 
-	void SetTexture(render::Texture* texture) {textureData_.Texture = texture;}
+	void SetTexture(render::Texture* texture);
+
+	void SetTexture(Word textureName);
 
 	void SetParent(Element* parent) {parent_ = parent;}
 
 	void SetColor(Color* color) {color_ = color;}
+
+	void SetDrawData(SpriteDrawData *drawData) {drawData_ = drawData;}
 
 	float & GetOpacity();
 };

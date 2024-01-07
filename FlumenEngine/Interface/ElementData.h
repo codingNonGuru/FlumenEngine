@@ -6,21 +6,32 @@
 
 class Element;
 
+namespace render
+{
+    class Texture;
+}
+
 struct SpriteDescriptor
 {
 private:
 	bool isInitialized;
 
 public:
+    bool HasTexture {false};
+
 	Word TextureName;
 
 	Word ShaderName;
 
+    render::Texture *Texture {nullptr};
+
 	SpriteDescriptor() : isInitialized(false) {}
 
-	SpriteDescriptor(Word shaderName) : TextureName(), ShaderName(shaderName), isInitialized(true) {}
+	SpriteDescriptor(Word shaderName) : HasTexture(false), TextureName(), ShaderName(shaderName), isInitialized(true) {}
 
-	SpriteDescriptor(Word textureName, Word shaderName) : TextureName(textureName), ShaderName(shaderName), isInitialized(true) {}
+	SpriteDescriptor(Word textureName, Word shaderName) : HasTexture(true), TextureName(textureName), ShaderName(shaderName), isInitialized(true) {}
+
+    SpriteDescriptor(render::Texture *texture, Word shaderName) : HasTexture(true), Texture(texture), ShaderName(shaderName), isInitialized(true) {}
 
 	operator bool() {return isInitialized;}
 };

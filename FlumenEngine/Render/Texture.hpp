@@ -53,6 +53,8 @@ namespace render
 
 		Size GetSize() const {return size_;}
 
+		File *GetFile() const {return file_;}
+
 		~Texture();
 	};
 }

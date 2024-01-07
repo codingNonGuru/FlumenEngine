@@ -16,7 +16,7 @@
 #include "FlumenEngine/Render/ShaderManager.hpp"
 #include "FlumenEngine/Render/TextureManager.hpp"
 
-#define DEFAULT_CHILDREN_COUNT 512
+#define DEFAULT_CHILDREN_COUNT 32
 
 Element::Element() 
 {
@@ -45,7 +45,21 @@ void Element::Configure(Size size, DrawOrder drawOrder, PositionData positionDat
 	if(spriteDescriptor)
 	{
 		auto shader = ShaderManager::GetShaderMap().Get(spriteDescriptor.ShaderName);
-		auto texture = render::TextureManager::GetTexture(spriteDescriptor.TextureName);
+
+		auto texture = [&] -> render::Texture *
+		{
+			if(spriteDescriptor.HasTexture == false)
+				return nullptr;
+
+			if(spriteDescriptor.Texture == nullptr)
+			{
+				return render::TextureManager::GetTexture(spriteDescriptor.TextureName);
+			}
+			else
+			{
+				return spriteDescriptor.Texture;
+			}
+		} ();
 
     	sprite = new Sprite(shader, texture);
 	}
@@ -292,6 +306,8 @@ void Element::Close()
 
 void Element::AddChild(Element* child)
 {
+	assert(children_.IsFull() == false && "Element child buffer is full.\n");
+
 	auto childPointer = children_.Allocate();
 	if(childPointer == nullptr)
 		return;

@@ -18,6 +18,8 @@ Color Color::YELLOW = Color(1.0f, 1.0f, 0.0f, 1.0f);
 
 Color Color::CYAN = Color(0.0f, 1.0f, 1.0f, 1.0f);
 
+Color Color::ORANGE = Color(1.0f, 0.5f, 0.0f, 1.0f);
+
 Color Color::MAGENTA = Color(1.0f, 0.0f, 1.0f, 1.0f);
 
 float Color::GetSaturation(Color color)

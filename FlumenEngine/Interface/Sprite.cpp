@@ -3,11 +3,14 @@
 
 #include "Sprite.hpp"
 #include "FlumenEngine/Render/Texture.hpp"
+#include "FlumenEngine/Render/TextureManager.hpp"
 #include "FlumenEngine/Render/Camera.hpp"
 #include "Element.hpp"
 #include "FlumenEngine/Render/Model.hpp"
 #include "FlumenEngine/Render/Shader.hpp"
 #include "FlumenEngine/Core/Transform.hpp"
+#include "FlumenEngine/Utility/Color.hpp"
+#include "FlumenEngine/Core/File.hpp"
 
 Sprite::Sprite()
 {
@@ -34,11 +37,11 @@ void Sprite::Initialize(Shader* shader, TextureData textureData)
 	opacity_ = 1.0f;
 }
 
-void Sprite::Draw(Camera* camera, const SpriteDrawData data = SpriteDrawData())
+void Sprite::Draw(Camera* camera, const SpriteDrawData data)
 {
 	shader_->Bind();
 
-	SetDefaultConstants(camera, parent_ ? nullptr : &data);
+	SetDefaultConstants(camera, parent_ ? &SpriteDrawData() : &data);
 
 	SetExtraConstants();
 
@@ -46,7 +49,14 @@ void Sprite::Draw(Camera* camera, const SpriteDrawData data = SpriteDrawData())
 
 	BindExtraTextures();
 
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	if(shader_->GetName() == "SlicedSprite")
+	{
+		glDrawArrays(GL_TRIANGLES, 0, 54);
+	}
+	else
+	{
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+	}
 
 	shader_->Unbind();
 
@@ -61,28 +71,46 @@ float & Sprite::GetOpacity()
 	return opacity_;
 }
 
-void Sprite::SetDefaultConstants(Camera* camera, const SpriteDrawData *data)
+void Sprite::SetDefaultConstants(Camera* camera, const SpriteDrawData *newData)
 {
+	auto data = (drawData_ != nullptr ? drawData_ : newData);
+
 	shader_->SetConstant(camera->GetMatrix(), "viewMatrix");
 
 	shader_->SetConstant(parent_ ? parent_->GetGlobalPosition() : data->Position, "spritePosition");
 
-	auto size = [this, data]
+	auto size = [this, data] ()
 	{
-		if(parent_)
+		if(shader_->GetName() == "SlicedSprite")
 		{
-			auto scale = parent_->GetTransform()->GetScale();
-			if(textureData_.Texture)
-				return scale * (Scale2)textureData_.Texture->GetSize();
-			else
+			if(parent_)
+			{
+				auto scale = parent_->GetTransform()->GetScale() * data->Size;
+				
 				return scale * (Scale2)parent_->GetSize();
+			}
+			else
+			{
+				return data->Size;
+			}
 		}
 		else
 		{
-			if(textureData_.Texture)
-				return (Scale2)textureData_.Texture->GetSize() * data->Size;
+			if(parent_)
+			{
+				auto scale = parent_->GetTransform()->GetScale() * data->Size;
+				if(textureData_.Texture)
+					return scale * (Scale2)textureData_.Texture->GetSize();
+				else
+					return scale * (Scale2)parent_->GetSize();
+			}
 			else
-				return data->Size;
+			{
+				if(textureData_.Texture)
+					return (Scale2)textureData_.Texture->GetSize() * data->Size;
+				else
+					return data->Size;
+			}
 		}
 	} ();
 	shader_->SetConstant(size, "spriteSize");
@@ -93,16 +121,31 @@ void Sprite::SetDefaultConstants(Camera* camera, const SpriteDrawData *data)
 	auto drawOrder = parent_ ? (float)parent_->GetDrawOrder() * 0.1f : data->Depth;
 	shader_->SetConstant(drawOrder, "depth");
 
-	shader_->SetConstant(textureData_.Texture ? 1 : 0, "hasTexture");
+	if(shader_->GetName() == "Sprite")
+	{
+		shader_->SetConstant(textureData_.Texture != nullptr ? 1 : 0, "hasTexture");
+	}
 
 	shader_->SetConstant(textureData_.Offset, "textureOffset");
 
 	shader_->SetConstant(textureData_.Scale, "textureScale");
+
+	shader_->SetConstant(color_ != nullptr ? *color_ : Color::WHITE, "color");
+}
+
+void Sprite::SetTexture(render::Texture* texture) 
+{
+	textureData_.Texture = texture;
+}
+
+void Sprite::SetTexture(Word textureName)
+{
+	textureData_.Texture = render::TextureManager::GetTexture(textureName);
 }
 
 void Sprite::BindDefaultTextures()
 {
-	if(textureData_.Texture)
+	if(textureData_.Texture != nullptr)
 	{
 		shader_->BindTexture(textureData_.Texture, "diffuse");
 	}

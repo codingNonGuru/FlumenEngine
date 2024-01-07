@@ -20,7 +20,7 @@ public:
     static TextType * BuildText(ElementData, TextData);
 };
 
-template <class ElementType>
+template <class ElementType = Element>
 ElementType * ElementFactory::BuildElement(ElementData data)
 {
     auto element = new ElementType();
