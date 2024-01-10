@@ -17,6 +17,7 @@ class AnimationProperty;
 class Delegate;
 
 class Element;
+class Color;
 
 class MouseFollower
 {
@@ -133,6 +134,14 @@ public:
 
 	Size & GetSize();
 
+	int GetWidth() const {return size_.x;}
+
+	int GetHeight() const {return size_.y;}
+
+	void SetWidth(int width) {size_.x = width;}
+
+	void SetHeight(int height) {size_.y = height;}
+
 	DrawOrder & GetDrawOrder();
 
 	Opacity GetOpacity();
@@ -144,6 +153,8 @@ public:
 	Delegate & GetHoverEvents();
 
 	void SetInteractivity(bool);
+
+	void SetSpriteColor(Color &);
 
 	AnimationProperty* AddAnimationProperty(const char*, InterfaceElementParameters);
 

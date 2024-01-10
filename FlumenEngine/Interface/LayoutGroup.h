@@ -9,7 +9,9 @@ class LayoutGroup : public Element
 {
     int elementsPerRow {4};
 
-    float elementDistance {10.0f};
+    float horizontalDistance {0.0f};
+
+    float verticalDistance {0.0f};
 
     void HandleUpdate() override
     {
@@ -38,11 +40,11 @@ class LayoutGroup : public Element
             activeElementCount++;
         }
 
-        auto horizontalOffset = elementDistance * Float(elementsPerRow - 1) + rowWidth;
+        auto horizontalOffset = horizontalDistance * Float(elementsPerRow - 1) + rowWidth;
         horizontalOffset *= 0.5f;
         horizontalOffset -= (*children_.GetStart())->GetSize().x * 0.5f;
 
-        auto verticalOffset = elementDistance * Float((activeElementCount / elementsPerRow) - (activeElementCount % elementsPerRow == 0 ? 1 : 0)) + height;
+        auto verticalOffset = verticalDistance * Float((activeElementCount / elementsPerRow) - (activeElementCount % elementsPerRow == 0 ? 1 : 0)) + height;
         verticalOffset *= 0.5f;
         verticalOffset -= (*children_.GetStart())->GetSize().y * 0.5f;
 
@@ -62,7 +64,7 @@ class LayoutGroup : public Element
                 bool hasOnlyOneRow = activeElementCount / elementsPerRow == 0;
                 if(index != 0 && hasOnlyOneRow == false)
                 {
-                    position.y += elementDistance;
+                    position.y += verticalDistance;
                     position.y += (element->GetSize().y + (*(iterator - elementsPerRow))->GetSize().y) * 0.5f;
                 }
             }
@@ -74,13 +76,13 @@ class LayoutGroup : public Element
                 break;
 
             position.x += (element->GetSize().x + nextLabel->GetSize().x) * 0.5f;
-            position.x += elementDistance;
+            position.x += horizontalDistance;
 
             index++;
         }
 
-        size_.x = elementDistance * Float(elementsPerRow - 1) + rowWidth;
-        size_.y = elementDistance * Float((activeElementCount / elementsPerRow) - (activeElementCount % elementsPerRow == 0 ? 1 : 0)) + height;
+        size_.x = horizontalDistance * Float(elementsPerRow - 1) + rowWidth;
+        size_.y = verticalDistance * Float((activeElementCount / elementsPerRow) - (activeElementCount % elementsPerRow == 0 ? 1 : 0)) + height;
         
         UpdatePosition();
     }
@@ -89,6 +91,14 @@ public:
     void SetDistancing(int elementsPerRow, float elementDistance)
     {
         this->elementsPerRow = elementsPerRow;
-        this->elementDistance = elementDistance;
+        this->horizontalDistance = elementDistance;
+        this->verticalDistance = elementDistance;
+    }
+
+    void SetDistancing(int elementsPerRow, float horizontalDistance, float verticalDistance)
+    {
+        this->elementsPerRow = elementsPerRow;
+        this->horizontalDistance = horizontalDistance;
+        this->verticalDistance = verticalDistance;
     }
 };

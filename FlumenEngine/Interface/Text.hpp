@@ -46,4 +46,6 @@ public:
 	void SetAlignment(Alignments alignment) {this->alignment = alignment;}
 
 	void AdjustSize();
+
+	Integer GetFontHeight() const;
 };

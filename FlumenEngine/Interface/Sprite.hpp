@@ -62,6 +62,10 @@ private:
 
 	SpriteDrawData *drawData_ {nullptr};
 
+	bool isSliced_ {false};
+
+	Scale2 sliceCornerSize_ {16.0f, 16.0f};
+
 	void SetDefaultConstants(Camera *, const SpriteDrawData *);
 
 	void BindDefaultTextures();
@@ -89,6 +93,14 @@ public:
 	void SetColor(Color* color) {color_ = color;}
 
 	void SetDrawData(SpriteDrawData *drawData) {drawData_ = drawData;}
+
+	void SetSlice(Scale2 sliceCornerSize) 
+	{
+		sliceCornerSize_ = sliceCornerSize;
+		isSliced_ = true;
+	}
+
+	Scale2 GetSlice() const {return sliceCornerSize_;}
 
 	float & GetOpacity();
 };

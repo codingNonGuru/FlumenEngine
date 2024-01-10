@@ -125,6 +125,11 @@ Float Text::GetTextWidth()
 	return textWidth;
 }
 
+Integer Text::GetFontHeight() const
+{
+	return font_->GetHeight();
+}
+
 void Text::Render(Camera* camera)
 {
 	if(!IsGloballyActive())

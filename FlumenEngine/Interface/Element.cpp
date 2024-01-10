@@ -354,6 +354,11 @@ Element* Element::GetChild(Word identifier)
 	return nullptr;
 }
 
+void Element::SetSpriteColor(Color &color)
+{
+	sprite_->SetColor(&color);
+}	
+
 void Element::HandleOpen()
 {
 }

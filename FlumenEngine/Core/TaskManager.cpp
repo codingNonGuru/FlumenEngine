@@ -23,7 +23,7 @@ void TaskManager::Update()
 
 	for(auto task = recycleBin.GetStart(); task != recycleBin.GetEnd(); ++task)
 	{
-		tasks_.Remove(*task);
+		tasks_.RemoveAt(*task);
 	}
 }
 

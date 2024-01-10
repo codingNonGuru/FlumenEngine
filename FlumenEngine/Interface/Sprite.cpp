@@ -35,6 +35,11 @@ void Sprite::Initialize(Shader* shader, TextureData textureData)
 	parent_ = nullptr;
 
 	opacity_ = 1.0f;
+
+	if(shader_->GetName() == "SlicedSprite")
+	{
+		isSliced_ = true;
+	}
 }
 
 void Sprite::Draw(Camera* camera, const SpriteDrawData data)
@@ -49,7 +54,7 @@ void Sprite::Draw(Camera* camera, const SpriteDrawData data)
 
 	BindExtraTextures();
 
-	if(shader_->GetName() == "SlicedSprite")
+	if(isSliced_ == true)
 	{
 		glDrawArrays(GL_TRIANGLES, 0, 54);
 	}
@@ -79,9 +84,9 @@ void Sprite::SetDefaultConstants(Camera* camera, const SpriteDrawData *newData)
 
 	shader_->SetConstant(parent_ ? parent_->GetGlobalPosition() : data->Position, "spritePosition");
 
-	auto size = [this, data] ()
+	auto size = [this, data] () -> Scale2
 	{
-		if(shader_->GetName() == "SlicedSprite")
+		if(isSliced_ == true)
 		{
 			if(parent_)
 			{
@@ -126,11 +131,14 @@ void Sprite::SetDefaultConstants(Camera* camera, const SpriteDrawData *newData)
 		shader_->SetConstant(textureData_.Texture != nullptr ? 1 : 0, "hasTexture");
 	}
 
-	shader_->SetConstant(textureData_.Offset, "textureOffset");
-
-	shader_->SetConstant(textureData_.Scale, "textureScale");
-
 	shader_->SetConstant(color_ != nullptr ? *color_ : Color::WHITE, "color");
+
+	if(isSliced_ == true)
+	{
+		shader_->SetConstant(color_ != nullptr ? 1 : 0, "hasColor");
+
+		shader_->SetConstant(sliceCornerSize_, "sliceCornerSize");
+	}
 }
 
 void Sprite::SetTexture(render::Texture* texture) 

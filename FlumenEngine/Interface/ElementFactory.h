@@ -4,9 +4,11 @@
 
 #include "FlumenEngine/Interface/ElementData.h"
 #include "FlumenEngine/Interface/TextData.h"
+#include "FlumenEngine/Interface/BarData.h"
 
 class Element;
 class Text;
+class ProgressBar;
 
 class ElementFactory 
 {
@@ -18,6 +20,9 @@ public:
 
     template <class TextType = Text>
     static TextType * BuildText(ElementData, TextData);
+
+    template <class BarType = ProgressBar>
+    static BarType * BuildProgressBar(ElementData, BarData);
 };
 
 template <class ElementType = Element>
@@ -37,4 +42,14 @@ TextType * ElementFactory::BuildText(ElementData elementData, TextData textData)
     text->Setup(textData.Content);
 
     return text;    
+}
+
+template <class BarType>
+BarType * ElementFactory::BuildProgressBar(ElementData elementData, BarData barData)
+{
+    auto bar = new BarType();
+    bar->Configure(elementData.Size, elementData.Order, elementData.PositionData, elementData.Sprite, elementData.Opacity);
+    bar->Setup(barData);
+
+    return bar;    
 }
