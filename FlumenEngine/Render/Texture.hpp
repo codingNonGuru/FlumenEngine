@@ -39,11 +39,11 @@ namespace render
 
 		void Upload(void*);
 
-		void Bind();
+		void Bind() const;
 
-		void Bind(GLuint, Shader*, const char*);
+		void Bind(GLuint, Shader*, const char*) const;
 
-		void Unbind();
+		void Unbind() const;
 
 		void DownloadBackBuffer();
 

@@ -17,9 +17,27 @@ public:
 	enum class Alignments {LEFT, CENTER, RIGHT};
 
 private:
+	struct LetterData
+	{
+		char Letter;
+
+		int RowIndex;
+	};
+
+	struct Row
+	{
+		Array <LetterData> Letters;
+
+		float Width;
+
+		float Height;
+	};
+
 	Font* font_;
 
 	Phrase string_;
+
+	Array <Row> rows_;
 
 	Color color_;
 
@@ -27,9 +45,13 @@ private:
 
 	Alignments alignment;
 
-	void Assemble();
+	Float rowSpacingFactor_ {0.85f};
 
-	Float GetTextWidth();
+	bool isWidthLocked_ {false};
+
+	bool isHeightLocked_ {false};
+
+	void Assemble();
 
 protected:
 	Text();
@@ -45,7 +67,13 @@ public:
 
 	void SetAlignment(Alignments alignment) {this->alignment = alignment;}
 
-	void AdjustSize();
-
 	Integer GetFontHeight() const;
+
+	void LockWidth() {isWidthLocked_ = true;}
+
+	void LockHeight() {isHeightLocked_ = true;}
+
+	void LockWidth(int);
+
+	void LockHeight(int);
 };

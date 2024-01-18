@@ -13,7 +13,7 @@ public:
 
 	ShaderFile(const char* name, const char* path, ShaderTypes type) : File(name, path), type_(type) {}
 
-	const char* GetPath() const {return path_;}
+	const char* GetPath() {return path_.Get();}
 
 	void SetPath(const char* path) {path_ = path;}
 

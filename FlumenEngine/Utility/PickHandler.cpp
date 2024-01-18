@@ -5,7 +5,7 @@
 #include "FlumenEngine/Render/Camera.hpp"
 #include "FlumenEngine/Core/InputHandler.hpp"
 
-bool PickHandler::CheckCollision(Camera * camera, Mesh * mesh, Float3 meshOffset, Float meshScale = 1.0f)
+bool PickHandler::CheckCollision(Camera * camera, Mesh * mesh, Float3 meshOffset, Float meshScale)
 {
     Position2 mousePosition = InputHandler::GetMousePosition();
 

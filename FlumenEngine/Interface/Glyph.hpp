@@ -14,6 +14,10 @@ struct GlyphData
 	Float2 TextureOffset_;
 
 	Float2 TextureScale_;
+
+	int RowIndex_;
+
+	int Padding_[3];
 };
 
 class Glyph

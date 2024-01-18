@@ -1,5 +1,7 @@
 #pragma once
 
+#include "FlumenCore/Conventions.hpp"
+
 class AnimationKey
 {
 	float frame_;

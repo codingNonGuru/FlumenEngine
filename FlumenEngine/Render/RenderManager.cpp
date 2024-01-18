@@ -66,7 +66,7 @@ void RenderManager::Update()
 
 	FilterManager::Update();
 
-	Interface::Render();
+	Interface::Get()->Render();
 
 	if(window_ != nullptr)
 	{

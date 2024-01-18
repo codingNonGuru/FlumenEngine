@@ -90,4 +90,6 @@ public:
 	void Translate(Direction3);
 
 	Position2 GetScreenPosition(Position3);
+
+	Position2 GetWorldPosition(Position2);
 };

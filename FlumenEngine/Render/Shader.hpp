@@ -45,7 +45,7 @@ public:
 
 	void Unbind();
 
-	bool BindTexture(render::Texture*, const char*);
+	bool BindTexture(const render::Texture*, const char*);
 
 	ConstantBinding* GetConstant(const char*);
 

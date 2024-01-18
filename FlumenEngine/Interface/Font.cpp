@@ -66,7 +66,7 @@ Font::Font(File* file, Length size)
 
 	int signCount = 0;
 	int width = 0, height = 0;
-	for(char* sign = signs; *sign != 0; ++sign, ++signCount)
+	for(char* sign = (char *)signs; *sign != 0; ++sign, ++signCount)
 	{
 		char symbol[] = {*sign, 0};
 		SDL_Surface* letters = TTF_RenderUTF8_Blended(font, symbol, color);
@@ -88,7 +88,7 @@ Font::Font(File* file, Length size)
 		glyphs_.Allocate();
 
 	int horizontalAdvance = 0;
-	for(char* sign = signs; *sign != 0; ++sign)
+	for(char* sign = (char *)signs; *sign != 0; ++sign)
 	{
 		char symbol[] = {*sign, 0};
 		SDL_Surface* letters = TTF_RenderUTF8_Blended(font, symbol, color);

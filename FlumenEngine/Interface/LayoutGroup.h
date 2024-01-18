@@ -19,22 +19,22 @@ class LayoutGroup : public Element
         auto rowWidth = 0.0f;
         auto height = 0.0f;
         Length activeElementCount = 0;
-        for(auto iterator = children_.GetStart(); iterator != children_.GetEnd(); ++iterator)
+        
+        for(auto child : staticChildren_)
         {
-            auto element = *iterator;
-            if(!element->IsGloballyActive())
+            if(child->IsGloballyActive() == false)
                 continue;
 
-            width += element->GetSize().x;
+            width += child->GetSize().x;
 
             if(activeElementCount < elementsPerRow)
             {
-                rowWidth += element->GetSize().x;
+                rowWidth += child->GetSize().x;
             }
 
             if(activeElementCount % elementsPerRow == 0)
             {
-                height += element->GetSize().y;
+                height += child->GetSize().y;
             }
 
             activeElementCount++;
@@ -42,19 +42,19 @@ class LayoutGroup : public Element
 
         auto horizontalOffset = horizontalDistance * Float(elementsPerRow - 1) + rowWidth;
         horizontalOffset *= 0.5f;
-        horizontalOffset -= (*children_.GetStart())->GetSize().x * 0.5f;
+        horizontalOffset -= (*staticChildren_.GetStart())->GetSize().x * 0.5f;
 
         auto verticalOffset = verticalDistance * Float((activeElementCount / elementsPerRow) - (activeElementCount % elementsPerRow == 0 ? 1 : 0)) + height;
         verticalOffset *= 0.5f;
-        verticalOffset -= (*children_.GetStart())->GetSize().y * 0.5f;
+        verticalOffset -= (*staticChildren_.GetStart())->GetSize().y * 0.5f;
 
         auto position = Position3(0.0f, -verticalOffset, 0.0f);
 
         auto index = 0;
-        for(auto iterator = children_.GetStart(); iterator != children_.GetEnd(); ++iterator)
+        for(auto iterator = staticChildren_.GetStart(); iterator != staticChildren_.GetEnd(); ++iterator)
         {
-            auto element = *iterator;
-            if(!element->IsGloballyActive())
+            auto child = *iterator;
+            if(child->IsGloballyActive() == false)
                 continue;
 
             if(index % elementsPerRow == 0)
@@ -65,17 +65,17 @@ class LayoutGroup : public Element
                 if(index != 0 && hasOnlyOneRow == false)
                 {
                     position.y += verticalDistance;
-                    position.y += (element->GetSize().y + (*(iterator - elementsPerRow))->GetSize().y) * 0.5f;
+                    position.y += (child->GetSize().y + (*(iterator - elementsPerRow))->GetSize().y) * 0.5f;
                 }
             }
 
-            element->GetTransform()->GetPosition() = position;
+            child->SetBasePosition(position);
 
             auto nextLabel = *(iterator + 1);
-            if(iterator == children_.GetEnd() - 1)
+            if(iterator == staticChildren_.GetEnd() - 1)
                 break;
 
-            position.x += (element->GetSize().x + nextLabel->GetSize().x) * 0.5f;
+            position.x += (child->GetSize().x + nextLabel->GetSize().x) * 0.5f;
             position.x += horizontalDistance;
 
             index++;
@@ -85,6 +85,11 @@ class LayoutGroup : public Element
         size_.y = verticalDistance * Float((activeElementCount / elementsPerRow) - (activeElementCount % elementsPerRow == 0 ? 1 : 0)) + height;
         
         UpdatePosition();
+
+        for(auto &child : staticChildren_)
+        {
+            child->UpdatePosition();
+        }
     }
 
 public:

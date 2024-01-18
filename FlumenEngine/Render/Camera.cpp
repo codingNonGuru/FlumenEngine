@@ -222,3 +222,16 @@ Position2 Camera::GetScreenPosition(Position3 position)
 
 	return Position2(x, y);
 }
+
+Position2 Camera::GetWorldPosition(Position2 position) 
+{
+	position *= 2.0f;
+
+	position.x /= screen_->getWidthFloating();
+	position.y /= -screen_->getHeightFloating();
+
+	auto returnPosition = glm::inverse(finalMatrix_) * Float4(position, 0.0f, 1.0f);
+
+
+	return Position2(returnPosition.x, returnPosition.y);
+}

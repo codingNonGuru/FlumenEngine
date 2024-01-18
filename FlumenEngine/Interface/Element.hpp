@@ -8,6 +8,8 @@
 #include "FlumenEngine/Core/Types.hpp"
 #include "FlumenEngine/Interface/ElementData.h"
 
+#define DEFAULT_CHILD_COUNT 32
+
 class Sprite;
 class Camera;
 class Transform;
@@ -48,22 +50,24 @@ class Element : public Object
 
 	bool CheckHover();
 
-	Delegate * leftClickEvents_;
+	Delegate * leftClickEvents_ {nullptr};
 
-	Delegate * rightClickEvents_;
+	Delegate * rightClickEvents_ {nullptr};
 
-	Delegate * hoverEvents_;
+	Delegate * hoverEvents_ {nullptr};
 
 protected:
 	Word identifier_;
 
 	Sprite* sprite_;
 
-	Animator* animator_;
+	Animator* animator_ {nullptr};
 
 	AnimationEvent* closeEvent_;
 
-	Array <Element*> children_;
+	Array <Element *> staticChildren_;
+
+	Pool <Element *> dynamicChildren_;
 
 	Size size_;
 
@@ -77,7 +81,7 @@ protected:
 
 	ElementAnchors anchor_;
 
-	bool isInteractive_;
+	bool isInteractive_ {false};
 
 	bool isHovered_;
 
@@ -97,7 +101,7 @@ protected:
 
 	virtual void HandleDisable() override;
 
-	virtual void HandleSetParent(Object*) override;
+	virtual void HandleSetParent(Object *) override;
 
 	virtual void HandleLeftClick();
 
@@ -111,11 +115,13 @@ protected:
 
 	void Configure(Size, DrawOrder, PositionData, SpriteDescriptor = SpriteDescriptor(), Opacity = 1.0f);
 
-	void UpdatePosition();
+	void UpdateRecursively();
 
-	Element();
+	Element(int = DEFAULT_CHILD_COUNT);
 	
 public:
+	void UpdatePosition();
+
 	void SetOpacity(Opacity opacity) {opacity_ = opacity;}
 
 	Word GetIdentifier();
@@ -129,6 +135,12 @@ public:
 	void Update();
 
 	virtual void Render(Camera*);
+
+	Position2 GetPosition() const;
+
+	void SetPosition(Position2);
+
+	void SetBasePosition(Position2 position) {basePosition_ = position;}
 
 	Animator* GetAnimator();
 
@@ -158,9 +170,17 @@ public:
 
 	AnimationProperty* AddAnimationProperty(const char*, InterfaceElementParameters);
 
-	void AddChild(Element*);
+	void SetDynamicParent(Object *);
+
+	void AddChild(Element *);
+
+	void AddDynamicChild(Element *);
+
+	void RemoveChild(Element *);
 
 	Element* GetChild(Word);
+
+	const Array <Element *> &GetChildren() const {return staticChildren_;}
 
 	void Open();
 

@@ -56,7 +56,7 @@ Texture::Texture(Size size, TextureFormats format, DataBuffer & buffer)
 	Upload(reusableData);
 }
 
-Texture::Texture(Size size, TextureFormats format, container::Matrix* grid = nullptr)
+Texture::Texture(Size size, TextureFormats format, container::Matrix* grid)
 {
 	key_ = 0;
 
@@ -168,14 +168,14 @@ void Texture::ProcessPngFormat()
 	Upload(texture.GetData());
 }
 
-void Texture::Bind()
+void Texture::Bind() const
 {
 	glBindTexture(GL_TEXTURE_2D, key_);
 
 	DEBUG_OPENGL
 }
 
-void Texture::Bind(GLuint index, Shader* shader, const char* name)
+void Texture::Bind(GLuint index, Shader* shader, const char* name) const
 {
 	GLuint location = shader->GetTextureLocation(name);
 	glUniform1i(location, index);
@@ -185,7 +185,7 @@ void Texture::Bind(GLuint index, Shader* shader, const char* name)
 	DEBUG_OPENGL
 }
 
-void Texture::Unbind()
+void Texture::Unbind() const
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
 

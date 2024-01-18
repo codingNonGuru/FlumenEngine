@@ -34,7 +34,7 @@ float* Kernel::operator() (int x, int y)
 	return values_(x + side_, y + side_);
 }
 
-void Kernel::Initialize(KernelTypes type, float variable, float contrastStrength = 1.0f, bool normalized = true)
+void Kernel::Initialize(KernelTypes type, float variable, float contrastStrength, bool normalized)
 {
 	sum_ = 0.0;
 	for(int y = -side_; y <= side_; ++y)

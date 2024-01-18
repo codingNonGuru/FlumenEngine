@@ -10,6 +10,7 @@
 #include "FlumenEngine/Interface/Interface.hpp"
 #include "FlumenEngine/Interface/Element.hpp"
 #include "FlumenEngine/Core/SceneManager.hpp"
+#include "FlumenEngine/Thread/ThreadManager.h"
 #include "TaskManager.hpp"
 #include "FlumenCore/Time.hpp"
 #include "FlumenEngine/Utility/Perlin.hpp"
@@ -42,7 +43,7 @@ void Engine::Initialize(Size size)
 
 	InputHandler::Initialize();
 
-	Interface::Initialize();
+	Interface::Get()->Initialize();
 
 	OnInitializeEnded.Invoke();
 
@@ -68,13 +69,15 @@ void Engine::StartGameLoop()
 			ShutDown();
 		}
 
+		engine::ThreadManager::Get()->Update();
+
 		SceneManager::Update();
 
 		TaskManager::Update();
 
 		OnInterfaceUpdateStarted.Invoke();
 
-		Interface::Update();
+		Interface::Get()->Update();
 
 		RenderManager::Update();
 	}

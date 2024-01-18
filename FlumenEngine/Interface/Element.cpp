@@ -18,7 +18,6 @@
 
 #define DEFAULT_CHILDREN_COUNT 32
 
-
 void MouseFollower::Update()
 {
 	if(isActive == false)
@@ -31,25 +30,19 @@ void MouseFollower::Update()
 	parent->UpdatePosition();
 }
 
-Element::Element() 
+Element::Element(int childCount) 
 {
 	isActive_ = false;
-
-	isInteractive_ = false;
 
 	parent_ = nullptr;
 
 	transform_ = nullptr;
 
-	animator_ = nullptr;
+	staticChildren_.Initialize(childCount);
 
-	leftClickEvents_ = nullptr;
+	dynamicChildren_.Initialize(4);
 
-	rightClickEvents_ = nullptr;
-
-	hoverEvents_ = nullptr;
-
-	Interface::AddElement("DefaultName", this);
+	Interface::Get()->AddElement("DefaultName", this);
 }
 
 void Element::Configure(Size size, DrawOrder drawOrder, PositionData positionData, SpriteDescriptor spriteDescriptor, Opacity opacity)
@@ -83,7 +76,7 @@ void Element::Configure(Size size, DrawOrder drawOrder, PositionData positionDat
 
 	size_ = size;
 
-	parent_ = positionData.Parent;
+	SetParent(positionData.Parent);
 
 	basePosition_ = positionData.Position;
 
@@ -113,8 +106,6 @@ void Element::Configure(Size size, DrawOrder drawOrder, PositionData positionDat
 
 	hoverEvents_ = new Delegate();
 
-	children_.Initialize(DEFAULT_CHILDREN_COUNT);
-
 	HandleConfigure();
 }
 
@@ -129,6 +120,27 @@ void Element::UpdatePosition()
 	}
 
 	*transform_ = Transform(basePosition_ + offset);
+}
+
+void Element::UpdateRecursively()
+{
+	Update();
+
+	for(auto &child : staticChildren_)
+	{
+		if(child->IsLocallyActive() == false)
+			continue;
+
+		child->UpdateRecursively();
+	}
+
+	for(auto &child : dynamicChildren_)
+	{
+		if(child->IsLocallyActive() == false)
+			continue;
+
+		child->UpdateRecursively();
+	}
 }
 
 Word Element::GetIdentifier()
@@ -271,6 +283,17 @@ Animator* Element::GetAnimator()
 	return animator_;
 }
 
+Position2 Element::GetPosition() const
+{
+	auto &position = transform_->GetPosition();
+	return Position2(position.x, position.y);
+}
+
+void Element::SetPosition(Position2 position) 
+{
+	transform_->GetPosition() = Position3(position.x, position.y, 0.0f);
+}
+
 void Element::SetInteractivity(bool isInteractive)
 {
 	isInteractive_ = isInteractive;
@@ -330,23 +353,36 @@ void Element::Close()
 
 void Element::AddChild(Element* child)
 {
-	assert(children_.IsFull() == false && "Element child buffer is full.\n");
+	assert(staticChildren_.IsFull() == false && "Static Element child buffer is full.\n");
 
-	auto childPointer = children_.Allocate();
+	auto childPointer = staticChildren_.Add();
 	if(childPointer == nullptr)
 		return;
 
 	*childPointer = child;
 }
 
+void Element::AddDynamicChild(Element* child)
+{
+	assert(dynamicChildren_.IsFull() == false && "Dynamic element child buffer is full.\n");
+
+	auto childPointer = dynamicChildren_.Add();
+	if(childPointer == nullptr)
+		return;
+
+	*childPointer = child;
+}
+
+void Element::RemoveChild(Element* child)
+{
+	dynamicChildren_.Remove(child);
+}
+
+
 Element* Element::GetChild(Word identifier)
 {
-	for(auto childIterator = children_.GetStart(); childIterator != children_.GetEnd(); ++childIterator)
+	for(auto &child : staticChildren_)
 	{
-		auto child = *childIterator;
-		if(child == nullptr)
-			continue;
-
 		if(child->GetIdentifier() == identifier)
 			return child;
 	}
@@ -369,6 +405,7 @@ void Element::HandleClose()
 
 void Element::HandleEnable()
 {
+	UpdatePosition();
 }
 
 void Element::HandleDisable()
@@ -378,11 +415,14 @@ void Element::HandleDisable()
 
 void Element::HandleSetParent(Object* parent)
 {
-	auto parentAsElement = (Element*)parent;
+	if(parent == nullptr)
+		return;
+
+	auto parentAsElement = (Element *)parent;
 	parentAsElement->AddChild(this);
 }
 
-void Element::HandleLeftClick() {std::cout<<"alohaaaa\n";}
+void Element::HandleLeftClick() {}
 
 void Element::HandleRightClick() {}
 
@@ -393,6 +433,23 @@ void Element::HandleConfigure() {}
 void Element::HandleInitialize() {}
 
 void Element::HandleUpdate() {}
+
+void Element::SetDynamicParent(Object* parent)
+{
+	if(parent == nullptr)
+		return;
+
+	auto parentAsElement = (Element *)parent;
+	parentAsElement->AddDynamicChild(this);
+
+	if(parent_ != nullptr)
+	{
+		auto formerParentAsElement = (Element *)parent_;
+		formerParentAsElement->RemoveChild(this);
+	}
+
+	parent_ = parent;
+}
 
 Position2 Element::GetAnchorOffset(ElementAnchors anchor)
 {

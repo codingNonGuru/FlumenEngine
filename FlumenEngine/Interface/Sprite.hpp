@@ -30,7 +30,7 @@ struct SpriteDrawData
 
 struct TextureData
 {
-	render::Texture *Texture {nullptr};
+	const render::Texture *Texture {nullptr};
 
 	Position2 Offset = {0.0f, 0.0f};
 
@@ -84,9 +84,9 @@ public:
 
 	void Draw(Camera*, const SpriteDrawData = SpriteDrawData());
 
-	void SetTexture(render::Texture* texture);
+	void SetTexture(const render::Texture* texture);
 
-	void SetTexture(Word textureName);
+	void SetTexture(const Word textureName);
 
 	void SetParent(Element* parent) {parent_ = parent;}
 

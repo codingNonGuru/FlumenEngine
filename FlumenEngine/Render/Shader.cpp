@@ -42,12 +42,12 @@ void Shader::Bind()
 void Shader::Unbind()
 {
 	glUseProgram(0);
-	glFinish();
+	//glFinish();
 
 	DEBUG_OPENGL
 }
 
-bool Shader::BindTexture(render::Texture* texture, const char* identifier)
+bool Shader::BindTexture(const render::Texture* texture, const char* identifier)
 {
 	auto binding = textureBindings_.Get(identifier);
 	if(!binding)
@@ -162,15 +162,15 @@ void Shader::SetConstant(int value, const char* identifier)
 	{
 	case AttributeElementTypes::FLOAT_1:
 		castValue = (float)value;
-		glUniform1fv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform1fv(binding->GetLocation(), 1, (const GLfloat *)&castValue);
 		break;
 	case AttributeElementTypes::INTEGER_1:
 		castValue = (int)value;
-		glUniform1iv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform1iv(binding->GetLocation(), 1, (const GLint *)&castValue);
 		break;
 	case AttributeElementTypes::UINTEGER_1:
 		castValue = (unsigned int)value;
-		glUniform1uiv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform1uiv(binding->GetLocation(), 1, (const GLuint *)&castValue);
 		break;
 	default:
 		std::cout<<"Constant identifier "<<identifier<<" corresponds to different type.\n";
@@ -194,15 +194,15 @@ void Shader::SetConstant(unsigned int value, const char* identifier)
 	{
 	case AttributeElementTypes::FLOAT_1:
 		castValue = (float)value;
-		glUniform1fv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform1fv(binding->GetLocation(), 1, (const GLfloat *)&castValue);
 		break;
 	case AttributeElementTypes::INTEGER_1:
 		castValue = (int)value;
-		glUniform1iv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform1iv(binding->GetLocation(), 1, (const GLint *)&castValue);
 		break;
 	case AttributeElementTypes::UINTEGER_1:
 		castValue = (unsigned int)value;
-		glUniform1uiv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform1uiv(binding->GetLocation(), 1, (const GLuint *)&castValue);
 		break;
 	default:
 		std::cout<<"Constant identifier "<<identifier<<" corresponds to different type.\n";
@@ -226,15 +226,15 @@ void Shader::SetConstant(float value, const char* identifier)
 	{
 	case AttributeElementTypes::FLOAT_1:
 		castValue = (float)value;
-		glUniform1fv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform1fv(binding->GetLocation(), 1, (const GLfloat *)&castValue);
 		break;
 	case AttributeElementTypes::INTEGER_1:
 		castValue = (int)value;
-		glUniform1iv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform1iv(binding->GetLocation(), 1, (const GLint *)&castValue);
 		break;
 	case AttributeElementTypes::UINTEGER_1:
 		castValue = (unsigned int)value;
-		glUniform1uiv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform1uiv(binding->GetLocation(), 1, (const GLuint *)&castValue);
 		break;
 	default:
 		std::cout<<"Constant identifier "<<identifier<<" corresponds to different type.\n";
@@ -258,15 +258,15 @@ void Shader::SetConstant(glm::vec2 value, const char* identifier)
 	{
 	case AttributeElementTypes::FLOAT_2:
 		castValue = glm::vec2(value.x, value.y);
-		glUniform2fv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform2fv(binding->GetLocation(), 1, (const GLfloat *)&castValue);
 		break;
 	case AttributeElementTypes::INTEGER_2:
 		castValue = glm::ivec2(value.x, value.y);
-		glUniform2iv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform2iv(binding->GetLocation(), 1, (const GLint *)&castValue);
 		break;
 	case AttributeElementTypes::UINTEGER_2:
 		castValue = glm::uvec2(value.x, value.y);
-		glUniform2uiv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform2uiv(binding->GetLocation(), 1, (const GLuint *)&castValue);
 		break;
 	default:
 		std::cout<<"Constant identifier "<<identifier<<" corresponds to different type.\n";
@@ -290,15 +290,15 @@ void Shader::SetConstant(glm::ivec2 value, const char* identifier)
 	{
 	case AttributeElementTypes::FLOAT_2:
 		castValue = glm::vec2(value.x, value.y);
-		glUniform2fv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform2fv(binding->GetLocation(), 1, (const float *)&castValue);
 		break;
 	case AttributeElementTypes::INTEGER_2:
 		castValue = glm::ivec2(value.x, value.y);
-		glUniform2iv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform2iv(binding->GetLocation(), 1, (const int *)&castValue);
 		break;
 	case AttributeElementTypes::UINTEGER_2:
 		castValue = glm::uvec2(value.x, value.y);
-		glUniform2uiv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform2uiv(binding->GetLocation(), 1, (const unsigned int *)&castValue);
 		break;
 	default:
 		std::cout<<"Constant identifier "<<identifier<<" corresponds to different type.\n";
@@ -322,15 +322,15 @@ void Shader::SetConstant(glm::uvec2 value, const char* identifier)
 	{
 	case AttributeElementTypes::FLOAT_2:
 		castValue = glm::vec2(value.x, value.y);
-		glUniform2fv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform2fv(binding->GetLocation(), 1, (const float *)&castValue);
 		break;
 	case AttributeElementTypes::INTEGER_2:
 		castValue = glm::ivec2(value.x, value.y);
-		glUniform2iv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform2iv(binding->GetLocation(), 1, (const int *)&castValue);
 		break;
 	case AttributeElementTypes::UINTEGER_2:
 		castValue = glm::uvec2(value.x, value.y);
-		glUniform2uiv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform2uiv(binding->GetLocation(), 1, (const unsigned int *)&castValue);
 		break;
 	default:
 		std::cout<<"Constant identifier "<<identifier<<" corresponds to different type.\n";
@@ -354,19 +354,19 @@ void Shader::SetConstant(glm::vec3 value, const char* identifier)
 	{
 	case AttributeElementTypes::FLOAT_2:
 		castValue = Float3(value.x, value.y, value.z);
-		glUniform2fv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform2fv(binding->GetLocation(), 1, (const float *)&castValue);
 		break;
 	case AttributeElementTypes::FLOAT_3:
 		castValue = Float3(value.x, value.y, value.z);
-		glUniform3fv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform3fv(binding->GetLocation(), 1, (const float *)&castValue);
 		break;
 	case AttributeElementTypes::INTEGER_3:
 		castValue = Integer3(value.x, value.y, value.z);
-		glUniform3iv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform3iv(binding->GetLocation(), 1, (const int *)&castValue);
 		break;
 	case AttributeElementTypes::UINTEGER_3:
 		castValue = glm::uvec3(value.x, value.y, value.z);
-		glUniform3uiv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform3uiv(binding->GetLocation(), 1, (const unsigned int *)&castValue);
 		break;
 	default:
 		std::cout<<"Constant identifier "<<identifier<<" corresponds to different type.\n";
@@ -390,15 +390,15 @@ void Shader::SetConstant(glm::ivec3 value, const char* identifier)
 	{
 	case AttributeElementTypes::FLOAT_3:
 		castValue = glm::vec3(value.x, value.y, value.z);
-		glUniform3fv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform3fv(binding->GetLocation(), 1, (const float *)&castValue);
 		break;
 	case AttributeElementTypes::INTEGER_3:
 		castValue = glm::ivec3(value.x, value.y, value.z);
-		glUniform3iv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform3iv(binding->GetLocation(), 1, (const int *)&castValue);
 		break;
 	case AttributeElementTypes::UINTEGER_3:
 		castValue = glm::uvec3(value.x, value.y, value.z);
-		glUniform3uiv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform3uiv(binding->GetLocation(), 1, (const unsigned int *)&castValue);
 		break;
 	default:
 		std::cout<<"Constant identifier "<<identifier<<" corresponds to different type.\n";
@@ -422,15 +422,15 @@ void Shader::SetConstant(glm::uvec3 value, const char* identifier)
 	{
 	case AttributeElementTypes::FLOAT_3:
 		castValue = glm::vec3(value.x, value.y, value.z);
-		glUniform3fv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform3fv(binding->GetLocation(), 1, (const float *)&castValue);
 		break;
 	case AttributeElementTypes::INTEGER_3:
 		castValue = glm::ivec3(value.x, value.y, value.z);
-		glUniform3iv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform3iv(binding->GetLocation(), 1, (const int *)&castValue);
 		break;
 	case AttributeElementTypes::UINTEGER_3:
 		castValue = glm::uvec3(value.x, value.y, value.z);
-		glUniform3uiv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform3uiv(binding->GetLocation(), 1, (const unsigned int *)&castValue);
 		break;
 	default:
 		std::cout<<"Constant identifier "<<identifier<<" corresponds to different type.\n";
@@ -454,19 +454,19 @@ void Shader::SetConstant(glm::vec4 value, const char* identifier)
 	{
 	case AttributeElementTypes::FLOAT_3:
 		castValue = Float4(value.x, value.y, value.z, 0.0f);
-		glUniform3fv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform3fv(binding->GetLocation(), 1, (const float *)&castValue);
 		break;
 	case AttributeElementTypes::FLOAT_4:
 		castValue = Float4(value.x, value.y, value.z, value.w);
-		glUniform4fv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform4fv(binding->GetLocation(), 1, (const float *)&castValue);
 		break;
 	case AttributeElementTypes::INTEGER_4:
 		castValue = glm::ivec4(value.x, value.y, value.z, value.w);
-		glUniform4iv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform4iv(binding->GetLocation(), 1, (const int *)&castValue);
 		break;
 	case AttributeElementTypes::UINTEGER_4:
 		castValue = glm::uvec4(value.x, value.y, value.z, value.w);
-		glUniform4uiv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform4uiv(binding->GetLocation(), 1, (const unsigned int *)&castValue);
 		break;
 	default:
 		std::cout<<"Constant identifier "<<identifier<<" corresponds to different type "<<(int)binding->GetType()<<".\n";
@@ -490,15 +490,15 @@ void Shader::SetConstant(glm::ivec4 value, const char* identifier)
 	{
 	case AttributeElementTypes::FLOAT_4:
 		castValue = glm::vec4(value.x, value.y, value.z, value.w);
-		glUniform4fv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform4fv(binding->GetLocation(), 1, (const float *)&castValue);
 		break;
 	case AttributeElementTypes::INTEGER_4:
 		castValue = glm::ivec4(value.x, value.y, value.z, value.w);
-		glUniform4iv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform4iv(binding->GetLocation(), 1, (const int *)&castValue);
 		break;
 	case AttributeElementTypes::UINTEGER_4:
 		castValue = glm::uvec4(value.x, value.y, value.z, value.w);
-		glUniform4uiv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform4uiv(binding->GetLocation(), 1, (const unsigned int *)&castValue);
 		break;
 	default:
 		std::cout<<"Constant identifier "<<identifier<<" corresponds to different type.\n";
@@ -522,15 +522,15 @@ void Shader::SetConstant(glm::uvec4 value, const char* identifier)
 	{
 	case AttributeElementTypes::FLOAT_4:
 		castValue = glm::vec4(value.x, value.y, value.z, value.w);
-		glUniform4fv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform4fv(binding->GetLocation(), 1, (const float *)&castValue);
 		break;
 	case AttributeElementTypes::INTEGER_4:
 		castValue = glm::ivec4(value.x, value.y, value.z, value.w);
-		glUniform4iv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform4iv(binding->GetLocation(), 1, (const int *)&castValue);
 		break;
 	case AttributeElementTypes::UINTEGER_4:
 		castValue = glm::uvec4(value.x, value.y, value.z, value.w);
-		glUniform4uiv(binding->GetLocation(), 1, (void*)&castValue);
+		glUniform4uiv(binding->GetLocation(), 1, (const unsigned int *)&castValue);
 		break;
 	default:
 		std::cout<<"Constant identifier "<<identifier<<" corresponds to different type.\n";
@@ -552,7 +552,7 @@ void Shader::SetConstant(glm::mat3 value, const char* identifier)
 	switch(binding->GetType())
 	{
 	case AttributeElementTypes::MATRIX_3:
-		glUniformMatrix3fv(binding->GetLocation(), 1, GL_FALSE, (void*)&value);
+		glUniformMatrix3fv(binding->GetLocation(), 1, GL_FALSE, (const float *)&value);
 		break;
 	default:
 		std::cout<<"Constant identifier "<<identifier<<" corresponds to different type.\n";
@@ -574,7 +574,7 @@ void Shader::SetConstant(glm::mat4 value, const char* identifier)
 	switch(binding->GetType())
 	{
 	case AttributeElementTypes::MATRIX_4:
-		glUniformMatrix4fv(binding->GetLocation(), 1, GL_FALSE, (void*)&value);
+		glUniformMatrix4fv(binding->GetLocation(), 1, GL_FALSE, (const float *)&value);
 		break;
 	default:
 		std::cout<<"Constant identifier "<<identifier<<" corresponds to different type.\n";

@@ -44,7 +44,7 @@ struct PositionData
 
 	ElementPivots Pivot;
 
-	Element *Parent;
+	Element *Parent {nullptr};
 
     PositionData(const PositionData &otherData) : Position(otherData.Position), Anchor(otherData.Anchor), Pivot(otherData.Pivot), Parent(otherData.Parent) {}
 

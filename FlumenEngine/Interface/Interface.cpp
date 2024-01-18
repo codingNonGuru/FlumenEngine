@@ -3,19 +3,23 @@
 #include "FlumenEngine/Core/InputHandler.hpp"
 #include "FlumenEngine/Render/RenderManager.hpp"
 
-#define MAXIMUM_ELEMENT_COUNT 4096
+#define MAXIMUM_ELEMENT_COUNT 16384
 
-Map <Element*, Word> Interface::elements_ = Map <Element*, Word> (MAXIMUM_ELEMENT_COUNT);
-
-Element* Interface::hoveredElement_ = nullptr;
-
-bool Interface::isSorted_ = false;
+#define MAXIMUM_CANVAS_COUNT 256
 
 Array <Element*> sortedElements = Array <Element*> (MAXIMUM_ELEMENT_COUNT);
 
-void Interface::Initialize() 
+void Interface::Initialize()
 {
-	InputHandler::OnInputUpdate += &Interface::ProcessInput;
+	elements_ = Map <Element*, Word> (MAXIMUM_ELEMENT_COUNT);
+
+	hoveredElement_ = nullptr;
+
+	isSorted_ = false;
+
+	InputHandler::OnInputUpdate += {this, &Interface::ProcessInput};
+
+	canvases.Initialize(MAXIMUM_CANVAS_COUNT);
 }
 
 void Interface::ProcessInput()
@@ -61,11 +65,12 @@ void Interface::ProcessInput()
 
 void Interface::Update()
 {
-	for(auto elementIterator = elements_.GetStart(); elementIterator != elements_.GetEnd(); ++elementIterator)
+	for(auto &canvas : canvases)
 	{
-		auto element = *elementIterator;
+		if(canvas->IsGloballyActive() == false)
+			continue;
 
-		element->Update();
+		canvas->UpdateRecursively();
 	}
 }
 
@@ -139,6 +144,11 @@ Element* Interface::AddElement(Word name, Element* element)
 	*sortedElements.Add() = element;
 
 	return element;
+}
+
+void Interface::AddCanvas(Element *canvas)
+{
+	*canvases.Add() = canvas;
 }
 
 Element* Interface::GetHoveredElement()

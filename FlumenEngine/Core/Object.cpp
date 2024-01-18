@@ -28,7 +28,7 @@ void Object::HandleEnable() {}
 
 void Object::HandleDisable() {}
 
-void Object::HandleSetParent(Object* parent) {}
+void Object::HandleSetParent(Object *parent) {}
 
 bool Object::IsLocallyActive()
 {

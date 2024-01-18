@@ -151,5 +151,5 @@ void Image::Apply(Image* canvas, Float alpha, Color& color, Size offset)
 
 Image::operator DataBuffer()
 {
-	return buffer_;
+	return *buffer_;
 }

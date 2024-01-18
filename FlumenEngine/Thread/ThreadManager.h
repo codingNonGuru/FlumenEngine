@@ -7,108 +7,63 @@
 #include <chrono>
 
 #include "FlumenCore/Singleton.h"
+#include "FlumenCore/Container/Pool.hpp"
+#include "FlumenCore/Container/Array.hpp"
+#include "FlumenCore/Delegate/Event.hpp"
+
+#include "FlumenEngine/Config.h"
+#include "FlumenEngine/Thread/ThreadResultData.h"
 
 namespace engine
 {
     class ThreadManager : public core::Singleton <ThreadManager>
     {
-        std::thread activeThread;
+        friend class core::Singleton <ThreadManager>;
 
-        std::future <int> task;
+        struct TaskData
+        {
+            std::future <int> Future;
 
-        std::atomic<bool> isDone {false};
+            Event OnFinish;
+        };
 
-        bool isInitialized {false};
+        static constexpr auto THREAD_OVERFLOW_MESSAGE = "Synchronous thread pool is overflowing.\n";
 
-        bool isWorking {false};
+        static constexpr auto ASYNC_TASK_OVERFLOW_MESSAGE = "Asynchronous task pool is overflowing.\n";
+
+        container::Pool <std::thread> threads;
+
+        container::Pool <TaskData> asyncTasks;
+
+        container::Array <TaskData *> finishedTasks;
+
+        ThreadManager();
 
     public:
-        ThreadManager() 
+        template<typename Callable, typename InputType, typename ResultType>
+        void LaunchSyncThread(Callable function, InputType &inputData, ThreadResultData <ResultType> &resultData)
         {
-            activeThread = std::thread([] {});
+            assert((threads.GetSize() < THREAD_COUNT) && THREAD_OVERFLOW_MESSAGE);
+
+            auto threadPointer = threads.Add(); 
+
+            auto threadIndex = threads.GetIndex(threadPointer);
+
+            auto processedResultData = resultData.GetResult(threadIndex);
+            
+            *threadPointer = std::thread(function, inputData, processedResultData);
         }
-        /*template<typename Callable, typename... Arguments>
-        void LaunchThread(Callable function, Arguments... arguments)
-        {
-            if(isInitialized == false)
-            {
-                isInitialized = true;
-            }
-            else
-            {
-                if(isDone == false)
-                {
-                    return;
-                }
-                
-                activeThread.join();
-            }
-
-            isDone = false;
-
-            //activeThread = std::thread(function, arguments...);
-
-            activeThread = std::thread
-            (
-                [this, function, arguments...] 
-                {
-                    arguments[0]->function(arguments...);
-                    
-                    this->isDone = true;
-                }
-            );
-        }*/
 
         template<typename Callable, typename... Arguments>
-        void LaunchThread(Callable function, Arguments... arguments)
+        void LaunchAsyncThread(Event event, Callable function, Arguments... arguments)
         {
-            /*std::cout<<"threads "<<activeThread.hardware_concurrency()<<"\n";
-            auto flag = activeThread.joinable();
-            std::cout<<"flag: "<<int(flag)<<'\n';
-            if(flag == true)
-            {
-                activeThread.join();
+            assert((asyncTasks.GetSize() < MAXIMUM_ASYNC_TASK_COUNT) && ASYNC_TASK_OVERFLOW_MESSAGE);
 
-                activeThread = std::thread(function, arguments...);
-            }
-            else if(isInitialized == false)
-            {
-                isInitialized = true;
-
-                activeThread = std::thread(function, arguments...);
-            }*/
-
-            /*if(activeThread.joinable())
-            {
-                std::cout<<"cucu\n";
-                activeThread.join();
-                std::cout<<"cucu2\n";
-
-                activeThread = std::thread(function, arguments...);
-            }*/
-
-            using namespace std::chrono_literals;
-
-            if(isInitialized == false)
-            {
-                isInitialized = true;
-                task = std::async(std::launch::async, function, arguments...);
-                return;
-            }
-
-            auto status = task.wait_for(0ms);
-            if(status == std::future_status::ready)
-            {
-                std::cout<<"done\n";
-                task = std::async(std::launch::async, function, arguments...);
-            }
-            else
-            {
-                std::cout<<"not done\n";
-            }
-            //std::cout<<task.get()<<"\n";
-
-            //task.get();
+            *asyncTasks.Add() = {std::async(std::launch::async, function, arguments...), event};
         }
+
+        void AwaitThreadFinish();
+
+        void Update();
     };
 }

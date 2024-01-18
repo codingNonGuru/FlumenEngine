@@ -1,36 +1,43 @@
 #pragma once
 
 #include "FlumenCore/Conventions.hpp"
+#include "FlumenCore/Singleton.h"
 
 class Element;
 
-class Interface
+class Interface : public core::Singleton <Interface>
 {
 	friend class Element;
 
+	friend class ElementFactory;
+
 private:
-	static Map <Element*, Word> elements_;
+	Map <Element*, Word> elements_;
 
-	static Element* hoveredElement_;
+	Array <Element *> canvases;
 
-	static bool isSorted_;
+	Element* hoveredElement_;
 
-	static void Sort();
+	bool isSorted_;
 
-	static void ProcessInput();
+	void Sort();
 
-	static Element* AddElement(Word, Element*);
+	void ProcessInput();
+
+	Element* AddElement(Word, Element*);
+
+	void AddCanvas(Element*);
 
 public:
-	static void Initialize();
+	void Initialize();
 
-	static void Update();
+	void Update();
 
-	static void Render();
+	void Render();
 
-	static Map <Element*, Word> & GetElements();
+	Map <Element*, Word> & GetElements();
 
-	static Element* GetElement(Word);
+	Element* GetElement(Word);
 
-	static Element* GetHoveredElement();
+	Element* GetHoveredElement();
 };

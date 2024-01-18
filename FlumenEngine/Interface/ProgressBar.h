@@ -30,5 +30,7 @@ public:
         {
             progress = 1.0f;
         }
+
+        UpdatePosition();
     }
 };

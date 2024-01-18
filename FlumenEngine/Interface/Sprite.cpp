@@ -46,7 +46,8 @@ void Sprite::Draw(Camera* camera, const SpriteDrawData data)
 {
 	shader_->Bind();
 
-	SetDefaultConstants(camera, parent_ ? &SpriteDrawData() : &data);
+	static auto emptyData = SpriteDrawData();
+	SetDefaultConstants(camera, parent_ ? &emptyData : &data);
 
 	SetExtraConstants();
 
@@ -141,12 +142,12 @@ void Sprite::SetDefaultConstants(Camera* camera, const SpriteDrawData *newData)
 	}
 }
 
-void Sprite::SetTexture(render::Texture* texture) 
+void Sprite::SetTexture(const render::Texture* texture) 
 {
 	textureData_.Texture = texture;
 }
 
-void Sprite::SetTexture(Word textureName)
+void Sprite::SetTexture(const Word textureName)
 {
 	textureData_.Texture = render::TextureManager::GetTexture(textureName);
 }
