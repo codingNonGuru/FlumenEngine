@@ -82,6 +82,11 @@ void Text::Setup(const char* string, Float scale)
 	UpdatePosition();
 }
 
+void Text::SetFont(FontDescriptor fontName)
+{
+	font_ = FontManager::GetFont(fontName);
+}
+
 void Text::SetColor(Color color)
 {
 	color_ = color;

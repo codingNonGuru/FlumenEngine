@@ -59,6 +59,8 @@ protected:
 	Text(FontDescriptor, Color = Color::BLACK);
 
 public:
+	void SetFont(FontDescriptor);
+
 	void SetColor(Color);
 
 	void Setup(const char*, Float = 1.0f);
