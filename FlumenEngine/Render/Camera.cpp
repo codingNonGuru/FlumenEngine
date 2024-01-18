@@ -143,6 +143,11 @@ void Camera::Zoom(float impulse)
 	}
 }
 
+void Camera::ZoomDynamically(float impulse)
+{
+	scrollImpulse_ -= impulse;
+}
+
 void Camera::Spin(float impulse)
 {
 	spinImpulse_ -= impulse;
@@ -179,13 +184,18 @@ void Camera::Update()
 
 		driftImpulse_ *= 0.9f;
 
-		viewDistance_ += scrollImpulse_;
-
 		if(viewDistance_ < 1.0f)
 			viewDistance_ = 1.0f;
 
 		if(viewDistance_ > 600.0f)
 			viewDistance_ = 600.0f;
+	}
+
+	if(isZoomingDynamically == true)
+	{
+		viewDistance_ += scrollImpulse_;
+
+		zoomFactor_ *= (1.0f + scrollImpulse_);
 
 		scrollImpulse_ *= 0.9f;
 	}

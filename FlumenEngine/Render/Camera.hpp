@@ -26,7 +26,7 @@ class Camera
 
 	float azimuth_;
 
-	float scrollImpulse_;
+	float scrollImpulse_ {0.0f};
 
 	float spinImpulse_;
 
@@ -37,6 +37,8 @@ class Camera
 	Screen* screen_;
 
 	float zoomFactor_;
+
+	bool isZoomingDynamically {false};
 
 	bool isAnimated;
 
@@ -68,6 +70,10 @@ public:
 	void Drag(glm::vec3);
 
 	void Zoom(float impulse);
+
+	void EnableDynamicZooming() {isZoomingDynamically = true;}
+
+	void ZoomDynamically(float);
 
 	void Spin(float impulse);
 
