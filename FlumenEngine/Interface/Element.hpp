@@ -166,7 +166,7 @@ public:
 
 	void SetInteractivity(bool);
 
-	void SetSpriteColor(Color &);
+	void SetSpriteColor(const Color &);
 
 	AnimationProperty* AddAnimationProperty(const char*, InterfaceElementParameters);
 

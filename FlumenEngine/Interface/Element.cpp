@@ -390,7 +390,7 @@ Element* Element::GetChild(Word identifier)
 	return nullptr;
 }
 
-void Element::SetSpriteColor(Color &color)
+void Element::SetSpriteColor(const Color &color)
 {
 	sprite_->SetColor(&color);
 }	

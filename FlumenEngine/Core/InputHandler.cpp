@@ -13,6 +13,8 @@ Map <Delegate, SDL_Scancode> InputHandler::onKeyPressedEvents = Map <Delegate, S
 
 Map <Delegate, SDL_Scancode> InputHandler::onKeyHeldEvents = Map <Delegate, SDL_Scancode> ();
 
+Map <Delegate, SDL_Scancode> InputHandler::onKeyReleasedEvents = Map <Delegate, SDL_Scancode> ();
+
 Delegate InputHandler::OnInputUpdate = Delegate();
 
 Delegate InputHandler::OnRightMouseClick = Delegate();
@@ -28,6 +30,8 @@ void InputHandler::Initialize()
 	onKeyPressedEvents.Initialize(64);
 
 	onKeyHeldEvents.Initialize(64);
+
+	onKeyReleasedEvents.Initialize(64);
 }
 
 void InputHandler::Update()
@@ -111,6 +115,29 @@ void InputHandler::Update()
 
 		event->Invoke();
 	}
+
+	for(auto &formerKey : formerKeys_)
+	{
+		bool isCurrentlyPressed = false;
+		
+		for(auto &currentKey : currentKeys_)
+		{
+			if(formerKey == currentKey)
+			{
+				isCurrentlyPressed = true;
+				break;
+			}
+		}
+
+		if(isCurrentlyPressed == true)
+			continue;
+
+		auto event = onKeyReleasedEvents.Get((SDL_Scancode)formerKey);
+		if(event != nullptr)
+		{
+			event->Invoke();
+		}
+	}
 }
 
 void InputHandler::UpdateMouse()
@@ -169,4 +196,85 @@ bool InputHandler::WasPressed(int32_t key)
 	}
 
 	return false;
+}
+
+void InputHandler::RegisterEvent(SDL_Scancode key, Event action)
+{
+	auto event = onKeyPressedEvents.Get(key);
+	if(event != nullptr)
+	{
+		*event += action;
+		//event->Add(object, function);
+		return;
+	}
+
+	event = onKeyPressedEvents.Add(key);
+	//event->Add(object, function);
+	*event += action;
+}
+
+void InputHandler::UnregisterEvent(SDL_Scancode key, Event action)
+{
+	auto event = onKeyPressedEvents.Get(key);
+	if(event != nullptr)
+	{
+		*event -= action;
+	}
+}
+
+void InputHandler::RegisterContinualEvent(SDL_Scancode key, Event action)
+{
+	auto event = onKeyHeldEvents.Get(key);
+	if(event != nullptr)
+	{
+		*event += action;
+	}
+	else
+	{
+		event = onKeyHeldEvents.Add(key);
+		*event += action;
+	}
+}
+
+void InputHandler::UnregisterContinualEvent(SDL_Scancode key, Event action)
+{
+	auto event = onKeyHeldEvents.Get(key);
+	if(event != nullptr)
+	{
+		*event -= action;
+	}
+}
+
+void InputHandler::RegisterContinualEvent(SDL_Scancode key, Event pressAction, Event releaseAction)
+{
+	auto event = onKeyPressedEvents.Get(key);
+	if(event != nullptr)
+	{
+		*event += pressAction;
+	}
+	else
+	{
+		event = onKeyPressedEvents.Add(key);
+		*event += pressAction;
+	}
+
+	event = onKeyReleasedEvents.Get(key);
+	if(event != nullptr)
+	{
+		*event += releaseAction;
+	}
+	else
+	{
+		event = onKeyReleasedEvents.Add(key);
+		*event += releaseAction;
+	}
+}
+
+void InputHandler::UnregisterContinualEvent(SDL_Scancode key)
+{
+	auto event = onKeyHeldEvents.Get(key);
+	if(event != nullptr)
+	{
+		event->Clear();
+	}
 }

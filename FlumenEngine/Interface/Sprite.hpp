@@ -58,7 +58,7 @@ private:
 
 	Element* parent_;
 
-	Color* color_ {nullptr};
+	const Color *color_ {nullptr};
 
 	SpriteDrawData *drawData_ {nullptr};
 
@@ -90,7 +90,7 @@ public:
 
 	void SetParent(Element* parent) {parent_ = parent;}
 
-	void SetColor(Color* color) {color_ = color;}
+	void SetColor(const Color *color) {color_ = color;}
 
 	void SetDrawData(SpriteDrawData *drawData) {drawData_ = drawData;}
 

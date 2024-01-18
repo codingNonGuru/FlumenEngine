@@ -132,7 +132,8 @@ void Sprite::SetDefaultConstants(Camera* camera, const SpriteDrawData *newData)
 		shader_->SetConstant(textureData_.Texture != nullptr ? 1 : 0, "hasTexture");
 	}
 
-	shader_->SetConstant(color_ != nullptr ? *color_ : Color::WHITE, "color");
+	auto color = const_cast <Color *>(color_);
+	shader_->SetConstant(color_ != nullptr ? *color : Color::WHITE, "color");
 
 	if(isSliced_ == true)
 	{

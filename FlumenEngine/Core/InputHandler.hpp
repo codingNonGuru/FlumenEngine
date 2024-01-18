@@ -36,6 +36,8 @@ class InputHandler
 
 	static Map <Delegate, SDL_Scancode> onKeyHeldEvents;
 
+	static Map <Delegate, SDL_Scancode> onKeyReleasedEvents;
+
 	static void UpdateMouse();
 
 public:
@@ -53,102 +55,17 @@ public:
 
 	static void Initialize();
 
-	static void RegisterEvent(SDL_Scancode key, Event action)
-	{
-		auto event = onKeyPressedEvents.Get(key);
-		if(event != nullptr)
-		{
-			*event += action;
-			//event->Add(object, function);
-			return;
-		}
+	static void RegisterEvent(SDL_Scancode key, Event action);
 
-		event = onKeyPressedEvents.Add(key);
-		//event->Add(object, function);
-		*event += action;
-	}
+	static void UnregisterEvent(SDL_Scancode, Event);
 
-	static void UnregisterEvent(SDL_Scancode key, Event action)
-	{
-		auto event = onKeyPressedEvents.Get(key);
-		if(event != nullptr)
-		{
-			*event -= action;
-		}
-	}
+	static void RegisterContinualEvent(SDL_Scancode, Event);
+	
+	static void UnregisterContinualEvent(SDL_Scancode, Event);
 
-	static void RegisterContinualEvent(SDL_Scancode key, Event action)
-	{
-		auto event = onKeyHeldEvents.Get(key);
-		if(event != nullptr)
-		{
-			*event += action;
-			//event->Add(object, function);
-			return;
-		}
+	static void RegisterContinualEvent(SDL_Scancode, Event, Event);
 
-		event = onKeyHeldEvents.Add(key);
-		//event->Add(object, function);
-		*event += action;
-	}
-
-	static void UnregisterContinualEvent(SDL_Scancode key, Event action)
-	{
-		auto event = onKeyHeldEvents.Get(key);
-		if(event != nullptr)
-		{
-			*event -= action;
-		}
-	}
-
-	/*template <class ClassType, class ObjectType>
-	static void RegisterEvent(SDL_Scancode key, ObjectType* object, void(ClassType::*function)())
-	{
-		auto event = onKeyPressedEvents.Get(key);
-		if(event != nullptr)
-		{
-			*event += {object, function};
-			//event->Add(object, function);
-			return;
-		}
-
-		event = onKeyPressedEvents.Add(key);
-		event->Add(object, function);
-	}
-
-	static void RegisterEvent(SDL_Scancode key, void(*function)())
-	{
-		auto event = onKeyPressedEvents.Get(key);
-		if(event != nullptr)
-		{
-			event->Add(function);
-			return;
-		}
-
-		event = onKeyPressedEvents.Add(key);
-		event->Add(function);
-	}
-
-	template <class ClassType, class ObjectType>
-	static void UnregisterEvent(SDL_Scancode key, ObjectType* object, void(ClassType::*function)())
-	{
-		auto event = onKeyPressedEvents.Get(key);
-		if(event != nullptr)
-		{
-			event->Remove(object, function);
-			return;
-		}
-	}
-
-	static void UnregisterEvent(SDL_Scancode key, void(*function)())
-	{
-		auto event = onKeyPressedEvents.Get(key);
-		if(event != nullptr)
-		{
-			event->Remove(function);
-			return;
-		}
-	}*/
+	static void UnregisterContinualEvent(SDL_Scancode);
 
 	static Position2 GetMousePosition(bool = true);
 
