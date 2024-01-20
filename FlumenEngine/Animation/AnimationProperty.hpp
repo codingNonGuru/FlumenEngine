@@ -13,7 +13,7 @@ private:
 
 	AnimationValueTypes valueType_;
 
-	void * targetValue_;
+	const float *targetValue_;
 
 	Array <AnimationKey> keys_;
 
@@ -22,9 +22,9 @@ public:
 
 	AnimationProperty(Animation*);
 
-	AnimationProperty(Animation*, float*);
+	AnimationProperty(Animation*, const float *);
 
-	void Initialize(float*);
+	void Initialize(const float *);
 
 	AnimationKey* AddKey();
 

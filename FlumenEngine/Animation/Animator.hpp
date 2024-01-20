@@ -18,5 +18,7 @@ public:
 
 	Animation* GetAnimation(const char*);
 
+	Animation* AddAnimation(const char*);
+
 	Animation* AddAnimation(Animation*, const char*);
 };

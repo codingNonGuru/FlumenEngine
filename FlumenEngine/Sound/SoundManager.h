@@ -10,12 +10,13 @@ namespace engine
 
     class SoundManager : public core::Singleton <SoundManager>
     {
-    private:
+        friend class core::Singleton <SoundManager>;
+    
         Map <Sound> sounds;
 
-    public:
         SoundManager() {}
 
+    public:
         void LoadSounds();
 
         void PlaySound(Word);

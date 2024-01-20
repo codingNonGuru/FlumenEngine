@@ -35,11 +35,11 @@ public:
 
 	void Update();
 
-	AnimationProperty* AddProperty();
+	AnimationProperty *AddProperty();
 
 	AnimationEvent* AddEvent();
 
-	void AddProperty(AnimationProperty);
+	AnimationProperty *AddProperty(AnimationProperty);
 
 	AnimationEvent* GetStartEvent() {return startEvent_;}
 

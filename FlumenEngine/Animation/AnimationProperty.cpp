@@ -10,7 +10,7 @@ AnimationProperty::AnimationProperty()
 	keys_.Initialize(8);
 }
 
-AnimationProperty::AnimationProperty(Animation* animation, float* targetValue)
+AnimationProperty::AnimationProperty(Animation* animation, const float *targetValue)
 {
 	animation_ = animation;
 
@@ -26,7 +26,7 @@ AnimationProperty::AnimationProperty(Animation* animation)
 	keys_.Initialize(8);
 }
 
-void AnimationProperty::Initialize(float* targetValue)
+void AnimationProperty::Initialize(const float* targetValue)
 {
 	valueType_ = AnimationValueTypes::FLOAT;
 

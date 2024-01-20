@@ -100,6 +100,8 @@ public:
 		isSliced_ = true;
 	}
 
+	void SetTextureSize(Scale2 scale) {textureData_.Scale = scale;}
+
 	Scale2 GetSlice() const {return sliceCornerSize_;}
 
 	float & GetOpacity();

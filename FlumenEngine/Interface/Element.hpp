@@ -14,6 +14,7 @@ class Sprite;
 class Camera;
 class Transform;
 class Animator;
+class Animation;
 class AnimationEvent;
 class AnimationProperty;
 class Delegate;
@@ -81,11 +82,21 @@ protected:
 
 	ElementAnchors anchor_;
 
+	bool isUpdatingPositionConstantly_ {false};
+
 	bool isInteractive_ {false};
 
 	bool isHovered_;
 
 	MouseFollower *mouseFollower_ {nullptr};
+
+	const Position2 *followedWorldPosition_ {nullptr};
+
+	Scale2 staticFollowOffset_;
+
+	Scale2 dynamicFollowOffset_;
+
+	const Camera *camera_ {nullptr};
 
 	virtual void HandleOpen();
 
@@ -122,6 +133,8 @@ protected:
 public:
 	void UpdatePosition();
 
+	void UpdatePositionConstantly() {isUpdatingPositionConstantly_ = true;}
+
 	void SetOpacity(Opacity opacity) {opacity_ = opacity;}
 
 	Word GetIdentifier();
@@ -137,6 +150,8 @@ public:
 	virtual void Render(Camera*);
 
 	Position2 GetPosition() const;
+
+	const Position2 &GetBasePosition() const {return basePosition_;}
 
 	void SetPosition(Position2);
 
@@ -156,7 +171,7 @@ public:
 
 	DrawOrder & GetDrawOrder();
 
-	Opacity GetOpacity();
+	const Opacity &GetOpacity();
 
 	Delegate & GetLeftClickEvents();
 
@@ -168,7 +183,9 @@ public:
 
 	void SetSpriteColor(const Color &);
 
-	AnimationProperty* AddAnimationProperty(const char*, InterfaceElementParameters);
+	void AddAnimation(Animation *, const char *);
+
+	AnimationProperty* AddAnimationProperty(const char*, InterfaceElementParameters, const float * = nullptr);
 
 	void SetDynamicParent(Object *);
 
@@ -187,4 +204,16 @@ public:
 	void Close();
 
 	void FollowMouse() {mouseFollower_ = new MouseFollower(this);}
+
+	void FollowWorldPosition(
+		const Position2 *position, 
+		const Camera *camera, 
+		Scale2 staticOffset = Position2(1.0f), 
+		Scale2 dynamicOffset = Position2(0.0f)) 
+	{
+		followedWorldPosition_ = position; 
+		camera_ = camera; 
+		staticFollowOffset_ = staticOffset;
+		dynamicFollowOffset_ = dynamicOffset;
+	}
 };

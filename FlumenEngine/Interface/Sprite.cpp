@@ -106,14 +106,14 @@ void Sprite::SetDefaultConstants(Camera* camera, const SpriteDrawData *newData)
 			{
 				auto scale = parent_->GetTransform()->GetScale() * data->Size;
 				if(textureData_.Texture)
-					return scale * (Scale2)textureData_.Texture->GetSize();
+					return scale * (Scale2)textureData_.Texture->GetSize() * textureData_.Scale;
 				else
 					return scale * (Scale2)parent_->GetSize();
 			}
 			else
 			{
 				if(textureData_.Texture)
-					return (Scale2)textureData_.Texture->GetSize() * data->Size;
+					return (Scale2)textureData_.Texture->GetSize() * data->Size * textureData_.Scale;
 				else
 					return data->Size;
 			}

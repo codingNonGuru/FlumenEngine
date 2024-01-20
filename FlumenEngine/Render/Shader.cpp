@@ -42,7 +42,6 @@ void Shader::Bind()
 void Shader::Unbind()
 {
 	glUseProgram(0);
-	//glFinish();
 
 	DEBUG_OPENGL
 }

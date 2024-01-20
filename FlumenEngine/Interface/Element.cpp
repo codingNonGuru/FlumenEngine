@@ -15,6 +15,7 @@
 #include "FlumenEngine/Render/Shader.hpp"
 #include "FlumenEngine/Render/ShaderManager.hpp"
 #include "FlumenEngine/Render/TextureManager.hpp"
+#include "FlumenEngine/Render/Camera.hpp"
 
 #define DEFAULT_CHILDREN_COUNT 32
 
@@ -26,8 +27,6 @@ void MouseFollower::Update()
 	auto mousePosition = InputHandler::GetMousePosition();
 
 	parent->basePosition_ = mousePosition;
-
-	parent->UpdatePosition();
 }
 
 Element::Element(int childCount) 
@@ -208,6 +207,25 @@ void Element::Update()
 		mouseFollower_->Update();
 	}
 
+	if(followedWorldPosition_)
+	{
+		auto screenPosition = camera_->GetScreenPosition({followedWorldPosition_->x, followedWorldPosition_->y, 0.0f});
+
+		auto offset = Scale2(size_) / 2.0f;
+
+		screenPosition += offset * staticFollowOffset_;
+
+		screenPosition += dynamicFollowOffset_ / camera_->GetZoomFactor();
+
+		transform_->GetPosition().x = screenPosition.x;
+		transform_->GetPosition().y = screenPosition.y;
+	}
+
+	if(isUpdatingPositionConstantly_ == true || mouseFollower_ != nullptr)
+	{
+		UpdatePosition();
+	}
+
 	HandleUpdate();
 }
 
@@ -222,7 +240,12 @@ void Element::Render(Camera* camera)
 	sprite_->Draw(camera);
 }
 
-AnimationProperty* Element::AddAnimationProperty(const char* animationName, InterfaceElementParameters parameter)
+void Element::AddAnimation(Animation *animation, const char *name)
+{
+	animator_->AddAnimation(animation, name);
+}
+
+AnimationProperty* Element::AddAnimationProperty(const char* animationName, InterfaceElementParameters parameter, const float *trackedValue)
 {
 	auto animation = animator_->GetAnimation(animationName);
 	if(!animation)
@@ -243,6 +266,10 @@ AnimationProperty* Element::AddAnimationProperty(const char* animationName, Inte
 		property = animation->AddProperty();
 		property->Initialize(&opacity_);
 		return property;
+	case InterfaceElementParameters::OTHER:
+		property = animation->AddProperty();
+		property->Initialize(trackedValue);
+		return property;
 	}
 
 	return nullptr;
@@ -258,7 +285,7 @@ DrawOrder & Element::GetDrawOrder()
 	return drawOrder_;
 }
 
-Opacity Element::GetOpacity()
+const Opacity &Element::GetOpacity()
 {
 	return opacity_;
 }

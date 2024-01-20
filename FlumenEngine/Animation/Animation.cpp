@@ -43,13 +43,15 @@ AnimationProperty* Animation::AddProperty()
 	return propertyPointer;
 }
 
-void Animation::AddProperty(AnimationProperty property)
+AnimationProperty *Animation::AddProperty(AnimationProperty property)
 {
 	auto propertyPointer = properties_.Allocate();
 	if(!propertyPointer)
 		return;
 
 	*propertyPointer = property;
+
+	return propertyPointer;
 }
 
 AnimationEvent* Animation::AddEvent()

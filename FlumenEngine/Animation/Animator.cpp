@@ -11,7 +11,9 @@ Animation* Animator::GetAnimation(const char* name)
 {
 	auto animation = animations_.Get(name);
 	if(animation == nullptr)
+	{
 		return nullptr;
+	}
 
 	return *animation;
 }

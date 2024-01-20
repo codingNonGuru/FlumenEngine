@@ -84,7 +84,8 @@ enum class InterfaceElementParameters
 	SIZE_X,
 	SIZE_Y,
 	DEPTH,
-	OPACITY
+	OPACITY,
+	OTHER
 };
 
 enum class KernelTypes
