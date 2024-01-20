@@ -21,7 +21,7 @@ struct Mouse
 
 	bool LastRight_, LastLeft_;
 
-	Mouse() : NormalizedPosition_(Position2(0.0f, 0.0f)), CurrentRight_(false), CurrentLeft_(false), LastRight_(false), LastLeft_(false), ScrollUp_(false), ScrollDown_(false) {}
+	Mouse() : NormalizedPosition_(Position2()), CurrentRight_(false), CurrentLeft_(false), LastRight_(false), LastLeft_(false), ScrollUp_(false), ScrollDown_(false) {}
 };
 
 class InputHandler
@@ -32,11 +32,11 @@ class InputHandler
 
 	static container::Array<int> formerKeys_;
 
-	static Map <Delegate, SDL_Scancode> onKeyPressedEvents;
+	static Map <Event, SDL_Scancode> onKeyPressedEvents;
 
-	static Map <Delegate, SDL_Scancode> onKeyHeldEvents;
+	static Map <Event, SDL_Scancode> onKeyHeldEvents;
 
-	static Map <Delegate, SDL_Scancode> onKeyReleasedEvents;
+	static Map <Event, SDL_Scancode> onKeyReleasedEvents;
 
 	static void UpdateMouse();
 
@@ -55,15 +55,13 @@ public:
 
 	static void Initialize();
 
-	static void RegisterEvent(SDL_Scancode key, Event action);
-
-	static void UnregisterEvent(SDL_Scancode, Event);
+	static void RegisterEvent(SDL_Scancode, Event);
 
 	static void RegisterContinualEvent(SDL_Scancode, Event);
-	
-	static void UnregisterContinualEvent(SDL_Scancode, Event);
 
 	static void RegisterContinualEvent(SDL_Scancode, Event, Event);
+
+	static void UnregisterEvent(SDL_Scancode);
 
 	static void UnregisterContinualEvent(SDL_Scancode);
 

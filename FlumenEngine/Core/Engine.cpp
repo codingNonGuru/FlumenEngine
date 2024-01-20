@@ -33,7 +33,7 @@ void Engine::Initialize(Size size)
 {
 	OnInitializeStarted.Invoke();
 
-	AssetManager::Initialize();
+AssetManager::Initialize();
 
 	screen_ = new Screen(size);
 
