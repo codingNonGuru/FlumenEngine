@@ -16,6 +16,7 @@
 #include "FlumenEngine/Render/ShaderManager.hpp"
 #include "FlumenEngine/Render/TextureManager.hpp"
 #include "FlumenEngine/Render/Camera.hpp"
+#include "FlumenEngine/Render/RenderManager.hpp"
 
 #define DEFAULT_CHILDREN_COUNT 32
 
@@ -121,6 +122,14 @@ void Element::UpdatePosition()
 	*transform_ = Transform(basePosition_ + offset);
 }
 
+void Element::FollowWorldPosition(const Position2 *position, const Word cameraName, Scale2 staticOffset, Scale2 dynamicOffset) 
+{
+	followedWorldPosition_ = position; 
+	camera_ = RenderManager::GetCamera(cameraName);
+	staticFollowOffset_ = staticOffset;
+	dynamicFollowOffset_ = dynamicOffset;
+}
+
 void Element::UpdateRecursively()
 {
 	Update();
@@ -184,8 +193,10 @@ bool Element::CheckHover()
 
 	auto position = GetGlobalPosition();
 
-	bool isInsideHorizontally = mousePosition.x > position.x - size_.x / 2 && mousePosition.x < position.x + size_.x / 2;
-	bool isInsideVertically = mousePosition.y > position.y - size_.y / 2 && mousePosition.y < position.y + size_.y / 2;
+	auto size = Scale2(size_) * transform_->GetScale() * 0.5f;
+
+	bool isInsideHorizontally = mousePosition.x > position.x - size.x && mousePosition.x < position.x + size.x;
+	bool isInsideVertically = mousePosition.y > position.y - size.y && mousePosition.y < position.y + size.y;
 
 	isHovered_ = isInsideHorizontally && isInsideVertically;
 
@@ -209,16 +220,7 @@ void Element::Update()
 
 	if(followedWorldPosition_)
 	{
-		auto screenPosition = camera_->GetScreenPosition({followedWorldPosition_->x, followedWorldPosition_->y, 0.0f});
-
-		auto offset = Scale2(size_) / 2.0f;
-
-		screenPosition += offset * staticFollowOffset_;
-
-		screenPosition += dynamicFollowOffset_ / camera_->GetZoomFactor();
-
-		transform_->GetPosition().x = screenPosition.x;
-		transform_->GetPosition().y = screenPosition.y;
+		UpdateWorldFollow();
 	}
 
 	if(isUpdatingPositionConstantly_ == true || mouseFollower_ != nullptr)
@@ -227,6 +229,20 @@ void Element::Update()
 	}
 
 	HandleUpdate();
+}
+
+void Element::UpdateWorldFollow()
+{
+	auto screenPosition = camera_->GetScreenPosition({followedWorldPosition_->x, followedWorldPosition_->y, 0.0f});
+
+	auto offset = Scale2(size_) / 2.0f;
+
+	screenPosition += offset * staticFollowOffset_;
+
+	screenPosition += dynamicFollowOffset_ / camera_->GetZoomFactor();
+
+	transform_->GetPosition().x = screenPosition.x;
+	transform_->GetPosition().y = screenPosition.y;
 }
 
 void Element::Render(Camera* camera)

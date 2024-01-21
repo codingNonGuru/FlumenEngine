@@ -128,6 +128,8 @@ protected:
 
 	void UpdateRecursively();
 
+	void UpdateWorldFollow();
+
 	Element(int = DEFAULT_CHILD_COUNT);
 	
 public:
@@ -148,6 +150,8 @@ public:
 	void Update();
 
 	virtual void Render(Camera*);
+
+	bool IsHovered() const {return isHovered_;}
 
 	Position2 GetPosition() const;
 
@@ -205,15 +209,5 @@ public:
 
 	void FollowMouse() {mouseFollower_ = new MouseFollower(this);}
 
-	void FollowWorldPosition(
-		const Position2 *position, 
-		const Camera *camera, 
-		Scale2 staticOffset = Position2(1.0f), 
-		Scale2 dynamicOffset = Position2(0.0f)) 
-	{
-		followedWorldPosition_ = position; 
-		camera_ = camera; 
-		staticFollowOffset_ = staticOffset;
-		dynamicFollowOffset_ = dynamicOffset;
-	}
+	void FollowWorldPosition(const Position2 *position, const Word camera, Scale2 staticOffset = Position2(1.0f), Scale2 dynamicOffset = Position2(0.0f));
 };

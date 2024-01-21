@@ -13,6 +13,10 @@ class LayoutGroup : public Element
 
     float verticalDistance {0.0f};
 
+    bool isWidthLocked {false};
+
+    bool isHeightLocked {false};
+
     void HandleUpdate() override
     {
         auto width = 0.0f;
@@ -81,8 +85,15 @@ class LayoutGroup : public Element
             index++;
         }
 
-        size_.x = horizontalDistance * Float(elementsPerRow - 1) + rowWidth;
-        size_.y = verticalDistance * Float((activeElementCount / elementsPerRow) - (activeElementCount % elementsPerRow == 0 ? 1 : 0)) + height;
+        if(isWidthLocked == false)
+        {
+            size_.x = horizontalDistance * Float(elementsPerRow - 1) + rowWidth;
+        }
+
+        if(isHeightLocked == false)
+        {
+            size_.y = verticalDistance * Float((activeElementCount / elementsPerRow) - (activeElementCount % elementsPerRow == 0 ? 1 : 0)) + height;
+        }
         
         UpdatePosition();
 
@@ -105,5 +116,19 @@ public:
         this->elementsPerRow = elementsPerRow;
         this->horizontalDistance = horizontalDistance;
         this->verticalDistance = verticalDistance;
+    }
+
+    void LockWidth(int width)
+    {
+        isWidthLocked = true;
+
+        GetSize().x = width;
+    }
+
+    void LockHeight(int height)
+    {
+        isHeightLocked = true;
+
+        GetSize().y = height;
     }
 };
