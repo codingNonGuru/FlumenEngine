@@ -24,6 +24,13 @@ Sprite::Sprite(Shader* shader, TextureData textureData)
 	Initialize(shader, textureData);
 }
 
+Sprite::Sprite(Shader *shader, Word textureName)
+{
+	auto texture = render::TextureManager::GetTexture(textureName);
+
+	Initialize(shader, texture);
+}
+
 void Sprite::Initialize(Shader* shader, TextureData textureData)
 {
 	isActive_ = true;

@@ -68,8 +68,6 @@ private:
 
 	void SetDefaultConstants(Camera *, const SpriteDrawData *);
 
-	void BindDefaultTextures();
-
 protected:
 	virtual void SetExtraConstants();
 
@@ -80,9 +78,13 @@ public:
 
 	Sprite(Shader *, TextureData = TextureData());
 
+	Sprite(Shader *, Word);
+
 	void Initialize(Shader *, TextureData = TextureData());
 
 	void Draw(Camera*, const SpriteDrawData = SpriteDrawData());
+
+	void BindDefaultTextures();
 
 	void SetTexture(const render::Texture* texture);
 

@@ -187,6 +187,8 @@ public:
 
 	void SetSpriteColor(const Color &);
 
+	void SetTexture(Word);
+
 	void AddAnimation(Animation *, const char *);
 
 	AnimationProperty* AddAnimationProperty(const char*, InterfaceElementParameters, const float * = nullptr);

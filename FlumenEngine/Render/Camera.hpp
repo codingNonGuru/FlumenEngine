@@ -40,6 +40,10 @@ class Camera
 
 	bool isZoomingDynamically {false};
 
+	bool isZoomLimited_ {false};
+
+	Scale2 zoomLimit_;
+
 	bool isAnimated;
 
 	Float animationTime;
@@ -75,6 +79,8 @@ public:
 
 	void ZoomDynamically(float);
 
+	void LimitZoom(Scale2 limit) {isZoomLimited_ = true; zoomLimit_ = limit;}
+
 	void Spin(float impulse);
 
 	void PushForward(float);
@@ -95,7 +101,7 @@ public:
 
 	void Translate(Direction3);
 
-	Position2 GetScreenPosition(Position3);
+	Position2 GetScreenPosition(Position3) const;
 
 	Position2 GetWorldPosition(Position2);
 };

@@ -76,7 +76,14 @@ void Text::Setup(const char* string, Float scale)
 
 	if(isHeightLocked_ == false)
 	{
-		size_.y = font_->GetHeight() * float(rowIndex + 1) * rowSpacingFactor_;
+		if(string_.GetSize() == 0)
+		{
+			size_.y = 0.0f;
+		}
+		else
+		{
+			size_.y = font_->GetHeight() * float(rowIndex + 1) * rowSpacingFactor_;
+		}
 	}
 
 	UpdatePosition();

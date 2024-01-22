@@ -3,7 +3,7 @@
 #include "FlumenEngine/Core/Engine.hpp"
 #include "FlumenEngine/Render/Screen.hpp"
 
-static const auto REGISTER_FAIL_MESSAGE = "Input handler is trying to overwrite event.\n";
+#define REGISTER_FAIL_MESSAGE "Input handler is trying to overwrite event.\n"
 
 static const auto KEY_MAP_SIZE = 64;
 

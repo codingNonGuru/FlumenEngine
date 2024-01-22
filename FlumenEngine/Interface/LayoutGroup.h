@@ -17,6 +17,8 @@ class LayoutGroup : public Element
 
     bool isHeightLocked {false};
 
+    Position2 generalOffset {};
+
     void HandleUpdate() override
     {
         auto width = 0.0f;
@@ -52,7 +54,7 @@ class LayoutGroup : public Element
         verticalOffset *= 0.5f;
         verticalOffset -= (*staticChildren_.GetStart())->GetSize().y * 0.5f;
 
-        auto position = Position3(0.0f, -verticalOffset, 0.0f);
+        auto position = Position2(0.0f, -verticalOffset);
 
         auto index = 0;
         for(auto iterator = staticChildren_.GetStart(); iterator != staticChildren_.GetEnd(); ++iterator)
@@ -73,7 +75,7 @@ class LayoutGroup : public Element
                 }
             }
 
-            child->SetBasePosition(position);
+            child->SetBasePosition(position + generalOffset);
 
             auto nextLabel = *(iterator + 1);
             if(iterator == staticChildren_.GetEnd() - 1)
@@ -130,5 +132,10 @@ public:
         isHeightLocked = true;
 
         GetSize().y = height;
+    }
+
+    void SetOffset(Position2 offset)
+    {
+        generalOffset = offset;
     }
 };

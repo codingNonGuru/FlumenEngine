@@ -140,6 +140,11 @@ void Camera::Zoom(float impulse)
 	else
 	{
 		zoomFactor_ *= impulse;
+
+		if(isZoomLimited_ == true)
+		{
+			zoomFactor_ = utility::Clamp(zoomFactor_, zoomLimit_.x, zoomLimit_.y);
+		}
 	}
 }
 
@@ -197,6 +202,11 @@ void Camera::Update()
 
 		zoomFactor_ *= (1.0f + scrollImpulse_);
 
+		if(isZoomLimited_ == true)
+		{
+			zoomFactor_ = utility::Clamp(zoomFactor_, zoomLimit_.x, zoomLimit_.y);
+		}
+
 		scrollImpulse_ *= 0.9f;
 	}
 
@@ -220,7 +230,7 @@ void Camera::Translate(Direction3 delta)
 	to_ += delta;
 }
 
-Position2 Camera::GetScreenPosition(Position3 position) 
+Position2 Camera::GetScreenPosition(Position3 position) const
 {
 	auto returnPosition = finalMatrix_ * Float4(position, 1.0f);
 	//returnPosition.x /= returnPosition.w;

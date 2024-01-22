@@ -47,7 +47,7 @@ AnimationProperty *Animation::AddProperty(AnimationProperty property)
 {
 	auto propertyPointer = properties_.Allocate();
 	if(!propertyPointer)
-		return;
+		return nullptr;
 
 	*propertyPointer = property;
 
