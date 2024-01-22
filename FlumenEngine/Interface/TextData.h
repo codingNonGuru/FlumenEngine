@@ -8,9 +8,11 @@ struct FontDescriptor
 {
 	Word Name;
 
-	FontDescriptor() {}
+	FontDescriptor();
 
-	FontDescriptor(Word name, Word size) {Name << name << size;}
+    FontDescriptor(Word);
+
+	FontDescriptor(Word, Word);
 
 	operator Word() {return Name;}
 

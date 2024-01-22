@@ -1,18 +1,27 @@
 #pragma once
 
 #include "FlumenCore/Conventions.hpp"
+#include "FlumenCore/Singleton.h"
 
 class File;
 
-class FileManager
+namespace engine
 {
-private:
-	static Array <File> files_;
+	class FileManager : public core::Singleton <FileManager>
+	{
+		friend class core::Singleton <FileManager>;
 
-	static void GetFilesInSubfolder(const char*, bool);
+		Array <File> files_;
 
-public:
-	static void Initialize();
+		void GetFilesInSubfolder(const char*, bool);
 
-	static Array <File>* GetFilesInFolder(const char*, bool);
-};
+		FileManager();
+
+	public:
+		Array <File> *GetFilesInFolder(const char*, bool);
+
+		const Array <File> &GetFiles();
+
+		const File *GetFile(const char *);
+	};
+}

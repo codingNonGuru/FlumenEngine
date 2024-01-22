@@ -25,7 +25,7 @@ public:
 
 	static Delegate OnShutDown;
 
-	static void Initialize(Size);
+	static void Initialize();
 
 	static void ShutDown();
 

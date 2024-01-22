@@ -1,19 +1,21 @@
 #include <GL/glew.h>
 #include "SDL2/SDL.h"
 
+#include "FlumenCore/Time.hpp"
+
 #include "FlumenEngine/Core/Engine.hpp"
+#include "FlumenEngine/Core/FileManager.hpp"
+#include "FlumenEngine/Core/ConfigManager.h"
 #include "FlumenEngine/Render/Screen.hpp"
 #include "FlumenEngine/Render/RenderManager.hpp"
 #include "FlumenEngine/Render/Window.hpp"
 #include "FlumenEngine/Core/InputHandler.hpp"
 #include "FlumenEngine/Core/AssetManager.hpp"
 #include "FlumenEngine/Interface/Interface.hpp"
-#include "FlumenEngine/Interface/Element.hpp"
 #include "FlumenEngine/Core/SceneManager.hpp"
 #include "FlumenEngine/Thread/ThreadManager.h"
 #include "TaskManager.hpp"
-#include "FlumenCore/Time.hpp"
-#include "FlumenEngine/Utility/Perlin.hpp"
+#include "FlumenEngine/Config.h"
 
 bool Engine::isRunning_ = false;
 
@@ -29,13 +31,19 @@ Delegate Engine::OnInterfaceUpdateStarted = Delegate();
 
 Delegate Engine::OnShutDown = Delegate();
 
-void Engine::Initialize(Size size)
+void Engine::Initialize()
 {
 	OnInitializeStarted.Invoke();
 
-AssetManager::Initialize();
+	engine::FileManager::Get();
 
-	screen_ = new Screen(size);
+	engine::ConfigManager::Get();
+
+	AssetManager::Initialize();
+
+	auto screenWidth = engine::ConfigManager::Get()->GetValue(engine::ConfigValues::DEFAULT_SCREEN_WIDTH).Integer;
+	auto screenHeight = engine::ConfigManager::Get()->GetValue(engine::ConfigValues::DEFAULT_SCREEN_HEIGHT).Integer;
+	screen_ = new Screen({screenWidth, screenHeight});
 
 	RenderManager::Initialize();
 

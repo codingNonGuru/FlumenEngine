@@ -11,7 +11,7 @@
 #include "FlumenEngine/Interface/FontManager.hpp"
 #include "FlumenEngine/Sound/SoundManager.h"
 
-Array <File>* AssetManager::files_ = nullptr;
+const Array <File> *AssetManager::files_ = nullptr;
 
 Map <AttributeType, Word> AssetManager::attributeTypes_ = Map <AttributeType, Word> ();
 
@@ -44,9 +44,9 @@ char* code = new char[1024 * 1024];
 
 void AssetManager::LoadAssets()
 {
-	FileManager::Initialize();
+	//FileManager::Initialize();
 
-	files_ = FileManager::GetFilesInFolder(".", true);
+	files_ = &engine::FileManager::Get()->GetFiles();//FileManager::GetFilesInFolder(".", true);
 
 	ShaderManager::LoadShaders();
 

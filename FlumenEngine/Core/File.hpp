@@ -17,4 +17,8 @@ public:
 	const char* GetName() {return name_;}
 
 	const char* GetPath() {return path_;}
+
+	bool HasName(FileName) const;
+
+	const char *ReadContent();
 };

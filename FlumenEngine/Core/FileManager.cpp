@@ -5,11 +5,33 @@
 #include "FileManager.hpp"
 #include "FlumenEngine/Core/File.hpp"
 
-Array <File> FileManager::files_ = Array <File>();
+static const auto ROOT_FOLDER = ".";
 
-void FileManager::Initialize()
+static const auto MAXIMUM_FILE_COUNT = 16384;
+
+using namespace engine;
+
+FileManager::FileManager()
 {
-	files_.Initialize(16384);
+	files_.Initialize(MAXIMUM_FILE_COUNT);
+
+	GetFilesInFolder(ROOT_FOLDER, true);
+}
+
+const Array <File> &FileManager::GetFiles()
+{
+	return &files_;
+}
+
+const File *FileManager::GetFile(const char *fileName)
+{
+	for(auto &file : files_)
+	{
+		if(file.HasName(fileName) == true)
+			return &file;
+	}
+
+	return nullptr;
 }
 
 Array <File>* FileManager::GetFilesInFolder(const char* path, bool isRecursive)

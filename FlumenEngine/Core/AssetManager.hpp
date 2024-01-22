@@ -9,7 +9,7 @@ class File;
 class AssetManager
 {
 private:
-	static Array <File> *files_;
+	static const Array <File> *files_;
 
 	static Map <AttributeType, Word> attributeTypes_;
 
