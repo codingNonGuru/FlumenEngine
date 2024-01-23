@@ -280,7 +280,7 @@ AnimationProperty* Element::AddAnimationProperty(const char* animationName, Inte
 		return property;
 	case InterfaceElementParameters::OPACITY:
 		property = animation->AddProperty();
-		property->Initialize(&opacity_);
+		property->Initialize(&opacity_.Get());
 		return property;
 	case InterfaceElementParameters::OTHER:
 		property = animation->AddProperty();

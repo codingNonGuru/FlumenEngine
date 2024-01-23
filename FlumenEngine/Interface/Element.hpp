@@ -124,7 +124,7 @@ protected:
 
 	Position2 GetPivotOffset(ElementPivots);
 
-	void Configure(Size, DrawOrder, PositionData, SpriteDescriptor = SpriteDescriptor(), Opacity = 1.0f);
+	void Configure(Size, DrawOrder, PositionData, SpriteDescriptor = SpriteDescriptor(), Opacity = Opacity(1.0f));
 
 	void UpdateRecursively();
 
@@ -138,6 +138,8 @@ public:
 	void UpdatePositionConstantly() {isUpdatingPositionConstantly_ = true;}
 
 	void SetOpacity(Opacity opacity) {opacity_ = opacity;}
+
+	void SetOpacity(float opacity) {opacity_ = opacity;}
 
 	Word GetIdentifier();
 

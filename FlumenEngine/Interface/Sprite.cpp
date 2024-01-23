@@ -41,7 +41,7 @@ void Sprite::Initialize(Shader* shader, TextureData textureData)
 
 	parent_ = nullptr;
 
-	opacity_ = 1.0f;
+	opacity_ = Opacity(1.0f);
 
 	if(shader_->GetName() == "SlicedSprite")
 	{
@@ -79,7 +79,7 @@ void Sprite::Draw(Camera* camera, const SpriteDrawData data)
 	}
 }
 
-float & Sprite::GetOpacity()
+Opacity &Sprite::GetOpacity()
 {
 	return opacity_;
 }

@@ -8,7 +8,7 @@
 Element * ElementFactory::BuildCanvas()
 {
     auto canvas = new Element(512);
-    canvas->Configure(Engine::GetScreen()->GetSize(), 0, {Position2(0.0f, 0.0f)});
+    canvas->Configure(Engine::GetScreen()->GetSize(), 0, {Position2()});
 
     Interface::Get()->AddCanvas(canvas);
 

@@ -48,7 +48,7 @@ class Sprite
 private:
 	bool isActive_;
 
-	float opacity_;
+	Opacity opacity_;
 
 	float depth_;
 
@@ -106,5 +106,5 @@ public:
 
 	Scale2 GetSlice() const {return sliceCornerSize_;}
 
-	float & GetOpacity();
+	Opacity &GetOpacity();
 };

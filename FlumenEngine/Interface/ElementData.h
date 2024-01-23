@@ -25,7 +25,9 @@ public:
 
     render::Texture *Texture {nullptr};
 
-	SpriteDescriptor() : isInitialized(false) {}
+    SpriteDescriptor() : isInitialized(false) {}
+
+    SpriteDescriptor(bool);
 
     SpriteDescriptor(Word, bool);
 
@@ -91,38 +93,33 @@ struct ElementData
 
     SpriteDescriptor Sprite;
     
-    typedef Opacity ElementOpacity;
     Opacity Opacity;
 
-    ElementData(ElementSize size, DrawOrder order, ElementPositionData positionData, SpriteDescriptor sprite, ElementOpacity opacity) :
+    ElementData(ElementSize size, DrawOrder order, ElementPositionData positionData, SpriteDescriptor sprite, struct Opacity opacity) :
         Size(size), Order(order), PositionData(positionData), Sprite(sprite), Opacity(opacity)
     {}
 
     ElementData(ElementSize size, DrawOrder order, ElementPositionData positionData, SpriteDescriptor sprite) :
-        Size(size), Order(order), PositionData(positionData), Sprite(sprite), Opacity(ElementOpacity(1.0f))
+        Size(size), Order(order), PositionData(positionData), Sprite{sprite}, Opacity{1.0f}
     {}
 
-    ElementData(ElementSize size, DrawOrder order, ElementPositionData positionData, ElementOpacity opacity) :
-        Size(size), Order(order), PositionData(positionData), Sprite(SpriteDescriptor()), Opacity(opacity)
+    ElementData(ElementSize size, DrawOrder order, ElementPositionData positionData, struct Opacity opacity) :
+        Size(size), Order(order), PositionData(positionData), Sprite{SpriteDescriptor()}, Opacity{opacity}
     {}
 
     ElementData(ElementSize size, DrawOrder order, ElementPositionData positionData) :
-        Size(size), Order(order), PositionData(positionData), Sprite(SpriteDescriptor()), Opacity(ElementOpacity(1.0f))
+        Size(size), Order(order), PositionData(positionData), Sprite(SpriteDescriptor()), Opacity(1.0f)
     {}
 
-    ElementData(DrawOrder order, ElementPositionData positionData, SpriteDescriptor sprite, ElementOpacity opacity) :
+    ElementData(DrawOrder order, ElementPositionData positionData, SpriteDescriptor sprite, struct Opacity opacity) :
         Size(ElementSize()), Order(order), PositionData(positionData), Sprite(sprite), Opacity(opacity)
     {}
 
     ElementData(DrawOrder order, ElementPositionData positionData, SpriteDescriptor sprite) :
-        Size(ElementSize()), Order(order), PositionData(positionData), Sprite(sprite), Opacity(ElementOpacity(1.0f))
-    {}
-
-    ElementData(DrawOrder order, ElementPositionData positionData, ElementOpacity opacity) :
-        Size(ElementSize()), Order(order), PositionData(positionData), Sprite(SpriteDescriptor()), Opacity(opacity)
+        Size(ElementSize()), Order(order), PositionData(positionData), Sprite{sprite}, Opacity{1.0f}
     {}
 
     ElementData(DrawOrder order, ElementPositionData positionData) :
-        Size(ElementSize()), Order(order), PositionData(positionData), Sprite(SpriteDescriptor()), Opacity(ElementOpacity(1.0f))
+        Size(ElementSize()), Order(order), PositionData(positionData), Sprite(SpriteDescriptor()), Opacity(1.0f)
     {}
 };

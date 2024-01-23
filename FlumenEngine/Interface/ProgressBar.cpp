@@ -2,12 +2,13 @@
 #include "FlumenEngine/Interface/ElementFactory.h"
 #include "FlumenEngine/Interface/Sprite.hpp"
 
-const auto defaultBarShader = "SlicedSprite";
+const auto DEFAULT_BAR_SHADER = "SlicedSprite";
 
 void ProgressBar::HandleConfigure()
 {
-    filler = ElementFactory::BuildElement <Filler>(
-        {size_, drawOrder_ + 1, {Position2(), ElementAnchors::MIDDLE_LEFT, ElementPivots::MIDDLE_LEFT, this}, {defaultBarShader}}
+    filler = ElementFactory::BuildElement <Filler>
+    (
+        {size_, drawOrder_ + 1, {ElementAnchors::MIDDLE_LEFT, ElementPivots::MIDDLE_LEFT, this}, {DEFAULT_BAR_SHADER}}
     );
     filler->Enable();
 }
