@@ -29,6 +29,6 @@ namespace engine
         ConfigManager();
 
     public:
-        ConfigValue GetValue(Word);
+        ConfigValue GetValue(LongWord);
     };
 }

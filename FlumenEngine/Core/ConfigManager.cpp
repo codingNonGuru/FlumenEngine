@@ -24,7 +24,7 @@ ConfigManager::ConfigManager()
     configObject = json::parse(fileContent);
 }
 
-ConfigManager::ConfigValue ConfigManager::GetValue(Word valueName)
+ConfigManager::ConfigValue ConfigManager::GetValue(LongWord valueName)
 {
     auto &value = configObject.at(valueName.Get());
     if(value.is_number_float() == true)

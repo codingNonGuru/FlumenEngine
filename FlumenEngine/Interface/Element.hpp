@@ -187,6 +187,8 @@ public:
 
 	void SetSpriteColor(const Color &);
 
+	void SetTextureScale(Scale2);
+
 	void SetTexture(Word);
 
 	void AddAnimation(Animation *, const char *);

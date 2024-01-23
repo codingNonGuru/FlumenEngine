@@ -27,11 +27,25 @@ public:
 
 	SpriteDescriptor() : isInitialized(false) {}
 
+    SpriteDescriptor(Word, bool);
+
+    SpriteDescriptor(const char *, bool);
+
 	SpriteDescriptor(Word shaderName) : HasTexture(false), TextureName(), ShaderName(shaderName), isInitialized(true) {}
+
+    SpriteDescriptor(const char *shaderName) : HasTexture(false), TextureName(), ShaderName(shaderName), isInitialized(true) {}
 
 	SpriteDescriptor(Word textureName, Word shaderName) : HasTexture(true), TextureName(textureName), ShaderName(shaderName), isInitialized(true) {}
 
+    SpriteDescriptor(const char *textureName, Word shaderName) : HasTexture(true), TextureName(textureName), ShaderName(shaderName), isInitialized(true) {}
+
+    SpriteDescriptor(Word textureName, const char *shaderName) : HasTexture(true), TextureName(textureName), ShaderName(shaderName), isInitialized(true) {}
+
+    SpriteDescriptor(const char *textureName, const char *shaderName) : HasTexture(true), TextureName(textureName), ShaderName(shaderName), isInitialized(true) {}
+
     SpriteDescriptor(render::Texture *texture, Word shaderName) : HasTexture(true), Texture(texture), ShaderName(shaderName), isInitialized(true) {}
+
+    SpriteDescriptor(render::Texture *texture, const char *shaderName) : HasTexture(true), Texture(texture), ShaderName(shaderName), isInitialized(true) {}
 
 	operator bool() {return isInitialized;}
 };
@@ -58,7 +72,11 @@ struct PositionData
 
 	PositionData(Position2 position) : Position(position), Anchor(ElementAnchors::MIDDLE_CENTER), Pivot(ElementPivots::MIDDLE_CENTER), Parent(nullptr) {}
 
-    PositionData() : Position(Position2(0.0f, 0.0f)), Anchor(ElementAnchors::MIDDLE_CENTER), Pivot(ElementPivots::MIDDLE_CENTER), Parent(nullptr) {}
+    PositionData() : Position(Position2()), Anchor(ElementAnchors::MIDDLE_CENTER), Pivot(ElementPivots::MIDDLE_CENTER), Parent(nullptr) {}
+
+    PositionData(Element *parent) : Position(Position2()), Anchor(ElementAnchors::MIDDLE_CENTER), Pivot(ElementPivots::MIDDLE_CENTER), Parent(parent) {}
+
+    PositionData(ElementAnchors anchor, ElementPivots pivot, Element *parent) : Position(Position2()), Anchor(anchor), Pivot(pivot), Parent(parent) {}
 };
 
 struct ElementData
@@ -90,5 +108,21 @@ struct ElementData
 
     ElementData(ElementSize size, DrawOrder order, ElementPositionData positionData) :
         Size(size), Order(order), PositionData(positionData), Sprite(SpriteDescriptor()), Opacity(ElementOpacity(1.0f))
+    {}
+
+    ElementData(DrawOrder order, ElementPositionData positionData, SpriteDescriptor sprite, ElementOpacity opacity) :
+        Size(ElementSize()), Order(order), PositionData(positionData), Sprite(sprite), Opacity(opacity)
+    {}
+
+    ElementData(DrawOrder order, ElementPositionData positionData, SpriteDescriptor sprite) :
+        Size(ElementSize()), Order(order), PositionData(positionData), Sprite(sprite), Opacity(ElementOpacity(1.0f))
+    {}
+
+    ElementData(DrawOrder order, ElementPositionData positionData, ElementOpacity opacity) :
+        Size(ElementSize()), Order(order), PositionData(positionData), Sprite(SpriteDescriptor()), Opacity(opacity)
+    {}
+
+    ElementData(DrawOrder order, ElementPositionData positionData) :
+        Size(ElementSize()), Order(order), PositionData(positionData), Sprite(SpriteDescriptor()), Opacity(ElementOpacity(1.0f))
     {}
 };

@@ -438,6 +438,11 @@ void Element::SetSpriteColor(const Color &color)
 	sprite_->SetColor(&color);
 }	
 
+void Element::SetTextureScale(Scale2 scale)
+{
+	sprite_->SetTextureSize(scale);
+}
+
 void Element::SetTexture(Word textureName)
 {
 	sprite_->SetTexture(textureName);
