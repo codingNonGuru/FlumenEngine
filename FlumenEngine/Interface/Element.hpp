@@ -28,9 +28,11 @@ class MouseFollower
 
 	Element *parent;
 
+	Position2 offset;
+
 	bool isActive {true};
 
-	MouseFollower(Element *newParent) : parent(newParent) {}
+	MouseFollower(Element *newParent, Position2 newOffset) : parent(newParent), offset(newOffset) {}
 
 	void Update();
 };
@@ -161,7 +163,7 @@ public:
 
 	void SetPosition(Position2);
 
-	void SetBasePosition(Position2 position) {basePosition_ = position;}
+	void SetBasePosition(Position2);
 
 	Animator* GetAnimator();
 
@@ -213,7 +215,7 @@ public:
 
 	void Close();
 
-	void FollowMouse() {mouseFollower_ = new MouseFollower(this);}
+	void FollowMouse(Position2 offset = Position2()) {mouseFollower_ = new MouseFollower(this, offset);}
 
 	void FollowWorldPosition(const Position2 *position, const Word camera, Scale2 staticOffset = Position2(1.0f), Scale2 dynamicOffset = Position2(0.0f));
 };

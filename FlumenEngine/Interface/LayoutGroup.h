@@ -99,7 +99,7 @@ class LayoutGroup : public Element
         
         UpdatePosition();
 
-        for(auto &child : staticChildren_)
+        for(auto &child : dynamicChildren_)
         {
             child->UpdatePosition();
         }

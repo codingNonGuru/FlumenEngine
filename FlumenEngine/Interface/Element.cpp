@@ -27,7 +27,7 @@ void MouseFollower::Update()
 
 	auto mousePosition = InputHandler::GetMousePosition();
 
-	parent->basePosition_ = mousePosition;
+	parent->basePosition_ = offset + mousePosition;
 }
 
 Element::Element(int childCount) 
@@ -335,6 +335,13 @@ Position2 Element::GetPosition() const
 void Element::SetPosition(Position2 position) 
 {
 	transform_->GetPosition() = Position3(position.x, position.y, 0.0f);
+}
+
+void Element::SetBasePosition(Position2 position) 
+{
+	basePosition_ = position;
+	
+	UpdatePosition();
 }
 
 void Element::SetInteractivity(bool isInteractive)
