@@ -1,5 +1,7 @@
 #pragma once
 
+#include "FlumenEngine/Core/ConfigManager.h"
+
 namespace engine
 {
     #define THREAD_COUNT 4
@@ -15,5 +17,6 @@ namespace engine
         static constexpr auto DEFAULT_INTERFACE_SHADER = "DEFAULT_INTERFACE_SHADER";
         static constexpr auto DEFAULT_INTERFACE_9_SLICE_SHADER = "DEFAULT_INTERFACE_9_SLICE_SHADER";
         static constexpr auto DEFAULT_INTERFACE_FONT = "DEFAULT_INTERFACE_FONT";  
+        static constexpr auto DEFAULT_SOUND_VOLUME = "DEFAULT_SOUND_VOLUME";  
     };
 }

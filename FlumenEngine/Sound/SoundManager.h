@@ -20,5 +20,7 @@ namespace engine
         void LoadSounds();
 
         void PlaySound(Word);
+
+        void SetVolume(float);
     };
 }
