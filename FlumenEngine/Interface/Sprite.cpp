@@ -11,6 +11,7 @@
 #include "FlumenEngine/Core/Transform.hpp"
 #include "FlumenEngine/Utility/Color.hpp"
 #include "FlumenEngine/Core/File.hpp"
+#include "FlumenEngine/Config.h"
 
 Sprite::Sprite()
 {
@@ -131,7 +132,9 @@ void Sprite::SetDefaultConstants(Camera* camera, const SpriteDrawData *newData)
 	Opacity opacity = parent_ ? opacity_ * parent_->GetOpacity() : data->Opacity;
 	shader_->SetConstant(opacity, "opacity");
 
-	auto drawOrder = parent_ ? (float)parent_->GetDrawOrder() * 0.1f : data->Depth;
+	static const auto DRAW_LAYER_COUNT = engine::ConfigManager::Get()->GetValue(engine::ConfigValues::INTERFACE_DRAW_LAYER_COUNT).Integer;
+
+	auto drawOrder = parent_ ? (float)parent_->GetDrawOrder() / (float)DRAW_LAYER_COUNT : data->Depth;
 	shader_->SetConstant(drawOrder, "depth");
 
 	if(shader_->GetName() == "Sprite")

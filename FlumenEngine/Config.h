@@ -18,5 +18,6 @@ namespace engine
         static constexpr auto DEFAULT_INTERFACE_9_SLICE_SHADER = "DEFAULT_INTERFACE_9_SLICE_SHADER";
         static constexpr auto DEFAULT_INTERFACE_FONT = "DEFAULT_INTERFACE_FONT";  
         static constexpr auto DEFAULT_SOUND_VOLUME = "DEFAULT_SOUND_VOLUME";  
+        static constexpr auto INTERFACE_DRAW_LAYER_COUNT = "INTERFACE_DRAW_LAYER_COUNT";  
     };
 }

@@ -51,3 +51,11 @@ State* StateManager::GetPreviousState()
 {
 	return instance.previousState;
 }
+
+void StateManager::Update()
+{
+	for(auto state : instance.states)
+	{
+		state->Update();
+	}
+}

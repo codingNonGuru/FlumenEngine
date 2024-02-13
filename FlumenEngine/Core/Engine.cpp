@@ -14,6 +14,7 @@
 #include "FlumenEngine/Interface/Interface.hpp"
 #include "FlumenEngine/Core/SceneManager.hpp"
 #include "FlumenEngine/Thread/ThreadManager.h"
+#include "FlumenEngine/Core/StateManager.hpp"
 #include "TaskManager.hpp"
 #include "FlumenEngine/Config.h"
 
@@ -78,6 +79,8 @@ void Engine::StartGameLoop()
 		}
 
 		engine::ThreadManager::Get()->Update();
+
+		StateManager::Update();
 
 		SceneManager::Update();
 

@@ -15,4 +15,6 @@ protected:
 
 public:
 	void Enter();
+
+	virtual void Update() {}
 };

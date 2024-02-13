@@ -49,4 +49,9 @@ public:
 	{
 		return Size(widthInteger_, heightInteger_);
 	}
+
+	float GetRatio()
+	{
+		return widthFloating_ / heightFloating_;
+	}
 };

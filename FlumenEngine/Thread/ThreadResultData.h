@@ -11,9 +11,10 @@ namespace engine
     {
         container::Block <Type, THREAD_COUNT> results;
 
+    public:
         Type &GetResult(int index)
         {
-            return results[index];
+            return *results[index];
         }
     };
 }

@@ -20,7 +20,7 @@ FileManager::FileManager()
 
 const Array <File> &FileManager::GetFiles()
 {
-	return &files_;
+	return files_;
 }
 
 const File *FileManager::GetFile(const char *fileName)

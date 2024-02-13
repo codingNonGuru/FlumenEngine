@@ -29,4 +29,6 @@ public:
 	static State* GetNextState();
 
 	static State* GetPreviousState();
+
+	static void Update();
 };

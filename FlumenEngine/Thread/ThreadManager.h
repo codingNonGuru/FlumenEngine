@@ -40,8 +40,10 @@ namespace engine
         ThreadManager();
 
     public:
+        static constexpr int GetThreadCount() {return THREAD_COUNT;}
+
         template<typename Callable, typename InputType, typename ResultType>
-        void LaunchSyncThread(Callable function, InputType &inputData, ThreadResultData <ResultType> &resultData)
+        void LaunchSyncThread(Callable function, const InputType &inputData, ThreadResultData <ResultType> &resultData)
         {
             assert((threads.GetSize() < THREAD_COUNT) && THREAD_OVERFLOW_MESSAGE);
 
@@ -49,9 +51,33 @@ namespace engine
 
             auto threadIndex = threads.GetIndex(threadPointer);
 
-            auto processedResultData = resultData.GetResult(threadIndex);
+            auto &processedResultData = resultData.GetResult(threadIndex);
             
-            *threadPointer = std::thread(function, inputData, processedResultData);
+            *threadPointer = std::thread(function, std::ref(inputData), std::ref(processedResultData));
+        }
+
+        template<typename Callable, typename InputType>
+        void LaunchSyncThread(Callable function, InputType &inputData)
+        {
+            assert((threads.GetSize() < THREAD_COUNT) && THREAD_OVERFLOW_MESSAGE);
+
+            auto threadPointer = threads.Add(); 
+
+            auto threadIndex = threads.GetIndex(threadPointer);
+
+            *threadPointer = std::thread(function, std::ref(inputData));
+        }
+
+        template<typename Callable>
+        void LaunchSyncThread(Callable function)
+        {
+            assert((threads.GetSize() < THREAD_COUNT) && THREAD_OVERFLOW_MESSAGE);
+
+            auto threadPointer = threads.Add(); 
+
+            auto threadIndex = threads.GetIndex(threadPointer);
+
+            *threadPointer = std::thread(function);
         }
 
         template<typename Callable, typename... Arguments>

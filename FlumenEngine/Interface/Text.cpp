@@ -10,6 +10,7 @@
 #include "FlumenEngine/Render/Camera.hpp"
 #include "FlumenEngine/Render/Texture.hpp"
 #include "FlumenEngine/Interface/TextData.h"
+#include "FlumenEngine/Config.h"
 
 Text::Text() {}
 
@@ -199,7 +200,9 @@ void Text::Render(Camera* camera)
 	Opacity opacity = opacity_;
 	shader->SetConstant(opacity, "opacity");
 
-	auto drawOrder = (float)drawOrder_ * 0.1f;
+	static const auto DRAW_LAYER_COUNT = engine::ConfigManager::Get()->GetValue(engine::ConfigValues::INTERFACE_DRAW_LAYER_COUNT).Integer;
+
+	auto drawOrder = (float)drawOrder_ / (float)DRAW_LAYER_COUNT;
 	shader->SetConstant(drawOrder, "depth");
 
 	if(texture && shader)
