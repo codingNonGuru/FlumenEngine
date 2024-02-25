@@ -47,5 +47,7 @@ public:
 
 	float GetTime();
 
-	float GetLength();
+	float GetLength() const;
+
+	void SetLength(float);
 };

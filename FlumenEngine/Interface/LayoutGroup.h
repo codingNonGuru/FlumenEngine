@@ -19,6 +19,8 @@ class LayoutGroup : public Element
 
     Position2 generalOffset {};
 
+    Size padding;
+
     void HandleUpdate() override
     {
         auto width = 0.0f;
@@ -90,11 +92,15 @@ class LayoutGroup : public Element
         if(isWidthLocked == false)
         {
             size_.x = horizontalDistance * Float(elementsPerRow - 1) + rowWidth;
+
+            size_.x += padding.x;
         }
 
         if(isHeightLocked == false)
         {
             size_.y = verticalDistance * Float((activeElementCount / elementsPerRow) - (activeElementCount % elementsPerRow == 0 ? 1 : 0)) + height;
+
+            size_.y += padding.y;
         }
         
         UpdatePosition();
@@ -106,7 +112,7 @@ class LayoutGroup : public Element
     }
 
 public:
-    void SetDistancing(int elementsPerRow, float elementDistance)
+    void SetDistancing(int elementsPerRow, float elementDistance = 0.0f)
     {
         this->elementsPerRow = elementsPerRow;
         this->horizontalDistance = elementDistance;
@@ -137,5 +143,10 @@ public:
     void SetOffset(Position2 offset)
     {
         generalOffset = offset;
+    }
+
+    void SetPadding(Size newPadding)
+    {
+        padding = newPadding;
     }
 };

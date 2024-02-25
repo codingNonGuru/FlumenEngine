@@ -7,7 +7,7 @@ AnimationEvent::AnimationEvent()
 	actions_ = nullptr;
 }
 
-AnimationEvent::AnimationEvent(float time)
+AnimationEvent::AnimationEvent(float time) : actions_(nullptr)
 {
 	Initialize(time);
 }
@@ -16,7 +16,10 @@ void AnimationEvent::Initialize(float time)
 {
 	time_ = time;
 
-	actions_ = new Delegate();
+	if(actions_ == nullptr)
+	{
+		actions_ = new Delegate();
+	}
 }
 
 float AnimationEvent::GetTime()

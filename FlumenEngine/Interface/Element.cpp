@@ -20,6 +20,10 @@
 
 #define DEFAULT_CHILDREN_COUNT 32
 
+#define OPEN_ANIMATION_NAME "Open"
+
+#define CLOSE_ANIMATION_NAME "Close"
+
 void MouseFollower::Update()
 {
 	if(isActive == false)
@@ -168,13 +172,6 @@ Sprite* Element::GetSprite()
 
 void Element::Initialize()
 {
-	auto animation = animator_->GetAnimation("Close");
-	if(animation != nullptr)
-	{
-		closeEvent_ = animation->GetFinishEvent();
-		closeEvent_->GetActions() += {this, &Element::Disable};
-	}
-
 	HandleInitialize();
 }
 
@@ -326,6 +323,18 @@ Animator* Element::GetAnimator()
 	return animator_;
 }
 
+void Element::SetupBasicAnimations()
+{
+	openAnimation_ = animator_->AddAnimation(new Animation(1.0f), OPEN_ANIMATION_NAME);
+	
+	closeAnimation_ = animator_->AddAnimation(new Animation(1.0f), CLOSE_ANIMATION_NAME);
+	
+	closeEvent_ = closeAnimation_->GetFinishEvent();
+	closeEvent_->GetActions() += {this, &Element::Disable};
+
+	HandleSetupAnimations();
+}
+
 Position2 Element::GetPosition() const
 {
 	auto &position = transform_->GetPosition();
@@ -381,22 +390,24 @@ void Element::TriggerHoverEvents()
 
 void Element::Open()
 {
-	if(!animator_ || isActive_)
+	if(animator_ == nullptr || isActive_ == true)
 		return;
 
 	isActive_ = true;
 
-	animator_->Play("Open");
+	openAnimation_->Play();
 
 	HandleOpen();
 }
 
 void Element::Close()
 {
-	if(!animator_ || !isActive_)
+	if(!animator_ || isActive_ == false)
 		return;
 
-	animator_->Play("Close");
+	SetInteractivity(false);
+
+	closeAnimation_->Play();
 
 	HandleClose();
 }
@@ -493,6 +504,8 @@ void Element::HandleConfigure() {}
 void Element::HandleInitialize() {}
 
 void Element::HandleUpdate() {}
+
+void Element::HandleSetupAnimations() {}
 
 void Element::SetDynamicParent(Object* parent)
 {

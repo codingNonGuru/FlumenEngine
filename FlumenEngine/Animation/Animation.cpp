@@ -116,7 +116,14 @@ float Animation::GetTime()
 	return time_;
 }
 
-float Animation::GetLength()
+float Animation::GetLength() const
 {
 	return length_;
+}
+
+void Animation::SetLength(float length)
+{
+	length_ = length;
+	
+	finishEvent_->Initialize(length);
 }

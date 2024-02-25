@@ -66,6 +66,10 @@ protected:
 
 	Animator* animator_ {nullptr};
 
+	Animation *openAnimation_ {nullptr};
+
+	Animation *closeAnimation_ {nullptr};
+
 	AnimationEvent* closeEvent_;
 
 	Array <Element *> staticChildren_;
@@ -122,6 +126,8 @@ protected:
 
 	virtual void HandleHover();
 
+	virtual void HandleSetupAnimations();
+
 	Position2 GetAnchorOffset(ElementAnchors);
 
 	Position2 GetPivotOffset(ElementPivots);
@@ -166,6 +172,8 @@ public:
 	void SetBasePosition(Position2);
 
 	Animator* GetAnimator();
+
+	void SetupBasicAnimations();
 
 	Size & GetSize();
 
