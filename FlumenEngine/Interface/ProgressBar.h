@@ -33,4 +33,6 @@ public:
 
         UpdatePosition();
     }
+
+    void SetSize(Scale2);
 };

@@ -326,6 +326,9 @@ Animator* Element::GetAnimator()
 void Element::SetupBasicAnimations()
 {
 	openAnimation_ = animator_->AddAnimation(new Animation(1.0f), OPEN_ANIMATION_NAME);
+
+	auto openLastEvent = openAnimation_->GetFinishEvent();
+	openLastEvent->GetActions() += {this, &Element::Enable};
 	
 	closeAnimation_ = animator_->AddAnimation(new Animation(1.0f), CLOSE_ANIMATION_NAME);
 	

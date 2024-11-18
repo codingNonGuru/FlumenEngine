@@ -13,11 +13,11 @@ container::Array<int> InputHandler::currentKeys_ = container::Array<int>();
 
 container::Array<int> InputHandler::formerKeys_ = container::Array<int>();
 
-Map <Event, SDL_Scancode> InputHandler::onKeyPressedEvents = Map <Event, SDL_Scancode> ();
+Map <Event, InputHandler::Trigger> InputHandler::onKeyPressedEvents = Map <Event, Trigger> ();
 
-Map <Event, SDL_Scancode> InputHandler::onKeyHeldEvents = Map <Event, SDL_Scancode> ();
+Map <Event, InputHandler::Trigger> InputHandler::onKeyHeldEvents = Map <Event, Trigger> ();
 
-Map <Event, SDL_Scancode> InputHandler::onKeyReleasedEvents = Map <Event, SDL_Scancode> ();
+Map <Event, InputHandler::Trigger> InputHandler::onKeyReleasedEvents = Map <Event, Trigger> ();
 
 Delegate InputHandler::OnInputUpdate = Delegate();
 
@@ -92,37 +92,53 @@ void InputHandler::Update()
 		OnLeftMouseClick.Invoke();
 	}
 
+	formerKeys_.Find(SDL_SCANCODE_LCTRL);
+
 	for(auto currentKey = currentKeys_.GetStart(); currentKey != currentKeys_.GetEnd(); ++currentKey)
 	{
-		bool wasPressed = false;
-		for(auto formerKey = formerKeys_.GetStart(); formerKey != formerKeys_.GetEnd(); ++formerKey)
+		bool wasPressed = formerKeys_.Find(*currentKey) != nullptr;
+		if(wasPressed == true)
 		{
-			if(*formerKey == *currentKey)
+			for(auto key = onKeyHeldEvents.GetFirstKey(); key != onKeyHeldEvents.GetLastKey(); ++key)
 			{
-				wasPressed = true;
-				break;
+				if(key->Key != *currentKey)
+					continue;
+
+				if(
+					(formerKeys_.Find(SDL_SCANCODE_LCTRL) != nullptr && currentKeys_.Find(SDL_SCANCODE_LCTRL) != nullptr && key->HasCtrl == true) || 
+					(formerKeys_.Find(SDL_SCANCODE_LCTRL) == nullptr && currentKeys_.Find(SDL_SCANCODE_LCTRL) == nullptr && key->HasCtrl == false))
+				{
+					auto event = onKeyHeldEvents.Get(*key);
+					if(event != nullptr && event->IsValid())
+					{
+						event->Invoke();
+					}
+				}
 			}
+
+			continue;
 		}
 
-		if(wasPressed)
+		for(auto key = onKeyPressedEvents.GetFirstKey(); key != onKeyPressedEvents.GetLastKey(); ++key)
 		{
-			auto event = onKeyHeldEvents.Get((SDL_Scancode)*currentKey);
-			if(event != nullptr && event->IsValid())
+			if(key->Key != *currentKey)
+				continue;
+
+			bool isCtrlAlsoPressed = key->HasCtrl == true && currentKeys_.Find(SDL_SCANCODE_LCTRL) != nullptr;
+			bool isPressedWithoutCtrl = key->HasCtrl == false && currentKeys_.Find(SDL_SCANCODE_LCTRL) == nullptr;
+
+			if(isCtrlAlsoPressed || isPressedWithoutCtrl)
 			{
+				auto event = onKeyPressedEvents.Get(*key);
+				if(event == nullptr)
+					continue;
+
+				if(event->IsValid() == false)
+					continue;
+
 				event->Invoke();
 			}
-
-			continue;
 		}
-
-		auto event = onKeyPressedEvents.Get((SDL_Scancode)*currentKey);
-		if(event == nullptr)
-			continue;
-
-		if(event->IsValid() == false)
-			continue;
-
-		event->Invoke();
 	}
 
 	for(auto &formerKey : formerKeys_)
@@ -141,13 +157,25 @@ void InputHandler::Update()
 		if(isCurrentlyPressed == true)
 			continue;
 
-		auto event = onKeyReleasedEvents.Get((SDL_Scancode)formerKey);
-		if(event == nullptr)
-			continue;
-
-		if(event->IsValid() == true)
+		for(auto key = onKeyReleasedEvents.GetFirstKey(); key != onKeyReleasedEvents.GetLastKey(); ++key)
 		{
-			event->Invoke();
+			if(key->Key != formerKey)
+				continue;
+
+			bool isCtrlAlsoPressed = key->HasCtrl == true && formerKeys_.Find(SDL_SCANCODE_LCTRL) != nullptr;
+			bool isPressedWithoutCtrl = key->HasCtrl == false && formerKeys_.Find(SDL_SCANCODE_LCTRL) == nullptr;
+
+			if(isCtrlAlsoPressed || isPressedWithoutCtrl)
+			{
+				auto event = onKeyReleasedEvents.Get(*key);
+				if(event == nullptr)
+					continue;
+
+				if(event->IsValid() == false)
+					continue;
+
+				event->Invoke();
+			}
 		}
 	}
 }
@@ -210,7 +238,7 @@ bool InputHandler::WasPressed(int32_t key)
 	return false;
 }
 
-void InputHandler::RegisterEvent(SDL_Scancode key, Event action)
+/*void InputHandler::RegisterEvent(SDL_Scancode key, Event action)
 {
 	auto event = onKeyPressedEvents.Get(key);
 	if(event == nullptr)
@@ -295,6 +323,122 @@ void InputHandler::UnregisterContinualEvent(SDL_Scancode key)
 	}
 
 	event = onKeyReleasedEvents.Get(key);
+	if(event != nullptr)
+	{
+		event->Clear();
+	}
+}*/
+
+void InputHandler::RegisterEvent(SDL_Scancode key, Event action)
+{
+	RegisterEvent(Trigger{key}, action);
+}
+
+void InputHandler::UnregisterEvent(SDL_Scancode key)
+{
+	UnregisterEvent(Trigger{key});
+}
+
+void InputHandler::RegisterContinualEvent(SDL_Scancode key, Event action)
+{
+	RegisterContinualEvent(Trigger{key}, action);
+}
+
+void InputHandler::RegisterContinualEvent(SDL_Scancode key, Event pressAction, Event releaseAction)
+{
+	RegisterContinualEvent(Trigger{key}, pressAction, releaseAction);
+}
+
+void InputHandler::UnregisterContinualEvent(SDL_Scancode key)
+{
+	UnregisterContinualEvent(Trigger{key});
+}
+
+void InputHandler::RegisterEvent(Trigger trigger, Event action)
+{
+	auto event = onKeyPressedEvents.Get(trigger);
+	if(event == nullptr)
+	{
+		event = onKeyPressedEvents.Add(trigger);
+	}
+	else
+	{
+		auto assertCondition = event->IsValid() == false;
+		assert(assertCondition && REGISTER_FAIL_MESSAGE);
+	}
+
+	*event = action;
+}
+
+void InputHandler::UnregisterEvent(Trigger trigger)
+{
+	auto event = onKeyPressedEvents.Get(trigger);
+	if(event != nullptr)
+	{
+		event->Clear();
+	}
+}
+
+void InputHandler::RegisterContinualEvent(Trigger trigger, Event action)
+{
+	auto event = onKeyHeldEvents.Get(trigger);
+	if(event == nullptr)
+	{
+		event = onKeyHeldEvents.Add(trigger);
+	}
+	else
+	{
+		auto assertCondition = event->IsValid() == false;
+		assert(assertCondition && REGISTER_FAIL_MESSAGE);
+	}
+
+	*event = action;
+}
+
+void InputHandler::RegisterContinualEvent(Trigger trigger, Event pressAction, Event releaseAction)
+{
+	auto event = onKeyPressedEvents.Get(trigger);
+	if(event == nullptr)
+	{
+		event = onKeyPressedEvents.Add(trigger);
+	}
+	else
+	{
+		auto assertCondition = event->IsValid() == false;
+		assert(assertCondition && REGISTER_FAIL_MESSAGE);
+	}
+
+	*event = pressAction;
+
+	event = onKeyReleasedEvents.Get(trigger);
+	if(event == nullptr)
+	{
+		event = onKeyReleasedEvents.Add(trigger);
+	}
+	else
+	{
+		auto assertCondition = event->IsValid() == false;
+		assert(assertCondition && REGISTER_FAIL_MESSAGE);
+	}
+
+	*event = releaseAction;
+}
+
+void InputHandler::UnregisterContinualEvent(Trigger trigger)
+{
+	auto event = onKeyHeldEvents.Get(trigger);
+	if(event != nullptr)
+	{
+		event->Clear();
+	}
+
+	event = onKeyPressedEvents.Get(trigger);
+	if(event != nullptr)
+	{
+		event->Clear();
+	}
+
+	event = onKeyReleasedEvents.Get(trigger);
 	if(event != nullptr)
 	{
 		event->Clear();

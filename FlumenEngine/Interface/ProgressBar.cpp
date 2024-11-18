@@ -32,3 +32,11 @@ void ProgressBar::Setup(BarData data)
     GetSprite()->SetSlice(data.CornerSlices);
     filler->GetSprite()->SetSlice(data.CornerSlices);
 }
+
+void ProgressBar::SetSize(Scale2 scale)
+{
+    SetWidth(scale.x);
+
+    SetHeight(scale.y);
+    filler->SetHeight(scale.y);
+}
