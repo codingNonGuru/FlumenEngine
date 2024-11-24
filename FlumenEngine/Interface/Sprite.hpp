@@ -86,6 +86,8 @@ public:
 
 	void BindDefaultTextures();
 
+	void BindTexture(const char *);
+
 	void SetTexture(const render::Texture* texture);
 
 	void SetTexture(const Word textureName);
@@ -107,4 +109,6 @@ public:
 	Scale2 GetSlice() const {return sliceCornerSize_;}
 
 	Opacity &GetOpacity();
+
+	const render::Texture *GetTexture() const {return textureData_.Texture;}
 };

@@ -165,10 +165,18 @@ void Sprite::SetTexture(const Word textureName)
 
 void Sprite::BindDefaultTextures()
 {
-	if(textureData_.Texture != nullptr)
-	{
-		shader_->BindTexture(textureData_.Texture, "diffuse");
-	}
+	if(textureData_.Texture == nullptr)
+		return;
+	
+	shader_->BindTexture(textureData_.Texture, "diffuse");
+}
+
+void Sprite::BindTexture(const char *name)
+{
+	if(textureData_.Texture == nullptr)
+		return;
+
+	shader_->BindTexture(textureData_.Texture, name);
 }
 
 void Sprite::SetExtraConstants()

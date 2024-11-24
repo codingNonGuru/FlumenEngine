@@ -34,7 +34,7 @@ public:
 
 	void Bind();
 
-	void Bind(GLuint);
+	void Bind(GLuint) const;
 
 	void Unbind();
 

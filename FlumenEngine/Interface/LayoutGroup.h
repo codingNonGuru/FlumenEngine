@@ -5,6 +5,8 @@
 #include "FlumenEngine/Interface/Element.hpp"
 #include "FlumenEngine/Core/Transform.hpp"
 
+class Scroller;
+
 class LayoutGroup : public Element
 {
     int elementsPerRow {4};
@@ -20,6 +22,8 @@ class LayoutGroup : public Element
     Position2 generalOffset {};
 
     Size padding;
+
+    Scroller *scroller {nullptr};
 
     void HandleUpdate() override
     {
@@ -48,7 +52,9 @@ class LayoutGroup : public Element
             activeElementCount++;
         }
 
-        auto horizontalOffset = horizontalDistance * Float(elementsPerRow - 1) + rowWidth;
+        int horizontalEffectiveCount = activeElementCount < elementsPerRow ? activeElementCount : elementsPerRow;
+
+        auto horizontalOffset = horizontalDistance * Float(horizontalEffectiveCount - 1) + rowWidth;
         horizontalOffset *= 0.5f;
         horizontalOffset -= (*staticChildren_.GetStart())->GetSize().x * 0.5f;
 
@@ -91,7 +97,7 @@ class LayoutGroup : public Element
 
         if(isWidthLocked == false)
         {
-            size_.x = horizontalDistance * Float(elementsPerRow - 1) + rowWidth;
+            size_.x = horizontalDistance * Float(horizontalEffectiveCount - 1) + rowWidth;
 
             size_.x += padding.x;
         }
@@ -149,4 +155,8 @@ public:
     {
         padding = newPadding;
     }
+
+    void MakeScrollable(int, int);
+
+    void SetScrollableChildCount(int);
 };

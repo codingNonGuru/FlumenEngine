@@ -17,6 +17,7 @@
 #include "FlumenEngine/Render/TextureManager.hpp"
 #include "FlumenEngine/Render/Camera.hpp"
 #include "FlumenEngine/Render/RenderManager.hpp"
+#include "FlumenEngine/Render/Texture.hpp"
 
 #define DEFAULT_CHILDREN_COUNT 32
 
@@ -467,6 +468,10 @@ void Element::SetTextureScale(Scale2 scale)
 void Element::SetTexture(Word textureName)
 {
 	sprite_->SetTexture(textureName);
+
+	size_ = sprite_->GetTexture()->GetSize();
+
+	UpdatePosition();
 }
 
 void Element::HandleOpen()

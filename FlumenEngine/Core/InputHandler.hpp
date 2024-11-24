@@ -34,7 +34,6 @@ public:
 		ALT
 	};
 
-private:
 	struct Trigger
 	{
 		SDL_Scancode Key;
@@ -64,6 +63,7 @@ private:
 		}
 	};
 
+private:
 	static Mouse mouse_;
 
 	static container::Array <int> currentKeys_;
@@ -75,6 +75,10 @@ private:
 	static Map <Event, Trigger> onKeyHeldEvents;
 
 	static Map <Event, Trigger> onKeyReleasedEvents;
+
+	static Delegate OnMouseScrollUp;
+
+	static Delegate OnMouseScrollDown;
 
 	static void UpdateMouse();
 
@@ -112,6 +116,14 @@ public:
 	static void UnregisterEvent(Trigger);
 
 	static void UnregisterContinualEvent(Trigger);
+
+	static void RegisterScrollUpEvent(Event);
+
+	static void UnregisterScrollUpEvent(Event);
+
+	static void RegisterScrollDownEvent(Event);
+
+	static void UnregisterScrollDownEvent(Event);
 
 	static Position2 GetMousePosition(bool = true);
 

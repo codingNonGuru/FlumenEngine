@@ -85,7 +85,7 @@ void DataBuffer::Bind()
 	DEBUG_OPENGL
 }
 
-void DataBuffer::Bind(GLuint bindPoint)
+void DataBuffer::Bind(GLuint bindPoint) const
 {
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, key_);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, bindPoint, key_);

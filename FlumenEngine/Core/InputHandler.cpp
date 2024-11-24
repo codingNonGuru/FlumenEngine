@@ -25,6 +25,10 @@ Delegate InputHandler::OnRightMouseClick = Delegate();
 
 Delegate InputHandler::OnLeftMouseClick = Delegate();
 
+Delegate InputHandler::OnMouseScrollUp = Delegate();
+
+Delegate InputHandler::OnMouseScrollDown = Delegate();
+
 void InputHandler::Initialize()
 {
 	currentKeys_.Initialize(KEY_MAP_SIZE);
@@ -90,6 +94,15 @@ void InputHandler::Update()
 	if(mouse_.CurrentLeft_)
 	{
 		OnLeftMouseClick.Invoke();
+	}
+
+	if(mouse_.ScrollUp_)
+	{
+		OnMouseScrollUp.Invoke();
+	}
+	else if(mouse_.ScrollDown_)
+	{
+		OnMouseScrollDown.Invoke();
 	}
 
 	formerKeys_.Find(SDL_SCANCODE_LCTRL);
@@ -238,97 +251,6 @@ bool InputHandler::WasPressed(int32_t key)
 	return false;
 }
 
-/*void InputHandler::RegisterEvent(SDL_Scancode key, Event action)
-{
-	auto event = onKeyPressedEvents.Get(key);
-	if(event == nullptr)
-	{
-		event = onKeyPressedEvents.Add(key);
-	}
-	else
-	{
-		auto assertCondition = event->IsValid() == false;
-		assert(assertCondition && REGISTER_FAIL_MESSAGE);
-	}
-
-	*event = action;
-}
-
-void InputHandler::UnregisterEvent(SDL_Scancode key)
-{
-	auto event = onKeyPressedEvents.Get(key);
-	if(event != nullptr)
-	{
-		event->Clear();
-	}
-}
-
-void InputHandler::RegisterContinualEvent(SDL_Scancode key, Event action)
-{
-	auto event = onKeyHeldEvents.Get(key);
-	if(event == nullptr)
-	{
-		event = onKeyHeldEvents.Add(key);
-	}
-	else
-	{
-		auto assertCondition = event->IsValid() == false;
-		assert(assertCondition && REGISTER_FAIL_MESSAGE);
-	}
-
-	*event = action;
-}
-
-void InputHandler::RegisterContinualEvent(SDL_Scancode key, Event pressAction, Event releaseAction)
-{
-	auto event = onKeyPressedEvents.Get(key);
-	if(event == nullptr)
-	{
-		event = onKeyPressedEvents.Add(key);
-	}
-	else
-	{
-		auto assertCondition = event->IsValid() == false;
-		assert(assertCondition && REGISTER_FAIL_MESSAGE);
-	}
-
-	*event = pressAction;
-
-	event = onKeyReleasedEvents.Get(key);
-	if(event == nullptr)
-	{
-		event = onKeyReleasedEvents.Add(key);
-	}
-	else
-	{
-		auto assertCondition = event->IsValid() == false;
-		assert(assertCondition && REGISTER_FAIL_MESSAGE);
-	}
-
-	*event = releaseAction;
-}
-
-void InputHandler::UnregisterContinualEvent(SDL_Scancode key)
-{
-	auto event = onKeyHeldEvents.Get(key);
-	if(event != nullptr)
-	{
-		event->Clear();
-	}
-
-	event = onKeyPressedEvents.Get(key);
-	if(event != nullptr)
-	{
-		event->Clear();
-	}
-
-	event = onKeyReleasedEvents.Get(key);
-	if(event != nullptr)
-	{
-		event->Clear();
-	}
-}*/
-
 void InputHandler::RegisterEvent(SDL_Scancode key, Event action)
 {
 	RegisterEvent(Trigger{key}, action);
@@ -443,4 +365,24 @@ void InputHandler::UnregisterContinualEvent(Trigger trigger)
 	{
 		event->Clear();
 	}
+}
+
+void InputHandler::RegisterScrollUpEvent(Event event)
+{
+	OnMouseScrollUp += event;
+}
+
+void InputHandler::UnregisterScrollUpEvent(Event event)
+{
+	OnMouseScrollUp -= event;
+}
+
+void InputHandler::RegisterScrollDownEvent(Event event)
+{
+	OnMouseScrollDown += event;
+}
+
+void InputHandler::UnregisterScrollDownEvent(Event event)
+{
+	OnMouseScrollDown -= event;
 }
