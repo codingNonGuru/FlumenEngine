@@ -469,9 +469,14 @@ void Element::SetTexture(Word textureName)
 {
 	sprite_->SetTexture(textureName);
 
-	size_ = sprite_->GetTexture()->GetSize();
+	AdjustSizeToTexture();
 
 	UpdatePosition();
+}
+
+void Element::AdjustSizeToTexture()
+{
+	size_ = sprite_->GetTexture()->GetSize();
 }
 
 void Element::HandleOpen()

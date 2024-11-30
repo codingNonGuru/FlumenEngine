@@ -117,9 +117,15 @@ void InputHandler::Update()
 				if(key->Key != *currentKey)
 					continue;
 
-				if(
-					(formerKeys_.Find(SDL_SCANCODE_LCTRL) != nullptr && currentKeys_.Find(SDL_SCANCODE_LCTRL) != nullptr && key->HasCtrl == true) || 
-					(formerKeys_.Find(SDL_SCANCODE_LCTRL) == nullptr && currentKeys_.Find(SDL_SCANCODE_LCTRL) == nullptr && key->HasCtrl == false))
+				bool isCtrlAlsoPressed = formerKeys_.Find(SDL_SCANCODE_LCTRL) != nullptr && currentKeys_.Find(SDL_SCANCODE_LCTRL) != nullptr && key->HasCtrl == true;
+				bool isPressedWithoutCtrl = formerKeys_.Find(SDL_SCANCODE_LCTRL) == nullptr && currentKeys_.Find(SDL_SCANCODE_LCTRL) == nullptr && key->HasCtrl == false;
+
+				bool isShiftAlsoPressed = formerKeys_.Find(SDL_SCANCODE_LSHIFT) != nullptr && currentKeys_.Find(SDL_SCANCODE_LSHIFT) != nullptr && key->HasShift == true;
+				bool isPressedWithoutShift = formerKeys_.Find(SDL_SCANCODE_LSHIFT) == nullptr && currentKeys_.Find(SDL_SCANCODE_LSHIFT) == nullptr && key->HasShift == false;
+
+				bool isPressedWithoutSupportKeys = isPressedWithoutShift && isPressedWithoutCtrl;
+
+				if(isCtrlAlsoPressed || isShiftAlsoPressed || isPressedWithoutSupportKeys)
 				{
 					auto event = onKeyHeldEvents.Get(*key);
 					if(event != nullptr && event->IsValid())
@@ -140,7 +146,12 @@ void InputHandler::Update()
 			bool isCtrlAlsoPressed = key->HasCtrl == true && currentKeys_.Find(SDL_SCANCODE_LCTRL) != nullptr;
 			bool isPressedWithoutCtrl = key->HasCtrl == false && currentKeys_.Find(SDL_SCANCODE_LCTRL) == nullptr;
 
-			if(isCtrlAlsoPressed || isPressedWithoutCtrl)
+			bool isShiftAlsoPressed = key->HasShift == true && currentKeys_.Find(SDL_SCANCODE_LSHIFT) != nullptr;
+			bool isPressedWithoutShift = key->HasShift == false && currentKeys_.Find(SDL_SCANCODE_LSHIFT) == nullptr;
+
+			bool isPressedWithoutSupportKeys = isPressedWithoutShift && isPressedWithoutCtrl;
+
+			if(isCtrlAlsoPressed || isShiftAlsoPressed || isPressedWithoutSupportKeys)
 			{
 				auto event = onKeyPressedEvents.Get(*key);
 				if(event == nullptr)
@@ -178,7 +189,12 @@ void InputHandler::Update()
 			bool isCtrlAlsoPressed = key->HasCtrl == true && formerKeys_.Find(SDL_SCANCODE_LCTRL) != nullptr;
 			bool isPressedWithoutCtrl = key->HasCtrl == false && formerKeys_.Find(SDL_SCANCODE_LCTRL) == nullptr;
 
-			if(isCtrlAlsoPressed || isPressedWithoutCtrl)
+			bool isShiftAlsoPressed = key->HasShift == true && formerKeys_.Find(SDL_SCANCODE_LSHIFT) != nullptr;
+			bool isPressedWithoutShift = key->HasShift == false && formerKeys_.Find(SDL_SCANCODE_LSHIFT) == nullptr;
+
+			bool isPressedWithoutSupportKeys = isPressedWithoutShift && isPressedWithoutCtrl;
+
+			if(isCtrlAlsoPressed || isShiftAlsoPressed || isPressedWithoutSupportKeys)
 			{
 				auto event = onKeyReleasedEvents.Get(*key);
 				if(event == nullptr)

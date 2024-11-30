@@ -185,6 +185,8 @@ public:
 
 	void SetHeight(int height) {size_.y = height;}
 
+	void AdjustSizeToTexture();
+
 	DrawOrder & GetDrawOrder();
 
 	const Opacity &GetOpacity();
