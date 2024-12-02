@@ -132,13 +132,15 @@ protected:
 
 	Position2 GetPivotOffset(ElementPivots);
 
+	Element() {}
+
+	void Initialize(int = DEFAULT_CHILD_COUNT);
+
 	void Configure(Size, DrawOrder, PositionData, SpriteDescriptor = SpriteDescriptor(), Opacity = Opacity(1.0f));
 
 	void UpdateRecursively();
 
 	void UpdateWorldFollow();
-
-	Element(int = DEFAULT_CHILD_COUNT);
 	
 public:
 	void UpdatePosition();
@@ -154,8 +156,6 @@ public:
 	void SetIdentifier(Word);
 
 	Sprite* GetSprite();
-
-	void Initialize();
 
 	void Update();
 

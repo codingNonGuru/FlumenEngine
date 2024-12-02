@@ -35,7 +35,7 @@ void MouseFollower::Update()
 	parent->basePosition_ = offset + mousePosition;
 }
 
-Element::Element(int childCount) 
+void Element::Initialize(int childCount) 
 {
 	isActive_ = false;
 
@@ -48,6 +48,8 @@ Element::Element(int childCount)
 	dynamicChildren_.Initialize(4);
 
 	Interface::Get()->AddElement("DefaultName", this);
+
+	HandleInitialize();
 }
 
 void Element::Configure(Size size, DrawOrder drawOrder, PositionData positionData, SpriteDescriptor spriteDescriptor, Opacity opacity)
@@ -169,11 +171,6 @@ void Element::SetIdentifier(Word identifier)
 Sprite* Element::GetSprite()
 {
 	return sprite_;
-}
-
-void Element::Initialize()
-{
-	HandleInitialize();
 }
 
 bool Element::CheckHover()
