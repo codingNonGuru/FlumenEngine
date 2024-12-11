@@ -228,4 +228,6 @@ public:
 	void FollowMouse(Position2 offset = Position2()) {mouseFollower_ = new MouseFollower(this, offset);}
 
 	void FollowWorldPosition(const Position2 *position, const Word camera, Scale2 staticOffset = Position2(1.0f), Scale2 dynamicOffset = Position2(0.0f));
+
+	void SetAnchorData(ElementAnchors anchor, ElementPivots pivot) {anchor_ = anchor; pivot_ = pivot;}
 };
