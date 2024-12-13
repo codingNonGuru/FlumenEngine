@@ -1,10 +1,9 @@
 #include "Scroller.h"
 #include "FlumenEngine/Core/InputHandler.hpp"
-#include "FlumenEngine/Interface/LayoutGroup.h"
 
-void Scroller::Setup(LayoutGroup *parent, int newListSize, int activeChildCount)
+void Scroller::Setup(Element *parent, int maximumVisibleCount, int activeChildCount)
 {
-    listSize = newListSize;
+    this->maximumVisibleCount = maximumVisibleCount;
 
     firstElementIndex = 0;
 
@@ -22,7 +21,7 @@ void Scroller::HandleUpdate()
 {
     const auto parent = (Element *)parent_;
 
-    if(listSize < activeChildCount)
+    if(maximumVisibleCount < activeChildCount)
     {
         auto &children = parent->GetChildren();
 
@@ -30,7 +29,7 @@ void Scroller::HandleUpdate()
         {
             auto child = *children.Get(i);
 
-            if(i >= firstElementIndex && i < firstElementIndex + listSize)
+            if(i >= firstElementIndex && i < firstElementIndex + maximumVisibleCount)
             {
                 child->Enable();
             }
@@ -66,7 +65,7 @@ void Scroller::HandleDisable()
     InputHandler::UnregisterScrollDownEvent({this, &Scroller::HandleScrollDown});
 }
 
-void Scroller::HandleScrollUp()
+void Scroller::HandleScrollDown()
 {
     if(isHovered_ == false)
         return;
@@ -74,13 +73,13 @@ void Scroller::HandleScrollUp()
     firstElementIndex++;
 
     const auto parent = (Element *)parent_;
-    if(firstElementIndex + listSize > activeChildCount)
+    if(firstElementIndex + maximumVisibleCount > activeChildCount)
     {
         firstElementIndex--;
     }
 }
 
-void Scroller::HandleScrollDown()
+void Scroller::HandleScrollUp()
 {
     if(isHovered_ == false)
         return;

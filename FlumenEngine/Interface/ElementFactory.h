@@ -6,6 +6,7 @@
 #include "FlumenEngine/Interface/TextData.h"
 #include "FlumenEngine/Interface/BarData.h"
 #include "FlumenEngine/Interface/Element.hpp"
+#include "FlumenEngine/Interface/SimpleList.h"
 
 class Text;
 class ProgressBar;
@@ -23,6 +24,9 @@ public:
 
     template <class BarType = ProgressBar>
     static BarType * BuildProgressBar(ElementData, BarData);
+
+    template <class ListType = SimpleList>
+    static ListType *BuildSimpleList(ElementData, int, ListOrientations = ListOrientations::VERTICAL, float = 0.0f);
 };
 
 template <class ElementType = Element>
@@ -55,4 +59,15 @@ BarType * ElementFactory::BuildProgressBar(ElementData elementData, BarData barD
     bar->Setup(barData);
 
     return bar;    
+}
+
+template <class ListType>
+ListType *ElementFactory::BuildSimpleList(ElementData elementData, int childCount, ListOrientations orientation, float distance)
+{
+    auto list = new ListType();
+    list->Initialize(childCount);
+    list->Configure(elementData.Size, elementData.Order, elementData.PositionData, elementData.Sprite, elementData.Opacity);
+    list->Setup(orientation, distance);
+
+    return list;    
 }

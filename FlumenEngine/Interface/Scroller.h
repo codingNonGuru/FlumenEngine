@@ -4,8 +4,6 @@
 
 #include "FlumenEngine/Interface/Element.hpp"
 
-class LayoutGroup;
-
 class Scroller : public Element
 {
     Delegate onScrollUp;
@@ -14,7 +12,7 @@ class Scroller : public Element
 
     int firstElementIndex;
 
-    int listSize;
+    int maximumVisibleCount;
 
     int activeChildCount;
 
@@ -29,7 +27,7 @@ class Scroller : public Element
     void HandleScrollDown();
 
 public:
-   void Setup(LayoutGroup *, int, int);
+   void Setup(Element *, int, int);
 
    void SetActiveChildCount(int);
 };
