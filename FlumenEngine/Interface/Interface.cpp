@@ -24,42 +24,73 @@ void Interface::Initialize()
 
 void Interface::ProcessInput()
 {
-	Element* firstElement = nullptr;
 	for(auto elementIterator = elements_.GetStart(); elementIterator != elements_.GetEnd(); ++elementIterator)
 	{
 		auto element = *elementIterator;
 
-		if(!element->CheckHover())
+		element->CheckHover();
+	}
+
+	Element* firstHoveredElement = nullptr;
+	for(auto elementIterator = elements_.GetStart(); elementIterator != elements_.GetEnd(); ++elementIterator)
+	{
+		auto element = *elementIterator;
+
+		if(element->IsHovered() == false)
 			continue;
 
-		if(!firstElement)
+		if(firstHoveredElement == nullptr)
 		{
-			firstElement = element;
+			firstHoveredElement = element;
 		}
 		else
 		{
-			if(element->GetDrawOrder() > firstElement->GetDrawOrder())
+			if(element->GetDrawOrder() > firstHoveredElement->GetDrawOrder())
 			{
-				firstElement = element;
+				firstHoveredElement = element;
 			}
 		}
 	}
 
-	hoveredElement_ = firstElement;
-
-	if(firstElement && InputHandler::GetMouse().CurrentLeft_)
+	Element* firstClickableElement = nullptr;
+	for(auto elementIterator = elements_.GetStart(); elementIterator != elements_.GetEnd(); ++elementIterator)
 	{
-		firstElement->TriggerLeftClickEvents();
+		auto element = *elementIterator;
+
+		if(element->IsHovered() == false)
+			continue;
+
+		if(element->IsClickable() == false)
+			continue;
+
+		if(firstClickableElement == nullptr)
+		{
+			firstClickableElement = element;
+		}
+		else
+		{
+			if(element->GetDrawOrder() > firstClickableElement->GetDrawOrder())
+			{
+				firstClickableElement = element;
+			}
+		}
 	}
 
-	if(firstElement && InputHandler::GetMouse().CurrentRight_)
+	hoveredElement_ = firstHoveredElement;
+
+	if(firstClickableElement != nullptr && InputHandler::GetMouse().CurrentLeft_ == true)
 	{
-		firstElement->TriggerRightClickEvents();
+		firstClickableElement->TriggerLeftClickEvents();
 	}
 
-	if(firstElement)
+	if(firstClickableElement != nullptr && InputHandler::GetMouse().CurrentRight_ == true)
 	{
-		firstElement->TriggerHoverEvents();
+		firstClickableElement->TriggerRightClickEvents();
+	}
+
+	if(firstHoveredElement != nullptr)
+	{
+		firstHoveredElement->TriggerHoverEvents();
 	}
 }
 

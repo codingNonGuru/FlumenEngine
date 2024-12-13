@@ -357,6 +357,8 @@ void Element::SetBasePosition(Position2 position)
 void Element::SetInteractivity(bool isInteractive)
 {
 	isInteractive_ = isInteractive;
+
+	isClickable_ = isInteractive;
 }
 
 void Element::TriggerLeftClickEvents()

@@ -92,6 +92,8 @@ protected:
 
 	bool isInteractive_ {false};
 
+	bool isClickable_ {false};
+
 	bool isHovered_;
 
 	MouseFollower *mouseFollower_ {nullptr};
@@ -198,6 +200,10 @@ public:
 	Delegate & GetHoverEvents();
 
 	void SetInteractivity(bool);
+
+	void MakeTransparentToClicks() {isClickable_ = false;}
+
+	bool IsClickable() const {return isClickable_;}
 
 	void SetSpriteColor(const Color &);
 

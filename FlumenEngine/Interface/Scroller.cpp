@@ -51,6 +51,8 @@ void Scroller::HandleEnable()
 {
     SetInteractivity(true);
 
+    MakeTransparentToClicks();
+
     InputHandler::RegisterScrollUpEvent({this, &Scroller::HandleScrollUp});
 
     InputHandler::RegisterScrollDownEvent({this, &Scroller::HandleScrollDown});
