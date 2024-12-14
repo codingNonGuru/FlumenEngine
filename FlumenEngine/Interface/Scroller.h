@@ -16,7 +16,9 @@ class Scroller : public Element
 
     int activeChildCount;
 
-    void HandleUpdate() override;
+    void HandleLateUpdate() override;
+
+    void HandleExtremelyLateUpdate() override;
 
     void HandleEnable() override;
 

@@ -158,6 +158,69 @@ void Element::UpdateRecursively()
 	}
 }
 
+void Element::UpdateLateRecursively()
+{
+	UpdateLately();
+
+	for(auto &child : staticChildren_)
+	{
+		if(child->IsLocallyActive() == false)
+			continue;
+
+		child->UpdateLateRecursively();
+	}
+
+	for(auto &child : dynamicChildren_)
+	{
+		if(child->IsLocallyActive() == false)
+			continue;
+
+		child->UpdateLateRecursively();
+	}
+}
+
+void Element::UpdateVeryLateRecursively()
+{
+	UpdateVeryLately();
+
+	for(auto &child : staticChildren_)
+	{
+		if(child->IsLocallyActive() == false)
+			continue;
+
+		child->UpdateVeryLateRecursively();
+	}
+
+	for(auto &child : dynamicChildren_)
+	{
+		if(child->IsLocallyActive() == false)
+			continue;
+
+		child->UpdateVeryLateRecursively();
+	}
+}
+
+void Element::UpdateExtremelyLateRecursively()
+{
+	UpdateExtremelyLately();
+
+	for(auto &child : staticChildren_)
+	{
+		if(child->IsLocallyActive() == false)
+			continue;
+
+		child->UpdateExtremelyLateRecursively();
+	}
+
+	for(auto &child : dynamicChildren_)
+	{
+		if(child->IsLocallyActive() == false)
+			continue;
+
+		child->UpdateExtremelyLateRecursively();
+	}
+}
+
 Word Element::GetIdentifier()
 {
 	return identifier_;
@@ -224,6 +287,30 @@ void Element::Update()
 	}
 
 	HandleUpdate();
+}
+
+void Element::UpdateLately()
+{
+	if(IsGloballyActive() == false)
+		return;
+		
+	HandleLateUpdate();
+}
+
+void Element::UpdateVeryLately()
+{
+	if(IsGloballyActive() == false)
+		return;
+		
+	HandleVeryLateUpdate();
+}
+
+void Element::UpdateExtremelyLately()
+{
+	if(IsGloballyActive() == false)
+		return;
+		
+	HandleExtremelyLateUpdate();
 }
 
 void Element::UpdateWorldFollow()
@@ -516,6 +603,12 @@ void Element::HandleConfigure() {}
 void Element::HandleInitialize() {}
 
 void Element::HandleUpdate() {}
+
+void Element::HandleLateUpdate() {}
+
+void Element::HandleVeryLateUpdate() {}
+
+void Element::HandleExtremelyLateUpdate() {}
 
 void Element::HandleSetupAnimations() {}
 

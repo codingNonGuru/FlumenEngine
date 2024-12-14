@@ -17,7 +17,7 @@ void Scroller::SetActiveChildCount(int activeChildCount)
     this->activeChildCount = activeChildCount;
 }
 
-void Scroller::HandleUpdate()
+void Scroller::HandleLateUpdate()
 {
     const auto parent = (Element *)parent_;
 
@@ -26,7 +26,7 @@ void Scroller::HandleUpdate()
         auto &children = parent->GetChildren();
 
         for(int i = 0; i < activeChildCount; ++i)
-        {
+        {            
             auto child = *children.Get(i);
 
             if(i >= firstElementIndex && i < firstElementIndex + maximumVisibleCount)
@@ -39,8 +39,11 @@ void Scroller::HandleUpdate()
             }
         }
     }
+}
 
-    SetPosition(parent->GetPosition());
+void Scroller::HandleExtremelyLateUpdate()
+{
+    const auto parent = (Element *)parent_;
 
     SetWidth(parent->GetSize().x);
 
@@ -49,6 +52,10 @@ void Scroller::HandleUpdate()
 
 void Scroller::HandleEnable()
 {
+    const auto parent = (Element *)parent_;
+    
+    SetPosition(parent->GetPosition());
+
     SetInteractivity(true);
 
     MakeTransparentToClicks();

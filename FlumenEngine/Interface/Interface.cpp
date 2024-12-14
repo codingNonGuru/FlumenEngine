@@ -103,6 +103,30 @@ void Interface::Update()
 
 		canvas->UpdateRecursively();
 	}
+
+	for(auto &canvas : canvases)
+	{
+		if(canvas->IsGloballyActive() == false)
+			continue;
+
+		canvas->UpdateLateRecursively();
+	}
+
+	for(auto &canvas : canvases)
+	{
+		if(canvas->IsGloballyActive() == false)
+			continue;
+
+		canvas->UpdateVeryLateRecursively();
+	}
+
+	for(auto &canvas : canvases)
+	{
+		if(canvas->IsGloballyActive() == false)
+			continue;
+
+		canvas->UpdateExtremelyLateRecursively();
+	}
 }
 
 void Interface::Render()

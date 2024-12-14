@@ -116,6 +116,12 @@ protected:
 
 	virtual void HandleUpdate();
 
+	virtual void HandleLateUpdate();
+
+	virtual void HandleVeryLateUpdate();
+
+	virtual void HandleExtremelyLateUpdate();
+
 	virtual void HandleEnable() override;
 
 	virtual void HandleDisable() override;
@@ -142,6 +148,12 @@ protected:
 
 	void UpdateRecursively();
 
+	void UpdateLateRecursively();
+
+	void UpdateVeryLateRecursively();
+
+	void UpdateExtremelyLateRecursively();
+
 	void UpdateWorldFollow();
 	
 public:
@@ -160,6 +172,12 @@ public:
 	Sprite* GetSprite();
 
 	void Update();
+
+	void UpdateLately();
+
+	void UpdateVeryLately();
+
+	void UpdateExtremelyLately();
 
 	virtual void Render(Camera*);
 

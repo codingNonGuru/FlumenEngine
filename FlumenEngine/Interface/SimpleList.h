@@ -29,7 +29,7 @@ class SimpleList : public Element
 
     Scroller *scroller {nullptr};
 
-    void HandleUpdate() override
+    void HandleVeryLateUpdate() override
     {
         //Reset data
         int width = 0;
