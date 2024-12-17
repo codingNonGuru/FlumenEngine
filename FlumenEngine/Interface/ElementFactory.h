@@ -27,6 +27,9 @@ public:
 
     template <class ListType = SimpleList>
     static ListType *BuildSimpleList(ElementData, int, ListOrientations = ListOrientations::VERTICAL, float = 0.0f);
+
+    template <class ListType = SimpleList>
+    static ListType *BuildSimpleList(ElementData, int, float = 0.0f);
 };
 
 template <class ElementType = Element>
@@ -70,4 +73,10 @@ ListType *ElementFactory::BuildSimpleList(ElementData elementData, int childCoun
     list->Setup(orientation, distance);
 
     return list;    
+}
+
+template <class ListType>
+ListType *ElementFactory::BuildSimpleList(ElementData elementData, int childCount, float distance = 0.0f)
+{
+    return BuildSimpleList(elementData, childCount, ListOrientations::VERTICAL, distance);
 }

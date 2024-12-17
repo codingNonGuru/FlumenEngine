@@ -27,6 +27,8 @@ class SimpleList : public Element
 
     Size padding;
 
+    int fixedElementCount {-1};
+
     Scroller *scroller {nullptr};
 
     void HandleVeryLateUpdate() override
@@ -35,29 +37,39 @@ class SimpleList : public Element
         int width = 0;
         int height = 0;
 
-        auto activeElementIndex = 0;
-
-        //Count active elements
-        for(auto child : staticChildren_)
+        auto elementCount = [&]
         {
-            if(child->IsGloballyActive() == false)
-                continue;
+            if(fixedElementCount != -1)
+            {
+                return fixedElementCount;
+            }
 
-            activeElementIndex++;
-        }
+            auto activeElementIndex = 0;
+
+            //Count active elements
+            for(auto child : staticChildren_)
+            {
+                if(child->IsGloballyActive() == false)
+                    continue;
+
+                activeElementIndex++;
+            }
+
+            return activeElementIndex;
+        } ();
 
         //Calculate the width & height of the entire layout
-        if(activeElementIndex == 1)
+        if(elementCount == 1)
         {
             width = (*staticChildren_.GetStart())->GetWidth();
 
             height = (*staticChildren_.GetStart())->GetHeight();
         }
-        else if(activeElementIndex > 1)
+        else if(elementCount > 1)
         {
             if(orientation == ListOrientations::HORIZONTAL)
             {
-                width = (*staticChildren_.GetStart())->GetWidth() * activeElementIndex + distance * (activeElementIndex - 1);
+                width = (*staticChildren_.GetStart())->GetWidth() * elementCount + distance * (elementCount - 1);
 
                 height = (*staticChildren_.GetStart())->GetHeight();
             }
@@ -65,7 +77,7 @@ class SimpleList : public Element
             {
                 width = (*staticChildren_.GetStart())->GetWidth();
 
-                height = (*staticChildren_.GetStart())->GetHeight() * activeElementIndex + distance * (activeElementIndex - 1);
+                height = (*staticChildren_.GetStart())->GetHeight() * elementCount + distance * (elementCount - 1);
             }
         }
 
@@ -142,6 +154,11 @@ public:
     void SetPadding(Size newPadding)
     {
         padding = newPadding;
+    }
+
+    void SetFixedElementCount(int count)
+    {
+        fixedElementCount = count;
     }
 
     void MakeScrollable(int, int);

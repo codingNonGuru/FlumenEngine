@@ -238,6 +238,8 @@ Sprite* Element::GetSprite()
 
 bool Element::CheckHover()
 {
+	isHovered_ = false;
+	
 	if(!isInteractive_)
 		return false;
 

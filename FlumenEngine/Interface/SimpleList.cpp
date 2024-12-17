@@ -14,6 +14,8 @@ void SimpleList::MakeScrollable(int maximumVisibleCount, int maximumActiveCount)
 
     scroller->Setup(this, maximumVisibleCount, maximumActiveCount);
     scroller->Enable();
+
+    SetFixedElementCount(maximumVisibleCount);
 }
 
 void SimpleList::SetScrollableChildCount(int maximumActiveCount)
