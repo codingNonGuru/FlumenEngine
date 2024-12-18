@@ -149,6 +149,8 @@ void Text::Assemble()
 			glyphData->Position_.x += textPosition.x;
 			glyphData->Position_.y += textPosition.y;
 
+			glyphData->Scale_ *= scale_;
+
 			startPosition.x += glyph->GetAdvance() * 0.5f;
 		}
 

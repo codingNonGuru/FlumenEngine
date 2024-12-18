@@ -65,6 +65,8 @@ public:
 
 	void Setup(const char*, Float = 1.0f);
 
+	void SetScale(Float scale) {scale_ = scale;}
+
 	virtual void Render(Camera*);
 
 	void SetAlignment(Alignments alignment) {this->alignment = alignment;}
