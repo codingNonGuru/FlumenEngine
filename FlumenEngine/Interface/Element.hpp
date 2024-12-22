@@ -60,6 +60,8 @@ class Element : public Object
 	Delegate * hoverEvents_ {nullptr};
 
 protected:
+	bool isRendering_;
+
 	Word identifier_;
 
 	Sprite* sprite_;
@@ -227,6 +229,8 @@ public:
 
 	void SetTextureScale(Scale2);
 
+	void SetTextureScale(float);
+
 	void SetTexture(Word);
 
 	void AddAnimation(Animation *, const char *);
@@ -254,4 +258,6 @@ public:
 	void FollowWorldPosition(const Position2 *position, const Word camera, Scale2 staticOffset = Position2(1.0f), Scale2 dynamicOffset = Position2(0.0f));
 
 	void SetAnchorData(ElementAnchors anchor, ElementPivots pivot) {anchor_ = anchor; pivot_ = pivot;}
+
+	void SetRendering(bool isRendering) {isRendering_ = isRendering;}
 };

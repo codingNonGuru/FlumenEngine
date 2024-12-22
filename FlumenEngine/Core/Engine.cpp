@@ -30,6 +30,8 @@ Delegate Engine::OnGameLoopStarted = Delegate();
 
 Delegate Engine::OnInterfaceUpdateStarted = Delegate();
 
+Delegate Engine::OnLoopCycleEnded = Delegate();
+
 Delegate Engine::OnShutDown = Delegate();
 
 void Engine::Initialize()
@@ -91,6 +93,8 @@ void Engine::StartGameLoop()
 		Interface::Get()->Update();
 
 		RenderManager::Update();
+
+		OnLoopCycleEnded.Invoke();
 	}
 }
 

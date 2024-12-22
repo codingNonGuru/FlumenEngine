@@ -69,7 +69,11 @@ public:
 
 	void SetTarget(glm::vec3);
 
+	void SetTarget(glm::vec2);
+
 	void SetTarget(Position3, Float);
+
+	void SetTarget(Position2, Float);
 
 	void Drag(glm::vec3);
 

@@ -109,10 +109,27 @@ void Camera::SetTarget(glm::vec3 target)
 	if(to_.x > world.width_) to_.x = world.width_;*/
 }
 
+void Camera::SetTarget(glm::vec2 target)
+{
+	to_.x = target.x;
+	to_.y = target.y;
+	azimuth_ = 1.57079f;
+}
+
 void Camera::SetTarget(Position3 target, Float duration)
 {
 	startPosition = to_;
 	endPosition = target;
+
+	isAnimated = true;
+	animationTime = 0.0f;
+	animationDuration = duration;
+}
+
+void Camera::SetTarget(Position2 target, Float duration)
+{
+	startPosition = to_;
+	endPosition = Position3(target, 0.0f);
 
 	isAnimated = true;
 	animationTime = 0.0f;

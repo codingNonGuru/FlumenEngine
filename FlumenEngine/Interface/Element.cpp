@@ -39,6 +39,8 @@ void Element::Initialize(int childCount)
 {
 	isActive_ = false;
 
+	isRendering_ = true;
+
 	parent_ = nullptr;
 
 	transform_ = nullptr;
@@ -331,6 +333,9 @@ void Element::UpdateWorldFollow()
 
 void Element::Render(Camera* camera)
 {
+	if(isRendering_ == false)
+		return;
+
 	if(IsGloballyActive() == false)
 		return;
 
@@ -547,6 +552,11 @@ void Element::SetSpriteColor(const Color &color)
 {
 	sprite_->SetColor(&color);
 }	
+
+void Element::SetTextureScale(float scale)
+{
+	sprite_->SetTextureSize(Scale2(scale, scale));
+}
 
 void Element::SetTextureScale(Scale2 scale)
 {
