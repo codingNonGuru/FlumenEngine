@@ -89,6 +89,8 @@ public:
 
 	static Delegate OnLeftMouseClick;
 
+	static Delegate OnDoubleClick;
+
 	static void Update();
 
 	static bool IsPressed(int32_t);
@@ -124,6 +126,10 @@ public:
 	static void RegisterScrollDownEvent(Event);
 
 	static void UnregisterScrollDownEvent(Event);
+
+	static void RegisterDoubleClickEvent(Event);
+
+	static void UnregisterDoubleClickEvent(Event);
 
 	static Position2 GetMousePosition(bool = true);
 

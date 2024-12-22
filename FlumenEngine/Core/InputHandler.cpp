@@ -1,3 +1,5 @@
+#include <chrono>
+
 #include "FlumenEngine/Core/InputHandler.hpp"
 
 #include "FlumenEngine/Core/Engine.hpp"
@@ -6,6 +8,8 @@
 #define REGISTER_FAIL_MESSAGE "Input handler is trying to overwrite event.\n"
 
 static const auto KEY_MAP_SIZE = 64;
+
+static const auto DOUBLE_CLICK_INTERVAL = 200;
 
 Mouse InputHandler::mouse_ = Mouse();
 
@@ -28,6 +32,12 @@ Delegate InputHandler::OnLeftMouseClick = Delegate();
 Delegate InputHandler::OnMouseScrollUp = Delegate();
 
 Delegate InputHandler::OnMouseScrollDown = Delegate();
+
+Delegate InputHandler::OnDoubleClick = Delegate();
+
+static auto leftClickTimeStamp = std::chrono::steady_clock::now();
+
+int64_t milisecondCount;
 
 void InputHandler::Initialize()
 {
@@ -59,7 +69,9 @@ void InputHandler::Update()
 		if(event.type == SDL_MOUSEBUTTONDOWN)
 		{
 			if(event.button.button == SDL_BUTTON_LEFT)
+			{
 				mouse_.CurrentLeft_ = true;
+			}
 			else if(event.button.button == SDL_BUTTON_RIGHT)
 				mouse_.CurrentRight_ = true;
 		}
@@ -94,6 +106,19 @@ void InputHandler::Update()
 	if(mouse_.CurrentLeft_)
 	{
 		OnLeftMouseClick.Invoke();
+
+		auto stamp = std::chrono::steady_clock::now();
+
+		auto deltaTime = stamp - leftClickTimeStamp;
+
+		leftClickTimeStamp = stamp;
+		
+		milisecondCount = std::chrono::duration_cast<std::chrono::milliseconds>(deltaTime).count();
+
+		if(milisecondCount < DOUBLE_CLICK_INTERVAL)
+		{
+			OnDoubleClick.Invoke();
+		}
 	}
 
 	if(mouse_.ScrollUp_)
@@ -401,4 +426,14 @@ void InputHandler::RegisterScrollDownEvent(Event event)
 void InputHandler::UnregisterScrollDownEvent(Event event)
 {
 	OnMouseScrollDown -= event;
+}
+
+void InputHandler::RegisterDoubleClickEvent(Event event)
+{
+	OnDoubleClick += event;
+}
+
+void InputHandler::UnregisterDoubleClickEvent(Event event)
+{
+	OnDoubleClick -= event;
 }
