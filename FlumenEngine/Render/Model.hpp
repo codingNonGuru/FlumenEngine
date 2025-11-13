@@ -11,6 +11,8 @@ class Light;
 
 enum class Shaders;
 
+struct ModelData {};
+
 class Model
 {
 protected:
@@ -26,16 +28,28 @@ protected:
 
 	void SetupBuffer();
 
+	Shader *BindShader();
+
+	Shader *GetShader();
+
 public:
 	Model();
 
 	Model(Mesh*, Shader*);
 
+	Model(Mesh*, Word);
+
+	Model(Word, Word);
+
 	virtual void Initialize();
 
 	void Initialize(Mesh*, Shader*);
 
+	void Initialize(Mesh*, Word);
+
 	void AddTexture(Texture*, const char*);
 
 	virtual void Render(Camera*, Light*);
+
+	virtual void Render(Camera*, ModelData *) {}
 };

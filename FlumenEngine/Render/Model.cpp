@@ -7,6 +7,8 @@
 #include "FlumenEngine/Render/Camera.hpp"
 #include "HeaderBuffer.hpp"
 #include "FlumenEngine/Render/DataBuffer.hpp"
+#include "FlumenEngine/Render/ShaderManager.hpp"
+#include "FlumenEngine/Render/MeshManager.hpp"
 
 enum class Shaders {GENERIC};
 
@@ -15,6 +17,18 @@ Model::Model() {}
 Model::Model(Mesh* mesh, Shader* shader)
 {
 	Initialize(mesh, shader);
+}
+
+Model::Model(Mesh* mesh, Word shaderName)
+{
+	Initialize(mesh, shaderName);
+}
+
+Model::Model(Word meshName, Word shaderName)
+{
+	auto mesh = MeshManager::GetMesh(meshName);
+
+	Initialize(mesh, shaderName);
 }
 
 void Model::Initialize() {}
@@ -32,17 +46,38 @@ void Model::Initialize(Mesh* mesh, Shader* shader)
 	SetupBuffer();
 }
 
+void Model::Initialize(Mesh* mesh, Word shaderName)
+{
+	meshes_.Initialize(1);
+	*meshes_.Add(0) = mesh;
+
+	shaders_.Initialize(1);
+	auto shader = ShaderManager::GetShader(shaderName);
+	*shaders_.Add(Shaders::GENERIC) = shader;
+
+	textures_.Initialize(shader->GetTextureCount());
+
+	SetupBuffer();
+}
+
 void Model::AddTexture(Texture* texture, const char* name)
 {
 	auto texturePointer = textures_.Add(name);
 	*texturePointer = texture;
 }
 
-void Model::Render(Camera* camera, Light* light)
+Shader *Model::BindShader()
 {
 	auto shader = *shaders_.Get(Shaders::GENERIC);
 
 	shader->Bind();
+
+	return shader;
+}
+
+void Model::Render(Camera* camera, Light* light)
+{
+	auto shader = BindShader();
 
 	shader->SetConstant(camera->GetMatrix(), "viewMatrix");
 
@@ -79,10 +114,9 @@ void Model::SetupBuffer()
 
 	buffers_.Initialize(4);
 
-	int index = 0;
 	auto meshAttributes = mesh->GetAttributes();
 	auto meshAttributeKey = meshAttributes.GetFirstKey();
-	for(auto meshAttribute = meshAttributes.GetStart(); meshAttribute != meshAttributes.GetEnd(); ++meshAttribute, ++index, ++meshAttributeKey)
+	for(auto meshAttribute = meshAttributes.GetStart(); meshAttribute != meshAttributes.GetEnd(); ++meshAttribute, ++meshAttributeKey)
 	{
 		auto meshAttributeData = meshAttribute->GetData();
 		if(meshAttributeData == nullptr)
@@ -91,4 +125,9 @@ void Model::SetupBuffer()
 		auto buffer = new DataBuffer(meshAttributeData->GetMemoryCapacity(), meshAttributeData->GetData());
 		*buffers_.Add(*meshAttributeKey) = buffer;
 	}
+}
+
+Shader *Model::GetShader()
+{
+	return *shaders_.Get(Shaders::GENERIC);
 }

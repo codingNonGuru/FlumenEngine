@@ -27,6 +27,10 @@ public:
 	void SetType(AttributeType* type) {type_ = type;}
 
 	void SetSize(Length size) {size_ = size;}
+
+	MeshAttribute() {}
+
+	MeshAttribute(Container* data, AttributeType* type, Length size) : data_(data), type_(type), size_(size) {}
 };
 
 class Camera;
@@ -50,6 +54,8 @@ public:
 	void Initialize(int);
 
 	void Initialize(File*);
+
+	void LoadFromWavefront(File *);
 
 	Map <MeshAttribute, Word> & GetAttributes() {return attributes_;}
 

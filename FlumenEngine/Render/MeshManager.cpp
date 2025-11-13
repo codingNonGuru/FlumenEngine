@@ -16,9 +16,9 @@ void MeshManager::LoadMeshes()
 {
 	meshes_.Initialize(MAXIMUM_MESH_COUNT);
 
-	auto files = AssetManager::GetFiles();
+	auto &files = *AssetManager::GetFiles();
 
-	for(File* file = files->GetStart(); file != files->GetEnd(); ++file)
+	for(auto &file : files)
 	{
 		auto meshExtension = ".mesh";
 
@@ -33,7 +33,29 @@ void MeshManager::LoadMeshes()
 		if(mesh == nullptr)
 			continue;
 
+		*mesh = new Mesh();
+
 		(*mesh)->Initialize(file);
+	}
+
+	for(auto &file : files)
+	{
+		auto meshExtension = ".obj";
+
+		auto extensionPosition = FindString(file.GetName(), meshExtension);
+		if(extensionPosition == nullptr)
+			continue;
+
+		Word meshName;
+		meshName.Add(file.GetName(), extensionPosition - file.GetName());
+
+		auto meshPointer = meshes_.Add(meshName);
+		if(meshPointer == nullptr)
+			continue;
+		
+		*meshPointer = new Mesh();
+
+		(*meshPointer)->LoadFromWavefront(&file);
 	}
 }
 
