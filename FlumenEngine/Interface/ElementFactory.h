@@ -17,7 +17,16 @@ public:
     static Element * BuildCanvas();
 
     template <class ElementType>
+    static ElementType * BuildElement(ElementData);
+
+    template <class ElementType>
     static ElementType * BuildElement(ElementData, int);
+
+    template <class ElementType>
+    static ElementType * BuildElement(ElementData, AdditionalElementData *);
+
+    template <class ElementType>
+    static ElementType * BuildElement(ElementData, int, AdditionalElementData *);
 
     template <class TextType = Text>
     static TextType * BuildText(ElementData, TextData);
@@ -33,11 +42,41 @@ public:
 };
 
 template <class ElementType = Element>
-ElementType * ElementFactory::BuildElement(ElementData data, int childCount = DEFAULT_CHILD_COUNT)
+ElementType * ElementFactory::BuildElement(ElementData data)
+{
+    auto element = new ElementType();
+    element->Initialize(DEFAULT_CHILD_COUNT);
+    element->Configure(data.Size, data.Order, data.PositionData, data.Sprite, data.Opacity);
+    
+    return element;
+}
+
+template <class ElementType = Element>
+ElementType * ElementFactory::BuildElement(ElementData data, int childCount)
 {
     auto element = new ElementType();
     element->Initialize(childCount);
     element->Configure(data.Size, data.Order, data.PositionData, data.Sprite, data.Opacity);
+    
+    return element;
+}
+
+template <class ElementType = Element>
+ElementType * ElementFactory::BuildElement(ElementData data, int childCount, AdditionalElementData *additionalData)
+{
+    auto element = new ElementType();
+    element->Initialize(childCount);
+    element->Configure(data.Size, data.Order, data.PositionData, data.Sprite, data.Opacity, additionalData);
+    
+    return element;
+}
+
+template <class ElementType = Element>
+ElementType * ElementFactory::BuildElement(ElementData data, AdditionalElementData *additionalData)
+{
+    auto element = new ElementType();
+    element->Initialize(DEFAULT_CHILD_COUNT);
+    element->Configure(data.Size, data.Order, data.PositionData, data.Sprite, data.Opacity, additionalData);
     
     return element;
 }

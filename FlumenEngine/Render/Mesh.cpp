@@ -1,3 +1,5 @@
+#define TINYOBJLOADER_IMPLEMENTATION
+
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -187,44 +189,6 @@ void Mesh::LoadFromWavefront(File *file)
 
 	attribute = attributes_.Add("index");
 	*attribute = MeshAttribute(indices, new AttributeType{"index", 4, 1, AttributeElementTypes::UINTEGER_1}, indexCount_);
-
-    /*tinyobj::attrib_t attributes;
-    std::vector <tinyobj::shape_t> shapes;
-    std::vector <tinyobj::material_t> materials;
-
-    std::string warnings;
-    std::string errors;
-
-    bool hasLoaded = tinyobj::LoadObj(&attributes, &shapes, &materials, &warnings, &errors, file->GetName());
-
-	std::cout << "> Vertex count: " << BOLD_WHITE_CODE << attributes.vertices.size() << BLANK_CODE << "\n";
-
-    auto shape = shapes.at(0);
-
-	indexCount_ = shape.mesh.indices.size();
-	vertexCount_ = attributes.vertices.size() / 3;*/
-
-    /*auto indices = new container::Array <unsigned int> (indexCount_);
-    for(auto &index : shape.mesh.indices)
-    {
-        *indices->Add() = index.vertex_index;
-    }*/
-
-    /*auto positions = new container::Array <Position2> (vertexCount_);
-    for(int i = 0; i < attributes.vertices.size(); i += 3)
-    {
-        *positions->Add() = {attributes.vertices[i], attributes.vertices[i + 2]};
-    }*/
-
-	/*attributes_.Initialize(2);
-
-	auto attribute = attributes_.Add("position");
-	*attribute = MeshAttribute(positions, new AttributeType{"position", 8, 2, AttributeElementTypes::FLOAT_2}, vertexCount_);
-
-	attribute = attributes_.Add("index");
-	*attribute = MeshAttribute(indices, new AttributeType{"index", 4, 1, AttributeElementTypes::UINTEGER_1}, indexCount_);*/
-
-	
 }
 
 MeshAttribute* Mesh::GetAttribute(const char* identifier)

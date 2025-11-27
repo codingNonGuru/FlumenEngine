@@ -37,6 +37,8 @@ public:
 
 	static Color WHITE;
 
+	static Color GRAY;
+
 	static Color RED;
 
 	static Color BLUE;

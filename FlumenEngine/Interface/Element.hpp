@@ -114,6 +114,8 @@ protected:
 
 	virtual void HandleConfigure();
 
+	virtual void HandleConfigure(AdditionalElementData *);
+
 	virtual void HandleInitialize();
 
 	virtual void HandleUpdate();
@@ -146,7 +148,7 @@ protected:
 
 	void Initialize(int = DEFAULT_CHILD_COUNT);
 
-	void Configure(Size, DrawOrder, PositionData, SpriteDescriptor = SpriteDescriptor(), Opacity = Opacity(1.0f));
+	void Configure(Size, DrawOrder, PositionData, SpriteDescriptor = SpriteDescriptor(), Opacity = Opacity(1.0f), AdditionalElementData * = nullptr);
 
 	void UpdateRecursively();
 

@@ -22,12 +22,12 @@ void MeshManager::LoadMeshes()
 	{
 		auto meshExtension = ".mesh";
 
-		auto extensionPosition = FindString(file->GetName(), meshExtension);
+		auto extensionPosition = FindString(file.GetName(), meshExtension);
 		if(extensionPosition == nullptr)
 			continue;
 
 		Word meshName;
-		meshName.Add(file->GetName(), extensionPosition - file->GetName());
+		meshName.Add(file.GetName(), extensionPosition - file.GetName());
 
 		auto mesh = meshes_.Add(meshName);
 		if(mesh == nullptr)
@@ -35,7 +35,7 @@ void MeshManager::LoadMeshes()
 
 		*mesh = new Mesh();
 
-		(*mesh)->Initialize(file);
+		(*mesh)->Initialize(&file);
 	}
 
 	for(auto &file : files)

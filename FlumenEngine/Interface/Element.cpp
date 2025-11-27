@@ -54,7 +54,7 @@ void Element::Initialize(int childCount)
 	HandleInitialize();
 }
 
-void Element::Configure(Size size, DrawOrder drawOrder, PositionData positionData, SpriteDescriptor spriteDescriptor, Opacity opacity)
+void Element::Configure(Size size, DrawOrder drawOrder, PositionData positionData, SpriteDescriptor spriteDescriptor, Opacity opacity, AdditionalElementData *additionalData)
 {
 	Sprite* sprite = nullptr;
 	if(spriteDescriptor)
@@ -115,7 +115,10 @@ void Element::Configure(Size size, DrawOrder drawOrder, PositionData positionDat
 
 	hoverEvents_ = new Delegate();
 
-	HandleConfigure();
+	if(additionalData != nullptr)
+		HandleConfigure(additionalData);
+	else
+		HandleConfigure();
 }
 
 void Element::UpdatePosition()
@@ -611,6 +614,8 @@ void Element::HandleRightClick() {}
 void Element::HandleHover() {}
 
 void Element::HandleConfigure() {}
+
+void Element::HandleConfigure(AdditionalElementData *) {}
 
 void Element::HandleInitialize() {}
 

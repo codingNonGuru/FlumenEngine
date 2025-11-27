@@ -123,3 +123,5 @@ struct ElementData
         Size(ElementSize()), Order(order), PositionData(positionData), Sprite(SpriteDescriptor()), Opacity(1.0f)
     {}
 };
+
+struct AdditionalElementData {};

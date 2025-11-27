@@ -6,6 +6,8 @@ Color Color::BLACK = Color(0.0f, 0.0f, 0.0f, 1.0f);
 
 Color Color::WHITE = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
+Color Color::GRAY = Color(0.5f, 0.5f, 0.5f, 1.0f);
+
 Color Color::RED = Color(1.0f, 0.0f, 0.0f, 1.0f);
 
 Color Color::BLUE = Color(0.0f, 0.0f, 1.0f, 1.0f);
