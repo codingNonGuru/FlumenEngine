@@ -6,7 +6,7 @@
 
 #include "LineRenderer.h"
 
-using namespace render;
+using namespace engine::render;
 
 #define DEFAULT_BUFFER_COUNT 5
 
@@ -58,7 +58,7 @@ void LineRenderer::TransferData(container::Array <Position2> &positions, contain
     (*buffers_.Get(COLOR_KEY))->UploadData(colors.GetStart(), colors.GetMemorySize());
 }
 
-void LineRenderer::Render(Camera *camera, float opacity)
+void LineRenderer::Render(Camera *camera, float opacity, float depth)
 {
     static auto lineShader = ShaderManager::GetShader("Line");
 
@@ -68,7 +68,7 @@ void LineRenderer::Render(Camera *camera, float opacity)
 
     lineShader->SetConstant(opacity, "opacity");
 
-    lineShader->SetConstant(0.0f, "depth");
+    lineShader->SetConstant(depth, "depth");
 
     (*buffers_.Get(POSITION_KEY))->Bind(0);
 
@@ -86,7 +86,7 @@ void LineRenderer::Render(Camera *camera, float opacity)
     lineShader->Unbind();
 }
 
-void LineRenderer::RenderLine(Camera *camera, Position2 position, float length, float thickness, float rotation, Float4 color, float opacity)
+void LineRenderer::RenderLine(Camera *camera, Position2 position, float length, float thickness, float rotation, Float4 color, float opacity, float depth)
 {
     static auto lineShader = ShaderManager::GetShader("LineSingular");
 
@@ -96,7 +96,7 @@ void LineRenderer::RenderLine(Camera *camera, Position2 position, float length, 
 
     lineShader->SetConstant(opacity, "opacity");
 
-    lineShader->SetConstant(0.0f, "depth");
+    lineShader->SetConstant(depth, "depth");
 
     lineShader->SetConstant(position, "position");
 
