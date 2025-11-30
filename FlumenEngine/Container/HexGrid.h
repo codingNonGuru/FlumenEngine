@@ -123,7 +123,7 @@ namespace container
 
         container::Block <TileType *, 6> GetNearbyTiles(TileType* tile)
         {
-            auto nearbyTiles = container::Block <TileType *, 6> ();
+            auto nearbyTiles = container::Block <TileType *, 6> (nullptr);
 
             int i = 0;
             for(Integer x = -1; x <= 1; ++x)
@@ -135,7 +135,7 @@ namespace container
                         if(x + y + z == 0)
                         {
                             auto nearbyTile = GetTile(tile->Coordinates + Integer3(x, y, z));
-                            if(nearbyTile != nullptr && nearbyTile != tile)
+                            if(nearbyTile != tile)
                             {
                                 *nearbyTiles[i] = nearbyTile;
                                 i++;
@@ -175,99 +175,5 @@ namespace container
         }
     };
 
-    template <
-        std::derived_from <core::hex::Tile> TileType, 
-        std::derived_from <core::hex::HexEdge <TileType>> EdgeType
-        >
-    class EdgyHexGrid : public HexGrid <TileType>
-    {
-        container::Grid <EdgeType> edges;
-
-    public:
-        void AddEdges()
-        {
-            edges.Initialize(this->tiles.GetWidth() * 3, this->tiles.GetHeight());
-        }
-
-        Integer2 GetEdgeCoordinates(TileType *first, TileType *second)
-        {
-            auto firstPosition = first->GetSquarePosition();
-            auto secondPosition = second->GetSquarePosition();
-
-            if(firstPosition.y == secondPosition.y)
-            {
-                auto x = firstPosition.x < secondPosition.x ? firstPosition.x : secondPosition.x;
-                auto y = firstPosition.y;
-
-                return {x, y};
-            }
-            else
-            {
-                int y = firstPosition.y < secondPosition.y ? firstPosition.y : secondPosition.y;
-                auto x = this->tiles.GetWidth() + firstPosition.x + secondPosition.x + 1;
-
-                return {x, y};
-            }
-        }
-
-        EdgeType *GetEdge(TileType *first, TileType *second)
-        {
-            auto firstPosition = first->GetSquarePosition();
-            auto secondPosition = second->GetSquarePosition();
-
-            if(firstPosition.y == secondPosition.y)
-            {
-                auto x = firstPosition.x < secondPosition.x ? firstPosition.x : secondPosition.x;
-                auto y = firstPosition.y;
-
-                /*if(abs(firstPosition.x - secondPosition.x) > 1)
-                {
-                    x = this->tiles.GetWidth() - 1;
-                }*/
-
-                if(y % 2 == 0)
-                {
-                    //x += 1;
-                }
-
-                //std::cout << x << " " << y << "\n";
-
-                return edges.Get(x, y);
-            }
-            else
-            {
-                int y = firstPosition.y < secondPosition.y ? firstPosition.y : secondPosition.y;
-            
-                /*if(firstPosition.y % 2 == 0)
-                {
-                    y = firstPosition.y / 2;
-                }
-                else
-                {
-                    y = secondPosition.y / 2;
-                }*/
-
-                auto x = this->tiles.GetWidth() + firstPosition.x + secondPosition.x + 1;
-                /*if(abs(firstPosition.x - secondPosition.x) > 3)
-                {
-                    x = this->tiles.GetWidth();
-                }*/
-                /*else if(abs(firstPosition.y - secondPosition.y) > 1)
-                {
-                    y = this->tiles.GetHeight() - 1;
-                }*/
-
-                if(y % 2 == 0)
-                {
-                    //x += 1;
-                }
-
-                //std::cout << x << " " << y << "\n";
-
-                return edges.Get(x, y);
-            }
-        }
-
-        container::Grid <EdgeType> &GetEdges() {return edges;}
-    };
+    
 }

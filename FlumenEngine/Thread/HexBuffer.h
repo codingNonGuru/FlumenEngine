@@ -60,8 +60,8 @@ namespace engine::thread
 
         int GetSize() const {return Tiles.GetSize();}
 
-        auto begin() {return typename container::Array <HexType *>::Iterator <HexType *>(Tiles, Tiles.GetStart());}
+        auto begin() {return typename container::Array <HexType *>::template Iterator <HexType *>(Tiles, Tiles.GetStart());}
 
-        auto end() {return typename container::Array <HexType *>::Iterator <HexType *>(Tiles, Tiles.GetEnd());}
+        auto end() {return typename container::Array <HexType *>::template Iterator <HexType *>(Tiles, Tiles.GetEnd());}
     };
 }
