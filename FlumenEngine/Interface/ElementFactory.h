@@ -7,9 +7,13 @@
 #include "FlumenEngine/Interface/BarData.h"
 #include "FlumenEngine/Interface/Element.hpp"
 #include "FlumenEngine/Interface/SimpleList.h"
+#include "FlumenEngine/Interface/Text.hpp"
 
-class Text;
 class ProgressBar;
+
+#define DEFAULT_ROW_COUNT 1
+
+#define DEFAULT_ROW_LENGTH 128
 
 class ElementFactory 
 {
@@ -30,6 +34,9 @@ public:
 
     template <class TextType = Text>
     static TextType * BuildText(ElementData, TextData);
+
+    template <class TextType = Text>
+    static TextType * BuildRichText(ElementData, TextData);
 
     template <class BarType = ProgressBar>
     static BarType * BuildProgressBar(ElementData, BarData);
@@ -84,7 +91,32 @@ ElementType * ElementFactory::BuildElement(ElementData data, AdditionalElementDa
 template <class TextType>
 TextType * ElementFactory::BuildText(ElementData elementData, TextData textData)
 {
-    auto text = new TextType(textData.Font, textData.Color);
+    if(textData.RowData != nullptr)
+    {
+        std::cout<<"Element Factory cannot BuildText with Row Data. Use BuildRichText.\n";
+        abort();
+    }
+
+    auto text = new TextType(textData.Font, textData.PrimaryColor);
+
+    text->Initialize();
+    text->Configure(elementData.Size, elementData.Order, elementData.PositionData, elementData.Sprite, elementData.Opacity);
+    text->Setup(textData.Content);
+
+    return text;    
+}
+
+template <class TextType>
+TextType * ElementFactory::BuildRichText(ElementData elementData, TextData textData)
+{
+    auto text = [&]
+    {
+        if(textData.RowData == nullptr)
+            return new TextType(textData.Font, DEFAULT_ROW_COUNT, DEFAULT_ROW_LENGTH, textData.PrimaryColor, textData.SecondaryColor);
+        else 
+            return new TextType(textData.Font, textData.RowData->Count, textData.RowData->Size, textData.PrimaryColor, textData.SecondaryColor);
+    } ();
+
     text->Initialize();
     text->Configure(elementData.Size, elementData.Order, elementData.PositionData, elementData.Sprite, elementData.Opacity);
     text->Setup(textData.Content);

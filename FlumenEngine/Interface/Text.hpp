@@ -39,7 +39,11 @@ private:
 
 	Array <Row> rows_;
 
-	Color color_;
+	Array <int> colorIndices_;
+
+	Color primaryColor_;
+
+	Color secondaryColor_;
 
 	Float scale_;
 
@@ -57,6 +61,8 @@ protected:
 	Text();
 
 	Text(FontDescriptor, Color = Color::BLACK);
+
+	Text(FontDescriptor, int, int, Color, Color = Color::WHITE);
 
 public:
 	void SetFont(FontDescriptor);

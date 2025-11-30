@@ -19,22 +19,39 @@ struct FontDescriptor
 	operator const char*() {return Name;}
 };
 
+struct RowData
+{
+    int Count;
+
+    int Size;
+};
+
 struct TextData
 {
     FontDescriptor Font;
 
     typedef Color TextColor;
-    TextColor Color;
+    TextColor PrimaryColor;
+
+    TextColor SecondaryColor;
 
     Phrase Content;
 
-    TextData() : Font(), Color(), Content() {}
+    RowData *RowData = nullptr;
 
-    TextData(FontDescriptor font, TextColor color, Phrase content) : Font(font), Color(color), Content(content) {}
+    TextData() : Font(), PrimaryColor(), Content() {}
 
-    TextData(FontDescriptor font, TextColor color) : Font(font), Color(color), Content() {}
+    TextData(FontDescriptor font, TextColor color, Phrase content) : Font(font), PrimaryColor(color), Content(content) {}
 
-    TextData(FontDescriptor font, Phrase content) : Font(font), Color(TextColor::BLACK), Content(content) {}
+    TextData(FontDescriptor font, TextColor primaryColor, TextColor secondaryColor, Phrase content) : Font(font), PrimaryColor(primaryColor), SecondaryColor(secondaryColor), Content(content) {}
 
-    TextData(FontDescriptor font) : Font(font), Color(TextColor::BLACK), Content() {}
+    TextData(FontDescriptor font, TextColor primaryColor, TextColor secondaryColor, struct RowData *rowData) : Font(font), PrimaryColor(primaryColor), SecondaryColor(secondaryColor), Content(), RowData(rowData) {}
+
+    TextData(FontDescriptor font, TextColor primaryColor, TextColor secondaryColor) : Font(font), PrimaryColor(primaryColor), SecondaryColor(secondaryColor), Content() {}
+
+    TextData(FontDescriptor font, TextColor color) : Font(font), PrimaryColor(color), Content() {}
+
+    TextData(FontDescriptor font, Phrase content) : Font(font), PrimaryColor(TextColor::BLACK), Content(content) {}
+
+    TextData(FontDescriptor font) : Font(font), PrimaryColor(TextColor::BLACK), Content() {}
 };

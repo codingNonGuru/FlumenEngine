@@ -18,7 +18,7 @@ Text::Text(FontDescriptor fontName, Color color)
 {
 	font_ = FontManager::GetFont(fontName);
 
-	color_ = color;
+	primaryColor_ = color;
 
 	alignment = Alignments::CENTER;
 
@@ -28,6 +28,28 @@ Text::Text(FontDescriptor fontName, Color color)
 		auto row = rows_.Add();
 		*row = {Array <Text::LetterData> (256), 0.0f, 0.0f};
 	}
+
+	colorIndices_.Initialize(16 * 256);
+}
+
+Text::Text(FontDescriptor fontName, int rowCount, int rowSize, Color primaryColor, Color secondaryColor) 
+{
+	font_ = FontManager::GetFont(fontName);
+
+	primaryColor_ = primaryColor;
+
+	secondaryColor_ = secondaryColor;
+
+	alignment = Alignments::CENTER;
+
+	rows_.Initialize(rowCount);
+	for(int i = 0; i < rows_.GetCapacity(); ++i)
+	{
+		auto row = rows_.Add();
+		*row = {Array <Text::LetterData> (rowSize), 0.0f, 0.0f};
+	}
+
+	colorIndices_.Initialize(rowCount * rowSize);
 }
 
 void Text::Setup(const char* string, Float scale)
@@ -38,11 +60,15 @@ void Text::Setup(const char* string, Float scale)
 
 	rows_.Reset();
 
+	colorIndices_.Reset();
+
 	int rowIndex = 0;
 
 	auto currentRow = rows_.Add();
 	currentRow->Letters.Reset();
 	currentRow->Width = 0.0f;
+
+	auto colorIndex = 0;
 
 	for(auto sign = string_.Get(); sign != string_.GetEnd(); ++sign)
 	{
@@ -56,11 +82,29 @@ void Text::Setup(const char* string, Float scale)
 			rowIndex++;
 			continue;
 		}
+
+		if(*sign == '<')
+		{
+			auto nextSign = sign + 1;
+			auto nextNextSign = sign + 2;
+			if(nextSign != string_.GetEnd() && nextNextSign != string_.GetEnd() && *nextNextSign == '>' && (*nextSign == '1' || *nextSign == '2'))
+			{
+				sign = sign + 2;
+				if(*nextSign == '1')
+					colorIndex = 0;
+				else
+					colorIndex = 1;
+
+				continue;
+			}
+		}
 		
 		*currentRow->Letters.Add() = {*sign, rowIndex};
 		
 		auto glyph = font_->GetGlyph(*sign);
 		currentRow->Width += glyph->GetAdvance();
+
+		*colorIndices_.Add() = colorIndex;
 	}
 
 	if(isWidthLocked_ == false)
@@ -97,7 +141,7 @@ void Text::SetFont(FontDescriptor fontName)
 
 void Text::SetColor(Color color)
 {
-	color_ = color;
+	primaryColor_ = color;
 }
 
 void Text::Assemble()
@@ -109,6 +153,8 @@ void Text::Assemble()
 	auto textPosition = GetGlobalPosition();
 	textPosition.x -= size_.x * 0.5f;
 	textPosition.y -= size_.y * 0.5f;
+
+	auto colorIndex = colorIndices_.GetStart();
 
 	auto startPosition = Float2(0.0f, font_->GetHeight() * 0.5f * rowSpacingFactor_);
 	for(auto &row : rows_)
@@ -140,7 +186,7 @@ void Text::Assemble()
 
 			*glyphData = glyph->GetData();
 
-			glyphData->Color_ = color_;
+			glyphData->Color_ = *colorIndex == 0 ? primaryColor_ : secondaryColor_;
 
 			startPosition.x += glyph->GetAdvance() * 0.5f;
 
@@ -152,6 +198,8 @@ void Text::Assemble()
 			glyphData->Scale_ *= scale_;
 
 			startPosition.x += glyph->GetAdvance() * 0.5f;
+
+			colorIndex++;
 		}
 
 		startPosition.x = 0.0f;
