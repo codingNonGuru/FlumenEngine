@@ -22,7 +22,7 @@ private:
 public:
 	static Delegate* OnAssetsLoaded_;
 
-	static Array <File> *GetFiles();
+	static const Array <File> *GetFiles();
 
 	static Map <AttributeType, Word> & GetAttributeTypes();
 

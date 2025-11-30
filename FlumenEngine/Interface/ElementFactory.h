@@ -115,7 +115,7 @@ ListType *ElementFactory::BuildSimpleList(ElementData elementData, int childCoun
 }
 
 template <class ListType>
-ListType *ElementFactory::BuildSimpleList(ElementData elementData, int childCount, float distance = 0.0f)
+ListType *ElementFactory::BuildSimpleList(ElementData elementData, int childCount, float distance)
 {
     return BuildSimpleList(elementData, childCount, ListOrientations::VERTICAL, distance);
 }

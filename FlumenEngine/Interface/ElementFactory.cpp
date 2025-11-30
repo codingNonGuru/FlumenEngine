@@ -5,7 +5,7 @@
 #include "FlumenEngine/Render/Screen.hpp"
 #include "FlumenEngine/Interface/Interface.hpp"
 
-#define DEFAULT_CANVAS_ELEMENT_COUNT 512
+#define DEFAULT_CANVAS_ELEMENT_COUNT 1024
 
 Element * ElementFactory::BuildCanvas()
 {

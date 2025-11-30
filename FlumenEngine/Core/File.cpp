@@ -16,7 +16,7 @@ bool File::HasName(FileName name) const
 
 const char *currentFileContent = nullptr;
 
-const char *File::ReadContent()
+const char *File::ReadContent() const
 {
 	std::ifstream fileStream(path_);
 

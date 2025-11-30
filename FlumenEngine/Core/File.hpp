@@ -20,5 +20,5 @@ public:
 
 	bool HasName(FileName) const;
 
-	const char *ReadContent();
+	const char *ReadContent() const;
 };

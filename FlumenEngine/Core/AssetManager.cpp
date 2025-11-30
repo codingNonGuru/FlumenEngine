@@ -100,7 +100,7 @@ void AssetManager::CountScripts()
 	std::cout<<totalLineCount<<" Lines found.\n";
 }
 
-Array <File>* AssetManager::GetFiles()
+const Array <File>* AssetManager::GetFiles()
 {
 	return files_;
 }
