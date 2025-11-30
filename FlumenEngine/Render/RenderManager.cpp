@@ -56,6 +56,10 @@ void RenderManager::Update()
 {
 	UpdateCameras();
 
+	EnableDepthTesting();
+
+	SetBlendMode();
+
 	ClearDefaultBuffer();
 
 	SceneManager::Render();
