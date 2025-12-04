@@ -25,6 +25,8 @@ public:
 
 	static Delegate OnShutDown;
 
+	static Delegate OnLoopCycleStarted;
+
 	static Delegate OnLoopCycleEnded;
 
 	static void Initialize();
