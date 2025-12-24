@@ -10,5 +10,7 @@ namespace engine::render
     {
     public:
         static void RenderHex(Camera *, Position2, float, float, Float4);
+
+        static void RenderEmptyHex(Camera *, Position2, float, float, Float4, float);
     };
 }
