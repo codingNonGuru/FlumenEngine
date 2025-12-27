@@ -6,15 +6,13 @@
 
 class Scroller : public Element
 {
-    Delegate onScrollUp;
-
-    Delegate onScrollDown;
-
     int firstElementIndex;
 
     int maximumVisibleCount;
 
     int activeChildCount;
+
+    void HandleInitialize() override;
 
     void HandleLateUpdate() override;
 
@@ -24,12 +22,12 @@ class Scroller : public Element
 
     void HandleDisable() override;
 
-    void HandleScrollUp();
+    void HandleScrollUp() override;
 
-    void HandleScrollDown();
+    void HandleScrollDown() override;
 
 public:
-   void Setup(Element *, int, int);
+    void Setup(Element *, int, int);
 
-   void SetActiveChildCount(int);
+    void SetActiveChildCount(int);
 };

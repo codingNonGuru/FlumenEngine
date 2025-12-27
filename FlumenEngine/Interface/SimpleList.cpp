@@ -2,7 +2,7 @@
 #include "FlumenEngine/Interface/ElementFactory.h"
 #include "FlumenEngine/Interface/Scroller.h"
 
-void SimpleList::MakeScrollable(int maximumVisibleCount, int maximumActiveCount)
+void SimpleList::AddScroller(int maximumVisibleCount, int maximumActiveCount)
 {
     if(scroller != nullptr)
         return;

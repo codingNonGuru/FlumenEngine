@@ -72,6 +72,11 @@ namespace container
             return tiles.Get(position.x, position.y);
         }
 
+        TileType* GetTileWithinBounds(Integer2 position)
+        {
+            return tiles.GetWithinBounds(position.x, position.y);
+        }
+
         container::Grid <TileType> &GetTiles()
         {
             return tiles;

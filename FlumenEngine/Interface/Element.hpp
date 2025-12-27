@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "FlumenCore/Conventions.hpp"
+#include "FlumenCore/Delegate/StaticDelegate.h"
 
 #include "FlumenEngine/Core/Object.hpp"
 #include "FlumenEngine/Core/Types.hpp"
@@ -45,11 +46,16 @@ class Element : public Object
 
 	friend class MouseFollower;
 
+private:
 	void TriggerRightClickEvents();
 	
 	void TriggerLeftClickEvents();
 
 	void TriggerHoverEvents();
+
+	void TriggerScrollUpEvents();
+
+	void TriggerScrollDownEvents();
 
 	bool CheckHover();
 
@@ -58,6 +64,10 @@ class Element : public Object
 	Delegate * rightClickEvents_ {nullptr};
 
 	Delegate * hoverEvents_ {nullptr};
+
+	core::StaticDelegate *scrollUpEvents {nullptr};
+
+	core::StaticDelegate *scrollDownEvents {nullptr};
 
 protected:
 	bool isRendering_;
@@ -95,6 +105,8 @@ protected:
 	bool isInteractive_ {false};
 
 	bool isClickable_ {false};
+
+	bool isScrollable {false};
 
 	bool isHovered_;
 
@@ -138,6 +150,10 @@ protected:
 
 	virtual void HandleHover();
 
+	virtual void HandleScrollUp() {}
+
+	virtual void HandleScrollDown() {}
+
 	virtual void HandleSetupAnimations();
 
 	Position2 GetAnchorOffset(ElementAnchors);
@@ -147,6 +163,8 @@ protected:
 	Element() {}
 
 	void Initialize(int = DEFAULT_CHILD_COUNT);
+
+	void Initialize(int, Word);
 
 	void Configure(Size, DrawOrder, PositionData, SpriteDescriptor = SpriteDescriptor(), Opacity = Opacity(1.0f), AdditionalElementData * = nullptr);
 
@@ -221,11 +239,19 @@ public:
 
 	Delegate & GetHoverEvents();
 
+	core::StaticDelegate &GetScrollUpEvents();
+
+	core::StaticDelegate &GetScrollDownEvents();
+
 	void SetInteractivity(bool);
 
 	void MakeTransparentToClicks() {isClickable_ = false;}
 
 	bool IsClickable() const {return isClickable_;}
+
+	bool IsScrollable() const {return isScrollable;}
+
+	void MakeScrollable(int = 1);
 
 	void SetSpriteColor(const Color &);
 

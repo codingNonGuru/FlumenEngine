@@ -161,7 +161,7 @@ public:
         fixedElementCount = count;
     }
 
-    void MakeScrollable(int, int);
+    void AddScroller(int, int);
 
     void SetScrollableChildCount(int);
 };

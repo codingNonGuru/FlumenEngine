@@ -1,5 +1,13 @@
 #include "Scroller.h"
 #include "FlumenEngine/Core/InputHandler.hpp"
+#include "FlumenEngine/Interface/Interface.hpp"
+
+void Scroller::HandleInitialize()
+{
+    MakeScrollable();
+
+    maximumVisibleCount = 0;
+}
 
 void Scroller::Setup(Element *parent, int maximumVisibleCount, int activeChildCount)
 {
@@ -20,6 +28,9 @@ void Scroller::SetActiveChildCount(int activeChildCount)
 void Scroller::HandleLateUpdate()
 {
     const auto parent = (Element *)parent_;
+
+    if(maximumVisibleCount == 0)
+        return;
 
     if(maximumVisibleCount < activeChildCount)
     {
@@ -59,19 +70,11 @@ void Scroller::HandleEnable()
     SetInteractivity(true);
 
     MakeTransparentToClicks();
-
-    InputHandler::RegisterScrollUpEvent({this, &Scroller::HandleScrollUp});
-
-    InputHandler::RegisterScrollDownEvent({this, &Scroller::HandleScrollDown});
 }
 
 void Scroller::HandleDisable()
 {
     SetInteractivity(false);
-
-    InputHandler::UnregisterScrollUpEvent({this, &Scroller::HandleScrollUp});
-
-    InputHandler::UnregisterScrollDownEvent({this, &Scroller::HandleScrollDown});
 }
 
 void Scroller::HandleScrollDown()
@@ -81,7 +84,7 @@ void Scroller::HandleScrollDown()
 
     firstElementIndex++;
 
-    const auto parent = (Element *)parent_;
+    //const auto parent = (Element *)parent_;
     if(firstElementIndex + maximumVisibleCount > activeChildCount)
     {
         firstElementIndex--;

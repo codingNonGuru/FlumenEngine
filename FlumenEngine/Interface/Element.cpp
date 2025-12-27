@@ -35,6 +35,25 @@ void MouseFollower::Update()
 	parent->basePosition_ = offset + mousePosition;
 }
 
+void Element::Initialize(int childCount, Word name)
+{
+	isActive_ = false;
+
+	isRendering_ = true;
+
+	parent_ = nullptr;
+
+	transform_ = nullptr;
+
+	staticChildren_.Initialize(childCount);
+
+	dynamicChildren_.Initialize(4);
+
+	Interface::Get()->AddElement(name, this);
+
+	HandleInitialize();
+}
+
 void Element::Initialize(int childCount) 
 {
 	isActive_ = false;
@@ -413,6 +432,16 @@ Delegate & Element::GetHoverEvents()
 	return *hoverEvents_;
 }
 
+core::StaticDelegate &Element::GetScrollUpEvents()
+{
+	return *scrollUpEvents;
+}
+
+core::StaticDelegate &Element::GetScrollDownEvents()
+{
+	return *scrollDownEvents;
+}
+
 Animator* Element::GetAnimator()
 {
 	return animator_;
@@ -458,6 +487,18 @@ void Element::SetInteractivity(bool isInteractive)
 	isClickable_ = isInteractive;
 }
 
+void Element::MakeScrollable(int eventCount)
+{
+	if(isScrollable == true)
+		return;
+
+	isScrollable = true;
+
+	scrollUpEvents = new core::StaticDelegate(eventCount);
+
+	scrollDownEvents = new core::StaticDelegate(eventCount);
+}
+
 void Element::TriggerLeftClickEvents()
 {
 	if(!leftClickEvents_)
@@ -486,6 +527,26 @@ void Element::TriggerHoverEvents()
 	hoverEvents_->Invoke();
 
 	HandleHover();
+}
+
+void Element::TriggerScrollUpEvents()
+{
+	if(isScrollable == false)
+		return;
+
+	scrollUpEvents->Invoke();
+
+	HandleScrollUp();
+}
+
+void Element::TriggerScrollDownEvents()
+{
+	if(isScrollable == false)
+		return;
+
+    scrollDownEvents->Invoke();
+
+	HandleScrollDown();
 }
 
 void Element::Open()

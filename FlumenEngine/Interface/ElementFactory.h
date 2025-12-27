@@ -3,11 +3,14 @@
 #include "FlumenCore/Conventions.hpp"
 
 #include "FlumenEngine/Interface/ElementData.h"
+#include "FlumenEngine/Interface/Interface.hpp"
 #include "FlumenEngine/Interface/TextData.h"
 #include "FlumenEngine/Interface/BarData.h"
 #include "FlumenEngine/Interface/Element.hpp"
 #include "FlumenEngine/Interface/SimpleList.h"
 #include "FlumenEngine/Interface/Text.hpp"
+#include "FlumenEngine/Core/Engine.hpp"
+#include "FlumenEngine/Render/Screen.hpp"
 
 class ProgressBar;
 
@@ -15,10 +18,15 @@ class ProgressBar;
 
 #define DEFAULT_ROW_LENGTH 128
 
+#define DEFAULT_CANVAS_ELEMENT_COUNT 1024
+
 class ElementFactory 
 {
 public:
     static Element * BuildCanvas();
+
+    template <class ElementType>
+    static ElementType *BuildCanvas();
 
     template <class ElementType>
     static ElementType * BuildElement(ElementData);
@@ -47,6 +55,18 @@ public:
     template <class ListType = SimpleList>
     static ListType *BuildSimpleList(ElementData, int, float = 0.0f);
 };
+
+template <class ElementType>
+ElementType *ElementFactory::BuildCanvas()
+{
+    auto canvas = new ElementType();
+    canvas->Initialize(DEFAULT_CANVAS_ELEMENT_COUNT);
+    canvas->Configure(Engine::GetScreen()->GetSize(), 0, {Position2()});
+
+    Interface::Get()->AddCanvas(canvas);
+
+    return canvas;
+}
 
 template <class ElementType = Element>
 ElementType * ElementFactory::BuildElement(ElementData data)

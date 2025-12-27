@@ -4,6 +4,7 @@
 #include "FlumenCore/Singleton.h"
 
 class Element;
+class Scroller;
 
 class Interface : public core::Singleton <Interface>
 {
@@ -20,13 +21,15 @@ private:
 
 	bool isSorted_;
 
+	bool areScrollersSorted;
+
 	void Sort();
 
 	void ProcessInput();
 
-	Element* AddElement(Word, Element*);
+	Element* AddElement(Word, Element *);
 
-	void AddCanvas(Element*);
+	void AddCanvas(Element *);
 
 public:
 	void Initialize();

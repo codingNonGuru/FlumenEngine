@@ -1,5 +1,6 @@
 #include "Interface.hpp"
 #include "Element.hpp"
+#include "Scroller.h"
 #include "FlumenEngine/Core/InputHandler.hpp"
 #include "FlumenEngine/Render/RenderManager.hpp"
 
@@ -16,6 +17,8 @@ void Interface::Initialize()
 	hoveredElement_ = nullptr;
 
 	isSorted_ = false;
+
+	areScrollersSorted = false;
 
 	InputHandler::OnInputUpdate += {this, &Interface::ProcessInput};
 
@@ -76,6 +79,30 @@ void Interface::ProcessInput()
 		}
 	}
 
+	Element* firstScrollableElement = nullptr;
+	for(auto elementIterator = elements_.GetStart(); elementIterator != elements_.GetEnd(); ++elementIterator)
+	{
+		auto element = *elementIterator;
+
+		if(element->IsHovered() == false)
+			continue;
+
+		if(element->IsScrollable() == false)
+			continue;
+
+		if(firstScrollableElement == nullptr)
+		{
+			firstScrollableElement = element;
+		}
+		else
+		{
+			if(element->GetDrawOrder() > firstScrollableElement->GetDrawOrder())
+			{
+				firstScrollableElement = element;
+			}
+		}
+	}
+
 	hoveredElement_ = firstHoveredElement;
 
 	if(firstClickableElement != nullptr && InputHandler::GetMouse().CurrentLeft_ == true)
@@ -91,6 +118,18 @@ void Interface::ProcessInput()
 	if(firstHoveredElement != nullptr)
 	{
 		firstHoveredElement->TriggerHoverEvents();
+	}
+
+	if(firstScrollableElement != nullptr)
+	{
+		if(InputHandler::GetMouse().ScrollUp_ == true)
+		{
+			firstScrollableElement->TriggerScrollUpEvents();
+		}
+		else if(InputHandler::GetMouse().ScrollDown_ == true)
+		{
+			firstScrollableElement->TriggerScrollDownEvents();
+		}
 	}
 }
 
@@ -135,6 +174,11 @@ void Interface::Render()
 	{
 		Sort();
 	}
+
+	/*if(areScrollersSorted == false)
+	{
+		SortScrollers();
+	}*/
 
 	auto camera = RenderManager::GetInterfaceCamera();
 
