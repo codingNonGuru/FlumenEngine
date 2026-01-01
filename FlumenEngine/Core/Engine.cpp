@@ -36,6 +36,12 @@ Delegate Engine::OnLoopCycleEnded = Delegate();
 
 Delegate Engine::OnShutDown = Delegate();
 
+static float timeDelta = 0.0f;
+
+static int tickCount = 0;
+
+static float averageFps = 0.0f;
+
 void Engine::Initialize()
 {
 	OnInitializeStarted.Invoke();
@@ -75,7 +81,7 @@ void Engine::StartGameLoop()
 	{
 		OnLoopCycleStarted.Invoke();
 
-		Time::Update();
+		UpdateTime();	
 
 		InputHandler::Update();
 
@@ -102,6 +108,22 @@ void Engine::StartGameLoop()
 	}
 }
 
+void Engine::UpdateTime()
+{
+	Time::Update();
+
+	timeDelta += Time::GetDelta();
+	tickCount += 1;
+
+	if(tickCount > 60)
+	{
+		averageFps = 60.0f / timeDelta;
+
+		timeDelta = 0.0f;
+		tickCount = 0;
+	}
+}
+
 void Engine::ShutDown()
 {
 	isRunning_ = false;
@@ -114,4 +136,9 @@ void Engine::ShutDown()
 Screen* Engine::GetScreen()
 {
 	return screen_;
+}
+
+float Engine::GetAverageFPS()
+{
+	return averageFps;
 }

@@ -14,6 +14,8 @@ private:
 
 	static void StartGameLoop();
 
+	static void UpdateTime();
+
 public:
 	static Delegate OnInitializeStarted;
 
@@ -34,4 +36,6 @@ public:
 	static void ShutDown();
 
 	static Screen* GetScreen();
+
+	static float GetAverageFPS();
 };
