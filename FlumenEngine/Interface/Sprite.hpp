@@ -84,6 +84,8 @@ public:
 
 	void Draw(Camera*, const SpriteDrawData = SpriteDrawData());
 
+	void DrawStandalone(Camera*, const SpriteDrawData = SpriteDrawData());
+
 	void BindDefaultTextures();
 
 	void BindTexture(const char *);

@@ -80,6 +80,40 @@ void Sprite::Draw(Camera* camera, const SpriteDrawData data)
 	}
 }
 
+void Sprite::DrawStandalone(Camera* camera, const SpriteDrawData data)
+{
+	shader_->Bind();
+
+	shader_->SetConstant(camera->GetMatrix(), "viewMatrix");
+
+	shader_->SetConstant(data.Position, "spritePosition");
+
+	auto size = (Scale2)textureData_.Texture->GetSize() * data.Size;
+	shader_->SetConstant(size, "spriteSize");
+
+	static const auto DRAW_LAYER_COUNT = engine::ConfigManager::Get()->GetValue(engine::ConfigValues::INTERFACE_DRAW_LAYER_COUNT).Integer;
+
+	auto drawOrder = data.Depth / (float)DRAW_LAYER_COUNT;
+	shader_->SetConstant(drawOrder, "depth");
+
+	shader_->SetConstant(int(1), "hasTexture");
+
+	SetExtraConstants();
+
+	BindDefaultTextures();
+
+	BindExtraTextures();
+
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	shader_->Unbind();
+
+	if(textureData_.Texture)
+	{
+		textureData_.Texture->Unbind();
+	}
+}
+
 Opacity &Sprite::GetOpacity()
 {
 	return opacity_;
