@@ -161,6 +161,68 @@ public:
         fixedElementCount = count;
     }
 
+    void UpdateSize()
+    {
+        //Reset data
+        int width = 0;
+        int height = 0;
+
+        auto elementCount = [&]
+        {
+            if(fixedElementCount != -1)
+            {
+                return fixedElementCount;
+            }
+
+            auto activeElementIndex = 0;
+
+            //Count active elements
+            for(auto child : staticChildren_)
+            {
+                if(child->IsGloballyActive() == false)
+                    continue;
+
+                activeElementIndex++;
+            }
+
+            return activeElementIndex;
+        } ();
+
+        //Calculate the width & height of the entire layout
+        if(elementCount == 1)
+        {
+            width = (*staticChildren_.GetStart())->GetWidth();
+
+            height = (*staticChildren_.GetStart())->GetHeight();
+        }
+        else if(elementCount > 1)
+        {
+            if(orientation == ListOrientations::HORIZONTAL)
+            {
+                width = (*staticChildren_.GetStart())->GetWidth() * elementCount + distance * (elementCount - 1);
+
+                height = (*staticChildren_.GetStart())->GetHeight();
+            }
+            else
+            {
+                width = (*staticChildren_.GetStart())->GetWidth();
+
+                height = (*staticChildren_.GetStart())->GetHeight() * elementCount + distance * (elementCount - 1);
+            }
+        }
+
+        //Set layout size
+        if(isWidthLocked == false)
+        {
+            SetWidth(width + padding.x * 2);
+        }
+
+        if(isHeightLocked == false)
+        {
+            SetHeight(height + padding.y * 2);
+        }
+    }
+
     void AddScroller(int, int);
 
     void SetScrollableChildCount(int);
